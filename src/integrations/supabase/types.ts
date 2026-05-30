@@ -118,8 +118,10 @@ export type Database = {
           higher_education: string | null
           id: string
           linkedin_url: string | null
+          matric_stream: string | null
           phone: string | null
           profession: string | null
+          roll_number: string | null
           status: string
           updated_at: string
           website_url: string | null
@@ -137,8 +139,10 @@ export type Database = {
           higher_education?: string | null
           id: string
           linkedin_url?: string | null
+          matric_stream?: string | null
           phone?: string | null
           profession?: string | null
+          roll_number?: string | null
           status?: string
           updated_at?: string
           website_url?: string | null
@@ -156,8 +160,10 @@ export type Database = {
           higher_education?: string | null
           id?: string
           linkedin_url?: string | null
+          matric_stream?: string | null
           phone?: string | null
           profession?: string | null
+          roll_number?: string | null
           status?: string
           updated_at?: string
           website_url?: string | null

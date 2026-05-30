@@ -43,6 +43,8 @@ function ProfileEdit() {
       full_name: form.full_name,
       avatar_url: form.avatar_url || null,
       graduation_year: form.graduation_year ? Number(form.graduation_year) : null,
+      matric_stream: form.matric_stream || null,
+      roll_number: form.roll_number || null,
       profession: form.profession || null,
       company: form.company || null,
       higher_education: form.higher_education || null,
@@ -52,7 +54,7 @@ function ProfileEdit() {
       linkedin_url: form.linkedin_url || null,
       website_url: form.website_url || null,
       bio: form.bio || null,
-    }).eq("id", user.id);
+    } as any).eq("id", user.id);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Profile updated");
@@ -75,9 +77,18 @@ function ProfileEdit() {
             <Field label="Profile photo URL"><Input placeholder="https://..." {...f("avatar_url")} /></Field>
           </Section>
 
-          <Section title="Education">
-            <Field label="Graduation year"><Input type="number" min={1950} max={new Date().getFullYear()} {...f("graduation_year")} /></Field>
-            <Field label="Higher education"><Input placeholder="University, degree" {...f("higher_education")} /></Field>
+          <Section title="Matric Record">
+            <Field label="Matric Passing Year"><Input type="number" min={1950} max={new Date().getFullYear()} placeholder="e.g. 2018" {...f("graduation_year")} /></Field>
+            <Field label="Matric Stream / Group">
+              <select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={form.matric_stream ?? ""} onChange={(e) => setForm({ ...form, matric_stream: e.target.value })}>
+                <option value="">Select stream</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Biology">Biology</option>
+                <option value="Arts/Commerce">Arts/Commerce</option>
+              </select>
+            </Field>
+            <Field label="Roll Number (optional)"><Input placeholder="For verification" {...f("roll_number")} /></Field>
+            <Field label="Higher Education"><Input placeholder="Intermediate, Bachelors, Masters..." {...f("higher_education")} /></Field>
           </Section>
 
           <Section title="Career">

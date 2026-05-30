@@ -66,31 +66,55 @@ function Stats() {
   const { data } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: async () => {
-      const [{ count: total }, { count: pending }, { data: recent }, { data: byYear }] = await Promise.all([
+      const [{ count: total }, { count: pending }, { data: recent }, { data: rows }] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("profiles").select("id, full_name, created_at").order("created_at", { ascending: false }).limit(5),
-        supabase.from("profiles").select("graduation_year"),
+        supabase.from("profiles").select("graduation_year, matric_stream"),
       ]);
       const yearMap: Record<string, number> = {};
-      (byYear ?? []).forEach((p) => { if (p.graduation_year) yearMap[p.graduation_year] = (yearMap[p.graduation_year] ?? 0) + 1; });
-      const topYears = Object.entries(yearMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
-      return { total: total ?? 0, pending: pending ?? 0, recent: recent ?? [], topYears };
+      const streamMap: Record<string, number> = {};
+      ((rows ?? []) as any[]).forEach((p) => {
+        if (p.graduation_year) yearMap[p.graduation_year] = (yearMap[p.graduation_year] ?? 0) + 1;
+        const s = p.matric_stream || "Unspecified";
+        streamMap[s] = (streamMap[s] ?? 0) + 1;
+      });
+      const topYears = Object.entries(yearMap).sort((a, b) => Number(b[0]) - Number(a[0])).slice(0, 6);
+      const streams = Object.entries(streamMap).sort((a, b) => b[1] - a[1]);
+      return { total: total ?? 0, pending: pending ?? 0, recent: recent ?? [], topYears, streams };
     },
   });
+
+  const totalForPct = (data?.streams ?? []).reduce((a, [, c]) => a + c, 0) || 1;
 
   return (
     <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
       <Stat label="Total Alumni" value={data?.total ?? 0} />
       <Stat label="Pending Approval" value={data?.pending ?? 0} tone="warn" />
-      <Stat label="Recent Signups (5)" value={data?.recent?.length ?? 0} />
-      <div className="rounded-xl border border-border bg-card p-5">
-        <p className="text-xs uppercase tracking-wider text-muted-foreground">Top Classes</p>
+      <div className="rounded-xl border border-border bg-card p-5 lg:col-span-1">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">Matric Batches</p>
         <div className="mt-3 space-y-1 text-sm">
           {data?.topYears.map(([y, c]) => (
-            <div key={y} className="flex justify-between"><span className="font-medium text-navy">Class of {y}</span><span className="text-muted-foreground">{c}</span></div>
+            <div key={y} className="flex justify-between"><span className="font-medium text-navy">Matric {y}</span><span className="text-muted-foreground">{c}</span></div>
           ))}
           {data && data.topYears.length === 0 && <p className="text-muted-foreground">No data yet</p>}
+        </div>
+      </div>
+      <div className="rounded-xl border border-border bg-card p-5">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">Stream Breakdown</p>
+        <div className="mt-3 space-y-2 text-sm">
+          {data?.streams.map(([s, c]) => {
+            const pct = Math.round((c / totalForPct) * 100);
+            return (
+              <div key={s}>
+                <div className="flex justify-between"><span className="font-medium text-navy">{s}</span><span className="text-muted-foreground">{c} · {pct}%</span></div>
+                <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                  <div className="h-full bg-gold" style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+            );
+          })}
+          {data && data.streams.length === 0 && <p className="text-muted-foreground">No data yet</p>}
         </div>
       </div>
     </div>
@@ -129,16 +153,17 @@ function AlumniMgmt() {
         <table className="w-full text-sm">
           <thead className="bg-secondary text-left">
             <tr className="text-xs uppercase tracking-wider text-muted-foreground">
-              <th className="px-5 py-3">Name</th><th className="px-5 py-3">Email</th><th className="px-5 py-3">Class</th>
+              <th className="px-5 py-3">Name</th><th className="px-5 py-3">Email</th><th className="px-5 py-3">Matric</th><th className="px-5 py-3">Stream</th>
               <th className="px-5 py-3">Status</th><th className="px-5 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {(data ?? []).map((p) => (
+            {(data ?? []).map((p: any) => (
               <tr key={p.id} className="border-t border-border">
                 <td className="px-5 py-3 font-medium text-navy">{p.full_name}</td>
                 <td className="px-5 py-3 text-muted-foreground">{p.email}</td>
-                <td className="px-5 py-3">{p.graduation_year ?? "—"}</td>
+                <td className="px-5 py-3">{p.graduation_year ? `Matric ${p.graduation_year}` : "—"}</td>
+                <td className="px-5 py-3 text-muted-foreground">{p.matric_stream ?? "—"}</td>
                 <td className="px-5 py-3">
                   <span className={`rounded-full px-2 py-0.5 text-xs ${p.status === "approved" ? "bg-green-100 text-green-800" : p.status === "suspended" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"}`}>
                     {p.status}
@@ -153,7 +178,7 @@ function AlumniMgmt() {
                 </td>
               </tr>
             ))}
-            {data && data.length === 0 && <tr><td colSpan={5} className="px-5 py-12 text-center text-muted-foreground">No alumni yet.</td></tr>}
+            {data && data.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-muted-foreground">No alumni yet.</td></tr>}
           </tbody>
         </table>
       </div>
