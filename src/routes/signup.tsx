@@ -10,20 +10,24 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Join Alumni Network — QBH" }, { name: "description", content: "Create your alumni account." }] }),
+  head: () => ({ meta: [{ title: "Join Alumni Network — QBH" }, { name: "description", content: "Create your Matric alumni account." }] }),
   component: SignupPage,
 });
+
+const STREAMS = ["Computer Science", "Biology", "Arts/Commerce"] as const;
 
 const schema = z.object({
   full_name: z.string().trim().min(2, "Enter your full name").max(120),
   email: z.string().trim().email("Invalid email").max(255),
   password: z.string().min(8, "Minimum 8 characters").max(100),
   graduation_year: z.coerce.number().int().min(1950).max(new Date().getFullYear()),
+  matric_stream: z.enum(STREAMS, { message: "Select your Matric stream" }),
+  roll_number: z.string().trim().max(50).optional().or(z.literal("")),
 });
 
 function SignupPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ full_name: "", email: "", password: "", graduation_year: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", password: "", graduation_year: "", matric_stream: "", roll_number: "" });
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
@@ -40,9 +44,12 @@ function SignupPage() {
       },
     });
     if (error) { setLoading(false); toast.error(error.message); return; }
-    // Update graduation year on profile
     if (data.user) {
-      await supabase.from("profiles").update({ graduation_year: r.data.graduation_year }).eq("id", data.user.id);
+      await supabase.from("profiles").update({
+        graduation_year: r.data.graduation_year,
+        matric_stream: r.data.matric_stream,
+        roll_number: r.data.roll_number || null,
+      } as any).eq("id", data.user.id);
     }
     setLoading(false);
     toast.success("Account created! Welcome to the network.");
@@ -55,7 +62,7 @@ function SignupPage() {
       <main className="flex flex-1 items-center justify-center px-4 py-16">
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elegant">
           <p className="text-xs uppercase tracking-[0.3em] text-gold">Become a Member</p>
-          <h1 className="mt-2 font-display text-3xl font-semibold text-navy">Join the network</h1>
+          <h1 className="mt-2 font-display text-3xl font-semibold text-navy">Join the Matric alumni</h1>
           <p className="mt-1 text-sm text-muted-foreground">Your account will be reviewed by the alumni office.</p>
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div className="space-y-1.5">
@@ -66,15 +73,32 @@ function SignupPage() {
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" autoComplete="new-password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+            </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" autoComplete="new-password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+                <Label htmlFor="grad">Matric Passing Year</Label>
+                <Input id="grad" type="number" min={1950} max={new Date().getFullYear()} placeholder="2018" value={form.graduation_year} onChange={(e) => setForm({ ...form, graduation_year: e.target.value })} required />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="grad">Class of</Label>
-                <Input id="grad" type="number" min={1950} max={new Date().getFullYear()} placeholder="2015" value={form.graduation_year} onChange={(e) => setForm({ ...form, graduation_year: e.target.value })} required />
+                <Label htmlFor="roll">Roll Number <span className="text-muted-foreground">(optional)</span></Label>
+                <Input id="roll" placeholder="e.g. 12345" value={form.roll_number} onChange={(e) => setForm({ ...form, roll_number: e.target.value })} />
               </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="stream">Academic Stream / Group</Label>
+              <select
+                id="stream"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={form.matric_stream}
+                onChange={(e) => setForm({ ...form, matric_stream: e.target.value })}
+                required
+              >
+                <option value="">Select your stream</option>
+                {STREAMS.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
             </div>
             <Button type="submit" disabled={loading} className="w-full bg-gradient-gold text-navy hover:opacity-95">
               {loading ? "Creating account..." : "Create my account"}
