@@ -30,7 +30,7 @@ function Landing() {
         setTickerItems(items.length ? items : [
           "Annual Alumni Reunion 2026 — registration now open",
           "QBH scholars launch new mentorship initiative",
-          "Class of 2015 celebrates 10-year reunion",
+          "Matric 2015 batch celebrates 10-year reunion",
           "School ranks among top institutions in the region",
         ]);
       });
@@ -163,7 +163,7 @@ function Landing() {
             {(stats?.events?.length ? stats.events : [
               { id: "p1", title: "Annual Alumni Reunion", event_date: new Date(Date.now() + 90 * 864e5).toISOString(), location: "Main Campus, Grand Hall" },
               { id: "p2", title: "Career Mentorship Mixer", event_date: new Date(Date.now() + 30 * 864e5).toISOString(), location: "Virtual" },
-              { id: "p3", title: "Class of 2010 — 15 Year Meet", event_date: new Date(Date.now() + 150 * 864e5).toISOString(), location: "Lahore" },
+              { id: "p3", title: "Matric 2010 — 15 Year Meet", event_date: new Date(Date.now() + 150 * 864e5).toISOString(), location: "Lahore" },
             ]).map((e: any) => {
               const d = new Date(e.event_date);
               return (

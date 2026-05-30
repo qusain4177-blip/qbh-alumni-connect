@@ -77,7 +77,9 @@ function Dashboard() {
               </div>
             </div>
             <dl className="mt-6 space-y-3 text-sm">
-              <Row label="Class of" value={profile?.graduation_year} />
+              <Row label="Matric Passing Year" value={profile?.graduation_year ? `Matric ${profile.graduation_year}` : null} />
+              <Row label="Matric Stream" value={(profile as any)?.matric_stream} />
+              <Row label="Roll Number" value={(profile as any)?.roll_number} />
               <Row label="Profession" value={profile?.profession} icon={<Briefcase className="h-4 w-4 text-gold" />} />
               <Row label="Company" value={profile?.company} />
               <Row label="Higher Education" value={profile?.higher_education} />
