@@ -178,7 +178,7 @@ function AlumniMgmt() {
                 </td>
               </tr>
             ))}
-            {data && data.length === 0 && <tr><td colSpan={5} className="px-5 py-12 text-center text-muted-foreground">No alumni yet.</td></tr>}
+            {data && data.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-muted-foreground">No alumni yet.</td></tr>}
           </tbody>
         </table>
       </div>
