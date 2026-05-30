@@ -54,41 +54,41 @@ function Landing() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Qamar E Bani Hashim campus" className="h-full w-full object-cover" width={1600} height={1100} />
-          <div className="absolute inset-0 bg-gradient-to-br from-navy/95 via-navy/85 to-navy/60" />
+          <img src={heroImg} alt="Qamar E Bani Hashim campus building" className="h-full w-full object-cover object-center" width={1600} height={1100} />
+          <div className="absolute inset-0 bg-gradient-to-b from-navy/95 via-navy/80 to-navy/95" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-navy/70 via-transparent to-navy/40" />
         </div>
-        <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-40">
-          <div className="max-w-3xl">
+        <div className="container relative mx-auto px-4 py-28 text-center lg:px-8 lg:py-40">
+          <div className="mx-auto max-w-4xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-gold backdrop-blur">
               <Award className="h-3.5 w-3.5" /> Est. Legacy of Excellence
             </div>
-            <h1 className="mt-6 font-display text-5xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
-              Where graduates of <span className="text-gold">Qamar E Bani Hashim</span> stay connected for life.
+            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+              Qamar E Bani Hashim <span className="text-gold">School Alumni Portal</span>
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/80">
-              Rejoin a community of scholars, professionals, and changemakers. Update your story, find old friends,
-              and open doors for the next generation.
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
+              Connecting Matric Pass-outs across generations.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
               <Link to="/signup">
                 <Button size="lg" className="bg-gradient-gold text-navy shadow-elegant hover:opacity-95">
-                  Join the Alumni Network <ArrowRight className="ml-1 h-4 w-4" />
+                  Register Now <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button size="lg" variant="outline" className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white">
-                  Member Login
+              <Link to="/directory">
+                <Button size="lg" variant="outline" className="border-gold/60 bg-white/5 text-white backdrop-blur hover:bg-gold hover:text-navy">
+                  Find Friends
                 </Button>
               </Link>
             </div>
 
-            <dl className="mt-14 grid grid-cols-3 gap-6 border-t border-white/10 pt-8 text-white">
+            <dl className="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8 text-white">
               <div>
                 <dt className="text-xs uppercase tracking-wider text-gold">Registered Alumni</dt>
                 <dd className="mt-1 font-display text-3xl font-semibold">{(stats?.alumniCount ?? 0) + "+"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wider text-gold">Graduating Classes</dt>
+                <dt className="text-xs uppercase tracking-wider text-gold">Matric Batches</dt>
                 <dd className="mt-1 font-display text-3xl font-semibold">40+</dd>
               </div>
               <div>
@@ -98,6 +98,7 @@ function Landing() {
             </dl>
           </div>
         </div>
+
 
         {/* News ticker */}
         <div className="relative border-t border-white/10 bg-navy/95 backdrop-blur">
