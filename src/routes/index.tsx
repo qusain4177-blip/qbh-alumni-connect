@@ -52,48 +52,47 @@ function Landing() {
       <Header />
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden border-b border-border bg-navy">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Qamar E Bani Hashim campus building" className="h-full w-full object-cover object-center" width={1600} height={1100} />
-          <div className="absolute inset-0 bg-gradient-to-b from-navy/95 via-navy/80 to-navy/95" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-navy/70 via-transparent to-navy/40" />
+          <img src={heroImg} alt="Qamar E Bani Hashim campus building" className="h-full w-full object-cover object-center opacity-30" width={1600} height={1100} />
+          <div className="absolute inset-0 bg-navy/70" />
         </div>
-        <div className="container relative mx-auto px-4 py-28 text-center lg:px-8 lg:py-40">
-          <div className="mx-auto max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-gold backdrop-blur">
-              <Award className="h-3.5 w-3.5" /> Est. Legacy of Excellence
+        <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-36">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white/70">
+              <Award className="h-3.5 w-3.5" /> Alumni Network
             </div>
-            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-              Qamar E Bani Hashim <span className="text-gold">School Alumni Portal</span>
+            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Qamar E Bani Hashim School Alumni Portal
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/70 lg:text-lg">
               Connecting Matric Pass-outs across generations.
             </p>
-            <div className="mt-9 flex flex-wrap justify-center gap-3">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link to="/signup">
-                <Button size="lg" className="bg-gradient-gold text-navy shadow-elegant hover:opacity-95">
-                  Register Now <ArrowRight className="ml-1 h-4 w-4" />
+                <Button size="lg" className="bg-white text-navy hover:bg-white/90">
+                  Register Now <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/directory">
-                <Button size="lg" variant="outline" className="border-gold/60 bg-white/5 text-white backdrop-blur hover:bg-gold hover:text-navy">
+                <Button size="lg" variant="outline" className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
                   Find Friends
                 </Button>
               </Link>
             </div>
 
-            <dl className="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8 text-white">
+            <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
-                <dt className="text-xs uppercase tracking-wider text-gold">Registered Alumni</dt>
-                <dd className="mt-1 font-display text-3xl font-semibold">{(stats?.alumniCount ?? 0) + "+"}</dd>
+                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Registered Alumni</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">{(stats?.alumniCount ?? 0) + "+"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wider text-gold">Matric Batches</dt>
-                <dd className="mt-1 font-display text-3xl font-semibold">40+</dd>
+                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Matric Batches</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">40+</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wider text-gold">Countries</dt>
-                <dd className="mt-1 font-display text-3xl font-semibold">25+</dd>
+                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Countries</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">25+</dd>
               </div>
             </dl>
           </div>
@@ -101,14 +100,14 @@ function Landing() {
 
 
         {/* News ticker */}
-        <div className="relative border-t border-white/10 bg-navy/95 backdrop-blur">
+        <div className="relative border-t border-white/10 bg-navy">
           <div className="container mx-auto flex items-center gap-4 overflow-hidden px-4 py-3 lg:px-8">
-            <span className="shrink-0 rounded-sm bg-gold px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-navy">Latest</span>
+            <span className="shrink-0 rounded border border-white/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/70">Latest</span>
             <div className="flex flex-1 overflow-hidden">
-              <div className="ticker flex shrink-0 gap-12 whitespace-nowrap text-sm text-white/85">
+              <div className="ticker flex shrink-0 gap-12 whitespace-nowrap text-sm text-white/70">
                 {[...tickerItems, ...tickerItems].map((t, i) => (
                   <span key={i} className="flex items-center gap-3">
-                    <span className="h-1 w-1 rounded-full bg-gold" /> {t}
+                    <span className="h-1 w-1 rounded-full bg-white/40" /> {t}
                   </span>
                 ))}
               </div>
@@ -116,6 +115,8 @@ function Landing() {
           </div>
         </div>
       </section>
+
+
 
       {/* Mission */}
       <section className="container mx-auto px-4 py-24 lg:px-8">
@@ -139,11 +140,11 @@ function Landing() {
             { icon: Compass, title: "Mentorship & Jobs", body: "Share opportunities, mentor students, and open doors within a trusted network." },
             { icon: Calendar, title: "Events & Reunions", body: "Stay close to the school calendar, official reunions, and alumni gatherings." },
           ].map(({ icon: Icon, title, body }) => (
-            <div key={title} className="group rounded-xl border border-border bg-card p-7 shadow-card transition-all hover:-translate-y-1 hover:border-gold/60 hover:shadow-elegant">
-              <div className="grid h-11 w-11 place-items-center rounded-md bg-navy text-gold">
+            <div key={title} className="rounded-lg border border-border bg-card p-8 transition-colors hover:border-foreground/20">
+              <div className="grid h-10 w-10 place-items-center rounded-md bg-secondary text-navy">
                 <Icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-5 font-display text-xl font-semibold text-navy">{title}</h3>
+              <h3 className="mt-6 font-display text-lg font-semibold text-navy">{title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
             </div>
           ))}
@@ -191,19 +192,17 @@ function Landing() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-24 lg:px-8">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-hero p-10 text-white shadow-elegant lg:p-16">
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="font-display text-3xl font-semibold lg:text-4xl">Your story belongs in the network.</h2>
-            <p className="mt-3 text-white/80">
+        <div className="rounded-2xl border border-border bg-navy p-12 text-white lg:p-16">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-3xl font-semibold tracking-tight lg:text-4xl">Your story belongs in the network.</h2>
+            <p className="mt-4 text-base leading-relaxed text-white/70">
               Create your alumni profile in minutes. Once approved by the alumni office, you'll have access
               to the directory, events, and exclusive opportunities.
             </p>
-            <Link to="/signup" className="mt-7 inline-flex">
-              <Button size="lg" className="bg-gradient-gold text-navy hover:opacity-95">Create my profile</Button>
+            <Link to="/signup" className="mt-8 inline-flex">
+              <Button size="lg" className="bg-white text-navy hover:bg-white/90">Create my profile</Button>
             </Link>
           </div>
-          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
-          <div className="absolute -bottom-24 -left-12 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
         </div>
       </section>
 

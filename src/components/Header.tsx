@@ -21,7 +21,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-gradient-hero text-gold">
+          <div className="grid h-9 w-9 place-items-center rounded-md bg-navy text-white">
             <GraduationCap className="h-5 w-5" />
           </div>
           <div className="leading-tight">
@@ -61,7 +61,7 @@ export function Header() {
           ) : (
             <>
               <Link to="/login"><Button variant="ghost" size="sm">Login</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-gradient-gold text-navy hover:opacity-90">Join Network</Button></Link>
+              <Link to="/signup"><Button size="sm" className="bg-navy text-white hover:bg-navy/90">Join Network</Button></Link>
             </>
           )}
         </div>
@@ -89,7 +89,7 @@ export function Header() {
               ) : (
                 <>
                   <Link to="/login" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Login</Button></Link>
-                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-gradient-gold text-navy">Join Network</Button></Link>
+                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-navy text-white">Join Network</Button></Link>
                 </>
               )}
             </div>
