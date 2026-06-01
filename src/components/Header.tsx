@@ -89,7 +89,7 @@ export function Header() {
               ) : (
                 <>
                   <Link to="/login" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Login</Button></Link>
-                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-gradient-gold text-navy">Join Network</Button></Link>
+                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-navy text-white">Join Network</Button></Link>
                 </>
               )}
             </div>
