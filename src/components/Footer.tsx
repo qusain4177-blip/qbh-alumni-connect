@@ -7,7 +7,7 @@ export function Footer() {
       <div className="container mx-auto grid gap-10 px-4 py-14 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2.5">
-            <div className="grid h-10 w-10 place-items-center rounded-md bg-gradient-gold text-navy">
+            <div className="grid h-10 w-10 place-items-center rounded-md border border-white/15 bg-white/5 text-white">
               <GraduationCap className="h-5 w-5" />
             </div>
             <div>
