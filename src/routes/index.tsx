@@ -192,19 +192,17 @@ function Landing() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-24 lg:px-8">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-hero p-10 text-white shadow-elegant lg:p-16">
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="font-display text-3xl font-semibold lg:text-4xl">Your story belongs in the network.</h2>
-            <p className="mt-3 text-white/80">
+        <div className="rounded-2xl border border-border bg-navy p-12 text-white lg:p-16">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-3xl font-semibold tracking-tight lg:text-4xl">Your story belongs in the network.</h2>
+            <p className="mt-4 text-base leading-relaxed text-white/70">
               Create your alumni profile in minutes. Once approved by the alumni office, you'll have access
               to the directory, events, and exclusive opportunities.
             </p>
-            <Link to="/signup" className="mt-7 inline-flex">
-              <Button size="lg" className="bg-gradient-gold text-navy hover:opacity-95">Create my profile</Button>
+            <Link to="/signup" className="mt-8 inline-flex">
+              <Button size="lg" className="bg-white text-navy hover:bg-white/90">Create my profile</Button>
             </Link>
           </div>
-          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
-          <div className="absolute -bottom-24 -left-12 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
         </div>
       </section>
 
