@@ -21,7 +21,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-gradient-hero text-gold">
+          <div className="grid h-9 w-9 place-items-center rounded-md bg-navy text-white">
             <GraduationCap className="h-5 w-5" />
           </div>
           <div className="leading-tight">
