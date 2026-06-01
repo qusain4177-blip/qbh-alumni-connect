@@ -140,11 +140,11 @@ function Landing() {
             { icon: Compass, title: "Mentorship & Jobs", body: "Share opportunities, mentor students, and open doors within a trusted network." },
             { icon: Calendar, title: "Events & Reunions", body: "Stay close to the school calendar, official reunions, and alumni gatherings." },
           ].map(({ icon: Icon, title, body }) => (
-            <div key={title} className="group rounded-xl border border-border bg-card p-7 shadow-card transition-all hover:-translate-y-1 hover:border-gold/60 hover:shadow-elegant">
-              <div className="grid h-11 w-11 place-items-center rounded-md bg-navy text-gold">
+            <div key={title} className="rounded-lg border border-border bg-card p-8 transition-colors hover:border-foreground/20">
+              <div className="grid h-10 w-10 place-items-center rounded-md bg-secondary text-navy">
                 <Icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-5 font-display text-xl font-semibold text-navy">{title}</h3>
+              <h3 className="mt-6 font-display text-lg font-semibold text-navy">{title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
             </div>
           ))}
