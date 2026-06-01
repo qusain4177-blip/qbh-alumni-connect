@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, ArrowUpRight, Award, Briefcase, Calendar, Compass, Globe, MapPin, Sparkles, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Award, Briefcase, Calendar, Globe, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
