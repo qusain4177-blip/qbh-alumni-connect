@@ -61,7 +61,7 @@ export function Header() {
           ) : (
             <>
               <Link to="/login"><Button variant="ghost" size="sm">Login</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-gradient-gold text-navy hover:opacity-90">Join Network</Button></Link>
+              <Link to="/signup"><Button size="sm" className="bg-navy text-white hover:bg-navy/90">Join Network</Button></Link>
             </>
           )}
         </div>
