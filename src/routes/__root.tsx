@@ -51,7 +51,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Qamar E Bani Hashim — Alumni Network" },
       { name: "twitter:title", content: "Qamar E Bani Hashim — Alumni Network" },
       { property: "og:description", content: "The official alumni portal of Qamar E Bani Hashim School. Reconnect, network, and celebrate our shared legacy." },
-      { name: "twitter:description", content: "The official alumni portal of Qamar E Bani Hashim School. Reconnect, network, and celebrate our shared legacy." },
+      { name: "twitter:description", content: "The official alumni network of Qamar E Bani Hashim. Find your batch, share what you're working on, stay in touch." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e84405aa-0307-4275-b8df-7ff4365a6a1e/id-preview-3bf50dca--32e27c7f-4ea4-400f-9d23-70d862346a69.lovable.app-1779918965052.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e84405aa-0307-4275-b8df-7ff4365a6a1e/id-preview-3bf50dca--32e27c7f-4ea4-400f-9d23-70d862346a69.lovable.app-1779918965052.png" },
       { name: "twitter:card", content: "summary_large_image" },

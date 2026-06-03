@@ -62,7 +62,7 @@ export function Header() {
           ) : (
             <>
               <Link to="/login"><Button variant="ghost" size="sm">Login</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-navy text-white hover:bg-navy/90">Join Network</Button></Link>
+              <Link to="/signup"><Button size="sm" className="bg-navy text-white hover:bg-navy/90">Sign up</Button></Link>
             </>
           )}
         </div>
@@ -90,7 +90,7 @@ export function Header() {
               ) : (
                 <>
                   <Link to="/login" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Login</Button></Link>
-                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-navy text-white">Join Network</Button></Link>
+                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-navy text-white">Sign up</Button></Link>
                 </>
               )}
             </div>
