@@ -28,7 +28,7 @@ function EventsPage() {
           <div className="container mx-auto px-4 lg:px-8">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/60">Calendar</p>
             <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight lg:text-6xl">Events & news</h1>
-            <p className="mt-4 max-w-2xl text-white/65">Reunions, batch meets, and announcements from campus. Updated weekly.seam</p>
+            <p className="mt-4 max-w-2xl text-white/65">Reunions, batch meets, and announcements from campus. Updated weekly.</p>
           </div>
         </section>
 
@@ -55,13 +55,13 @@ function EventsPage() {
                 </article>
               );
             })}
-            {events && events.length === 0 && <p className="text-muted-foreground">No upcoming events yet. Check back soon.</p>}
+            {events && events.length === 0 && <p className="text-muted-foreground">Nothing on the calendar yet. Check back in a few weeks.</p>}
           </div>
         </section>
 
         <section className="bg-secondary/50 py-16">
           <div className="container mx-auto px-4 lg:px-8">
-            <h2 className="font-display text-3xl font-semibold text-navy">Latest News</h2>
+            <h2 className="font-display text-3xl font-semibold text-navy">Recent news</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-2">
               {(news ?? []).map((n) => (
                 <article key={n.id} className="rounded-xl border border-border bg-card p-6">
@@ -72,7 +72,7 @@ function EventsPage() {
                   {n.excerpt && <p className="mt-2 text-sm text-muted-foreground">{n.excerpt}</p>}
                 </article>
               ))}
-              {news && news.length === 0 && <p className="text-muted-foreground">No announcements yet.</p>}
+              {news && news.length === 0 && <p className="text-muted-foreground">No announcements right now.</p>}
             </div>
           </div>
         </section>
