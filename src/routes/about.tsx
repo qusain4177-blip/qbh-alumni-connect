@@ -13,41 +13,42 @@ function About() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1">
-        <section className="bg-gradient-hero py-24 text-white">
+        <section className="bg-navy py-28 text-white">
           <div className="container mx-auto px-4 lg:px-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-gold">Our Heritage</p>
-            <h1 className="mt-3 max-w-3xl font-display text-5xl font-semibold lg:text-6xl">About Qamar E Bani Hashim</h1>
-            <p className="mt-5 max-w-2xl text-lg text-white/80">
-              A school built on faith, scholarship, and service — and the alumni community that carries its legacy forward.
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/60">About</p>
+            <h1 className="mt-4 max-w-3xl font-display text-5xl font-semibold tracking-tight lg:text-7xl">A school, and the people who left it.</h1>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
+              Qamar E Bani Hashim has been graduating Matric students since 1986. This page is the short version of what we stand for, and why the alumni network exists.
             </p>
           </div>
         </section>
 
-        <section className="container mx-auto grid gap-14 px-4 py-24 lg:grid-cols-3 lg:px-8">
+        <section className="container mx-auto grid gap-14 px-4 py-28 lg:grid-cols-3 lg:px-8">
           {[
-            { icon: BookOpen, title: "Tradition of Excellence", body: "For decades, our school has cultivated a culture of rigorous learning and moral grounding. Every graduate carries that standard into the world." },
-            { icon: HeartHandshake, title: "A Living Community", body: "The alumni network turns memories into momentum — connecting classmates, championing mentorship, and supporting today's students." },
-            { icon: Target, title: "Looking Forward", body: "Through scholarships, events, and chapters around the world, we invest in the future of Qamar E Bani Hashim and its people." },
+            { icon: BookOpen, title: "What the school does", body: "We prepare students for the Matric board exams, and for the decisions that follow them. Discipline, daily reading, and a teacher who knows your name." },
+            { icon: HeartHandshake, title: "Why alumni stay involved", body: "Old students return to teach, to fund scholarships, and to hire from the new batches. The network makes that easier than a group chat." },
+            { icon: Target, title: "What we are building", body: "A working directory, a real events calendar, and a job board that stays useful. No pageantry — just the practical parts of staying in touch." },
           ].map(({ icon: Icon, title, body }) => (
             <div key={title}>
-              <div className="grid h-12 w-12 place-items-center rounded-md bg-navy text-gold">
-                <Icon className="h-5 w-5" />
+              <div className="grid h-12 w-12 place-items-center rounded-md bg-navy text-white">
+                <Icon className="h-5 w-5" strokeWidth={1.75} />
               </div>
-              <h2 className="mt-5 font-display text-2xl font-semibold text-navy">{title}</h2>
+              <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight text-navy">{title}</h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">{body}</p>
             </div>
           ))}
         </section>
 
-        <section className="bg-secondary/50 py-24">
+        <section className="bg-secondary/50 py-28">
           <div className="container mx-auto max-w-3xl px-4 text-center lg:px-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-gold">Mission Statement</p>
-            <p className="mt-6 font-display text-2xl leading-relaxed text-navy lg:text-3xl">
-              "To preserve the bonds of our school community, to honor those who came before, and to open every possible door for those who will follow."
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Mission</p>
+            <p className="mt-6 font-display text-2xl leading-snug tracking-tight text-navy lg:text-4xl">
+              Keep the bonds intact. Make the door easy to find for whoever wants to come back.
             </p>
           </div>
         </section>
       </main>
+
       <Footer />
     </div>
   );

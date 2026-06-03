@@ -43,31 +43,31 @@ function ContactPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1">
-        <section className="container mx-auto grid gap-12 px-4 py-20 lg:grid-cols-2 lg:px-8">
+        <section className="container mx-auto grid gap-12 px-4 py-24 lg:grid-cols-2 lg:px-8">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-gold">We're here to help</p>
-            <h1 className="mt-3 font-display text-5xl font-semibold text-navy">Contact Support</h1>
-            <p className="mt-4 leading-relaxed text-muted-foreground">
-              For technical questions about your alumni account, profile updates, or anything related to the network,
-              send us a message and a team member will respond within two business days.
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Support</p>
+            <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight text-navy lg:text-6xl">Talk to a person.</h1>
+            <p className="mt-5 leading-relaxed text-muted-foreground">
+              Trouble signing in, a profile to correct, or a batch that needs adding — write to the alumni office. We reply within two working days.
             </p>
-            <div className="mt-8 space-y-4">
+            <div className="mt-10 space-y-5">
               <div className="flex items-start gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-md bg-navy text-gold"><Mail className="h-4 w-4" /></div>
+                <div className="grid h-10 w-10 place-items-center rounded-md bg-navy text-white"><Mail className="h-4 w-4" strokeWidth={1.75} /></div>
                 <div>
-                  <p className="font-medium text-navy">Email</p>
-                  <p className="text-sm text-muted-foreground">alumni@qbh.school</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Email</p>
+                  <p className="text-sm text-foreground">alumni@qbh.school</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-md bg-navy text-gold"><MessageSquare className="h-4 w-4" /></div>
+                <div className="grid h-10 w-10 place-items-center rounded-md bg-navy text-white"><MessageSquare className="h-4 w-4" strokeWidth={1.75} /></div>
                 <div>
-                  <p className="font-medium text-navy">Response Time</p>
-                  <p className="text-sm text-muted-foreground">Within 1–2 business days</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Response</p>
+                  <p className="text-sm text-foreground">Within 1–2 working days</p>
                 </div>
               </div>
             </div>
           </div>
+
 
           <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-8 shadow-card">
             <div className="grid gap-4 sm:grid-cols-2">

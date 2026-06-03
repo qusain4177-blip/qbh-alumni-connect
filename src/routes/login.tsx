@@ -40,10 +40,11 @@ function LoginPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex flex-1 items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elegant">
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">Member Access</p>
-          <h1 className="mt-2 font-display text-3xl font-semibold text-navy">Welcome back</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Sign in to access the alumni network.</p>
+        <div className="w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-sm">
+          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Sign in</p>
+          <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-navy">Welcome back.</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Use the email you registered with.</p>
+
           <form onSubmit={submit} className="mt-7 space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email">Email</Label>

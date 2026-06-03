@@ -28,12 +28,13 @@ function Landing() {
       .then(({ data }) => {
         const items = (data ?? []).map((n) => n.title);
         setTickerItems(items.length ? items : [
-          "Annual Alumni Reunion 2026 — registration now open",
-          "QBH scholars launch new mentorship initiative",
-          "Matric 2015 batch celebrates 10-year reunion",
-          "School ranks among top institutions in the region",
+          "Alumni Reunion 2026 — registration open",
+          "Matric 2015 marks ten years since graduation",
+          "New mentorship program pairs students with working alumni",
+          "Three QBH graduates named in regional honours list",
         ]);
       });
+
   }, []);
 
   const { data: stats } = useQuery({
@@ -59,42 +60,43 @@ function Landing() {
         </div>
         <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-36">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white/70">
-              <Award className="h-3.5 w-3.5" /> Alumni Network
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
+              <Award className="h-3.5 w-3.5" /> QBH / Alumni
             </div>
-            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Qamar E Bani Hashim School Alumni Portal
+            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              The Matric class, <br className="hidden sm:block" /> still in one room.
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/70 lg:text-lg">
-              Connecting Matric Pass-outs across generations.
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/65 lg:text-lg">
+              The official alumni network of Qamar E Bani Hashim. Find your batch, share what you're working on, and stay in touch.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
               <Link to="/signup">
-                <Button size="lg" className="bg-white text-navy hover:bg-white/90">
-                  Register Now <ArrowRight className="ml-1.5 h-4 w-4" />
+                <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">
+                  Create account <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/directory">
-                <Button size="lg" variant="outline" className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
-                  Find Friends
+                <Button size="lg" variant="outline" className="rounded-md border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
+                  Search directory
                 </Button>
               </Link>
             </div>
 
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Registered Alumni</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">{(stats?.alumniCount ?? 0) + "+"}</dd>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Alumni</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{(stats?.alumniCount ?? 0) + "+"}</dd>
               </div>
               <div>
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Matric Batches</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">40+</dd>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Batches</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">40+</dd>
               </div>
               <div>
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Countries</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">25+</dd>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Countries</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">25+</dd>
               </div>
             </dl>
+
           </div>
         </div>
 
@@ -102,7 +104,7 @@ function Landing() {
         {/* News ticker */}
         <div className="relative border-t border-white/10 bg-navy">
           <div className="container mx-auto flex items-center gap-4 overflow-hidden px-4 py-3 lg:px-8">
-            <span className="shrink-0 rounded border border-white/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/70">Latest</span>
+            <span className="shrink-0 rounded border border-white/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-white/70">Latest</span>
             <div className="flex flex-1 overflow-hidden">
               <div className="ticker flex shrink-0 gap-12 whitespace-nowrap text-sm text-white/70">
                 {[...tickerItems, ...tickerItems].map((t, i) => (
@@ -122,16 +124,15 @@ function Landing() {
       <section className="container mx-auto px-4 py-28 lg:px-8 lg:py-32">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Our Mission</p>
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">What this is</p>
             <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-navy lg:text-5xl">
-              A lifelong fellowship of scholarship and service.
+              An address book the school never lost.
             </h2>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-2 lg:text-lg">
-            The Qamar E Bani Hashim Alumni Network exists to preserve the bonds formed within our halls
-            and to channel them into mentorship, opportunity, and giving back. From the first reunion to
-            the next generation's graduation, we walk together.
+            QBH has been graduating Matric students for forty years. Most of them lost touch the week after results came out. This is the place to find them again — and to keep your own details current as life moves around.
           </p>
+
         </div>
 
         {/* Bento grid */}
@@ -142,15 +143,15 @@ function Landing() {
               <div className="grid h-10 w-10 place-items-center rounded-md border border-white/15 bg-white/5">
                 <Users className="h-5 w-5" strokeWidth={1.75} />
               </div>
-              <span className="text-[11px] font-medium uppercase tracking-wider text-white/50">01 — Directory</span>
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">01 / Directory</span>
             </div>
             <div className="mt-10">
-              <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">Find anyone, from any Matric batch.</h3>
+              <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">Find anyone, any batch.</h3>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-white/65">
-                Searchable directory filtered by graduation year, city, profession, or higher education stream — reconnect in a single click.
+                Filter by passing year, city, profession, or stream. No friend-of-a-friend hunts on WhatsApp.
               </p>
               <Link to="/directory" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-white transition-all duration-300 hover:gap-2.5">
-                Browse directory <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+                Open directory <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
               </Link>
             </div>
           </article>
@@ -162,7 +163,7 @@ function Landing() {
             </div>
             <div>
               <p className="font-display text-4xl font-semibold tracking-tight text-navy">{(stats?.alumniCount ?? 0) + "+"}</p>
-              <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Verified alumni</p>
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Verified alumni</p>
             </div>
           </article>
 
@@ -172,8 +173,8 @@ function Landing() {
               <Briefcase className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <h3 className="font-display text-lg font-semibold text-navy">Mentorship & Jobs</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">Open doors and share opportunities within a trusted alumni network.</p>
+              <h3 className="font-display text-lg font-semibold text-navy">Jobs & mentors</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">Post openings to people who already share a school. Ask for advice from someone who has been where you are going.</p>
             </div>
           </article>
 
@@ -182,22 +183,23 @@ function Landing() {
             <div className="grid h-10 w-10 place-items-center rounded-md bg-secondary text-navy">
               <Calendar className="h-5 w-5" strokeWidth={1.75} />
             </div>
-            <h3 className="mt-5 font-display text-lg font-semibold text-navy">Events & Reunions</h3>
+            <h3 className="mt-5 font-display text-lg font-semibold text-navy">Reunions, on the record</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              Stay close to the school calendar, official reunions, and chapter gatherings around the world.
+              Batch meets, school days, chapter dinners. Listed in one place with dates, venues and RSVP counts.
             </p>
           </article>
 
           {/* Global Chapters */}
           <article className="flex items-center justify-between rounded-xl border border-border bg-secondary/60 p-6 transition-all duration-300 hover:bg-secondary md:col-span-3">
             <div>
-              <h3 className="font-display text-lg font-semibold text-navy">Global Chapters</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">QBH alumni active across 25+ countries and counting.</p>
+              <h3 className="font-display text-lg font-semibold text-navy">Chapters abroad</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">Alumni in 25+ countries. Karachi, Dubai and Toronto chapters meet quarterly.</p>
             </div>
             <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md border border-border bg-card text-navy">
               <Globe className="h-5 w-5" strokeWidth={1.75} />
             </div>
           </article>
+
         </div>
       </section>
 
@@ -206,24 +208,26 @@ function Landing() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gold">Upcoming</p>
-              <h2 className="mt-2 font-display text-4xl font-semibold text-navy">Mark your calendar</h2>
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Upcoming</p>
+              <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-navy">On the calendar</h2>
             </div>
-            <Link to="/events" className="hidden text-sm font-medium text-navy hover:text-gold sm:inline-flex">View all events →</Link>
+            <Link to="/events" className="hidden text-sm font-medium text-navy hover:text-gold sm:inline-flex">All events →</Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {(stats?.events?.length ? stats.events : [
-              { id: "p1", title: "Annual Alumni Reunion", event_date: "2026-09-12T18:00:00.000Z", location: "Main Campus, Grand Hall" },
-              { id: "p2", title: "Career Mentorship Mixer", event_date: "2026-07-04T17:00:00.000Z", location: "Virtual" },
-              { id: "p3", title: "Matric 2010 — 15 Year Meet", event_date: "2026-11-22T17:00:00.000Z", location: "Lahore" },
+              { id: "p1", title: "Alumni Reunion 2026", event_date: "2026-09-12T18:00:00.000Z", location: "Main Campus, Grand Hall" },
+              { id: "p2", title: "Mentorship night", event_date: "2026-07-04T17:00:00.000Z", location: "Online" },
+              { id: "p3", title: "Matric 2010 — 15 years on", event_date: "2026-11-22T17:00:00.000Z", location: "Lahore" },
+
             ]).map((e: any) => {
               const d = new Date(e.event_date);
               return (
                 <article key={e.id} className="overflow-hidden rounded-xl border border-border bg-card">
                   <div className="flex items-center gap-4 bg-gradient-hero p-6 text-white">
                     <div className="flex flex-col items-center justify-center rounded-lg bg-white/10 px-3 py-2 text-center backdrop-blur">
-                      <span className="text-xs uppercase tracking-wider text-gold">{d.toLocaleString("en", { month: "short" })}</span>
-                      <span className="font-display text-2xl font-semibold">{d.getDate()}</span>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">{d.toLocaleString("en", { month: "short" })}</span>
+                      <span className="font-display text-2xl font-semibold tracking-tight">{d.getDate()}</span>
+
                     </div>
                     <div>
                       <h3 className="font-display text-lg font-semibold">{e.title}</h3>
@@ -244,15 +248,15 @@ function Landing() {
       <section className="container mx-auto px-4 py-24 lg:px-8">
         <div className="rounded-2xl border border-border bg-navy p-12 text-white lg:p-16">
           <div className="max-w-2xl">
-            <h2 className="font-display text-3xl font-semibold tracking-tight lg:text-4xl">Your story belongs in the network.</h2>
-            <p className="mt-4 text-base leading-relaxed text-white/70">
-              Create your alumni profile in minutes. Once approved by the alumni office, you'll have access
-              to the directory, events, and exclusive opportunities.
+            <h2 className="font-display text-3xl font-semibold tracking-tight lg:text-5xl">Add yourself to the list.</h2>
+            <p className="mt-5 text-base leading-relaxed text-white/65">
+              Three fields, two minutes. The alumni office verifies new accounts within a working day.
             </p>
             <Link to="/signup" className="mt-8 inline-flex">
-              <Button size="lg" className="bg-white text-navy hover:bg-white/90">Create my profile</Button>
+              <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">Create my profile</Button>
             </Link>
           </div>
+
         </div>
       </section>
 
