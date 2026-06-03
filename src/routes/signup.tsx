@@ -60,10 +60,11 @@ function SignupPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex flex-1 items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elegant">
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">Become a Member</p>
-          <h1 className="mt-2 font-display text-3xl font-semibold text-navy">Join the Matric alumni</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Your account will be reviewed by the alumni office.</p>
+        <div className="w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-sm">
+          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Create account</p>
+          <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-navy">Join your batch.</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Verified by the alumni office, usually within a working day.</p>
+
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="full_name">Full name</Label>
