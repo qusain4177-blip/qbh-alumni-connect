@@ -25,9 +25,10 @@ export function Header() {
             <GraduationCap className="h-5 w-5" />
           </div>
           <div className="leading-tight">
-            <div className="font-display text-base font-semibold text-navy">Qamar E Bani Hashim</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Alumni Network</div>
+            <div className="font-display text-base font-semibold tracking-tight text-navy">Qamar E Bani Hashim</div>
+            <div className="font-mono text-[9px] uppercase tracking-[0.24em] text-muted-foreground">Alumni / Est. 1986</div>
           </div>
+
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
