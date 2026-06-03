@@ -208,16 +208,17 @@ function Landing() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gold">Upcoming</p>
-              <h2 className="mt-2 font-display text-4xl font-semibold text-navy">Mark your calendar</h2>
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Upcoming</p>
+              <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-navy">On the calendar</h2>
             </div>
-            <Link to="/events" className="hidden text-sm font-medium text-navy hover:text-gold sm:inline-flex">View all events →</Link>
+            <Link to="/events" className="hidden text-sm font-medium text-navy hover:text-gold sm:inline-flex">All events →</Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {(stats?.events?.length ? stats.events : [
-              { id: "p1", title: "Annual Alumni Reunion", event_date: "2026-09-12T18:00:00.000Z", location: "Main Campus, Grand Hall" },
-              { id: "p2", title: "Career Mentorship Mixer", event_date: "2026-07-04T17:00:00.000Z", location: "Virtual" },
-              { id: "p3", title: "Matric 2010 — 15 Year Meet", event_date: "2026-11-22T17:00:00.000Z", location: "Lahore" },
+              { id: "p1", title: "Alumni Reunion 2026", event_date: "2026-09-12T18:00:00.000Z", location: "Main Campus, Grand Hall" },
+              { id: "p2", title: "Mentorship night", event_date: "2026-07-04T17:00:00.000Z", location: "Online" },
+              { id: "p3", title: "Matric 2010 — 15 years on", event_date: "2026-11-22T17:00:00.000Z", location: "Lahore" },
+
             ]).map((e: any) => {
               const d = new Date(e.event_date);
               return (
