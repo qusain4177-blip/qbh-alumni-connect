@@ -15,15 +15,14 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-display text-8xl font-bold text-navy">404</h1>
-        <h2 className="mt-2 font-display text-2xl text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <Link to="/" className="mt-6 inline-flex rounded-md bg-navy px-5 py-2.5 text-sm font-medium text-navy-foreground hover:opacity-90">
-          Return Home
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">404</p>
+        <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight text-navy">Page not found.</h1>
+        <p className="mt-3 text-sm text-muted-foreground">The link is broken or the page has moved.</p>
+        <Link to="/" className="mt-7 inline-flex rounded-md bg-navy px-5 py-2.5 text-sm font-medium text-navy-foreground hover:bg-navy/90">
+          Back to home
         </Link>
       </div>
+
     </div>
   );
 }
