@@ -143,15 +143,15 @@ function Landing() {
               <div className="grid h-10 w-10 place-items-center rounded-md border border-white/15 bg-white/5">
                 <Users className="h-5 w-5" strokeWidth={1.75} />
               </div>
-              <span className="text-[11px] font-medium uppercase tracking-wider text-white/50">01 — Directory</span>
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">01 / Directory</span>
             </div>
             <div className="mt-10">
-              <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">Find anyone, from any Matric batch.</h3>
+              <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">Find anyseamone, any batch.</h3>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-white/65">
-                Searchable directory filtered by graduation year, city, profession, or higher education stream — reconnect in a single click.
+                Filter by passing year, city, profession, or stream. No friend-of-a-friend hunts on WhatsApp.
               </p>
               <Link to="/directory" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-white transition-all duration-300 hover:gap-2.5">
-                Browse directory <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+                Open directory <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
               </Link>
             </div>
           </article>
@@ -163,7 +163,7 @@ function Landing() {
             </div>
             <div>
               <p className="font-display text-4xl font-semibold tracking-tight text-navy">{(stats?.alumniCount ?? 0) + "+"}</p>
-              <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Verified alumni</p>
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Verified alumni</p>
             </div>
           </article>
 
@@ -173,8 +173,8 @@ function Landing() {
               <Briefcase className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <h3 className="font-display text-lg font-semibold text-navy">Mentorship & Jobs</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">Open doors and share opportunities within a trusted alumni network.</p>
+              <h3 className="font-display text-lg font-semibold text-navy">Jobs & mentors</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">Post openings to people who already share a school. Ask for advice from someone who has been where you are going.</p>
             </div>
           </article>
 
@@ -183,22 +183,23 @@ function Landing() {
             <div className="grid h-10 w-10 place-items-center rounded-md bg-secondary text-navy">
               <Calendar className="h-5 w-5" strokeWidth={1.75} />
             </div>
-            <h3 className="mt-5 font-display text-lg font-semibold text-navy">Events & Reunions</h3>
+            <h3 className="mt-5 font-display text-lg font-semibold text-navy">Reunions, on the record</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              Stay close to the school calendar, official reunions, and chapter gatherings around the world.
+              Batch meets, school days, chapter dinners. Listed in one place with dates, venues and RSVP counts.
             </p>
           </article>
 
           {/* Global Chapters */}
           <article className="flex items-center justify-between rounded-xl border border-border bg-secondary/60 p-6 transition-all duration-300 hover:bg-secondary md:col-span-3">
             <div>
-              <h3 className="font-display text-lg font-semibold text-navy">Global Chapters</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">QBH alumni active across 25+ countries and counting.</p>
+              <h3 className="font-display text-lg font-semibold text-navy">Chapters abroad</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">Alumni in 25+ countries. Karachi, Dubai and Toronto chapters meet quarterly.</p>
             </div>
             <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md border border-border bg-card text-navy">
               <Globe className="h-5 w-5" strokeWidth={1.75} />
             </div>
           </article>
+
         </div>
       </section>
 
