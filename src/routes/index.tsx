@@ -104,7 +104,7 @@ function Landing() {
         {/* News ticker */}
         <div className="relative border-t border-white/10 bg-navy">
           <div className="container mx-auto flex items-center gap-4 overflow-hidden px-4 py-3 lg:px-8">
-            <span className="shrink-0 rounded border border-white/15 px seam-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-white/70">Wire</span>
+            <span className="shrink-0 rounded border border-white/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-white/70">Wire</span>
             <div className="flex flex-1 overflow-hidden">
               <div className="ticker flex shrink-0 gap-12 whitespace-nowrap text-sm text-white/70">
                 {[...tickerItems, ...tickerItems].map((t, i) => (
