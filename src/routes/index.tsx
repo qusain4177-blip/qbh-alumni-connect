@@ -225,8 +225,9 @@ function Landing() {
                 <article key={e.id} className="overflow-hidden rounded-xl border border-border bg-card">
                   <div className="flex items-center gap-4 bg-gradient-hero p-6 text-white">
                     <div className="flex flex-col items-center justify-center rounded-lg bg-white/10 px-3 py-2 text-center backdrop-blur">
-                      <span className="text-xs uppercase tracking-wider text-gold">{d.toLocaleString("en", { month: "short" })}</span>
-                      <span className="font-display text-2xl font-semibold">{d.getDate()}</span>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">{d.toLocaleString("en", { month: "short" })}</span>
+                      <span className="font-display text-2xl font-semibold tracking-tight">{d.getDate()}</span>
+
                     </div>
                     <div>
                       <h3 className="font-display text-lg font-semibold">{e.title}</h3>
