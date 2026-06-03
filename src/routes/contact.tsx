@@ -51,7 +51,7 @@ function ContactPage() {
               Trouble signing in, a profile to correct, or a batch that needs adding — write to the alumni office. We reply within two working days.
             </p>
             <div className="mt-10 space-y-5">
-              <div className="flex items seam-start gap-3">
+              <div className="flex items-start gap-3">
                 <div className="grid h-10 w-10 place-items-center rounded-md bg-navy text-white"><Mail className="h-4 w-4" strokeWidth={1.75} /></div>
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Email</p>
