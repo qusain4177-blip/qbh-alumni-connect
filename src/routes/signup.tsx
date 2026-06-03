@@ -52,7 +52,7 @@ function SignupPage() {
       } as any).eq("id", data.user.id);
     }
     setLoading(false);
-    toast.success("Account created! Welcome to the network.");
+    toast.success("Account created. Welcome.");
     navigate({ to: "/dashboard" });
   };
 
@@ -101,7 +101,7 @@ function SignupPage() {
                 {STREAMS.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-gradient-gold text-navy hover:opacity-95">
+            <Button type="submit" disabled={loading} className="w-full bg-navy text-white rounded-md hover:bg-navy/90">
               {loading ? "Creating account..." : "Create my account"}
             </Button>
           </form>
