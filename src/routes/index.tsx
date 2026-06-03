@@ -124,16 +124,15 @@ function Landing() {
       <section className="container mx-auto px-4 py-28 lg:px-8 lg:py-32">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Our Mission</p>
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">What this is</p>
             <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-navy lg:text-5xl">
-              A lifelong fellowship of scholarship and service.
+              An address book the school never lost.
             </h2>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-2 lg:text-lg">
-            The Qamar E Bani Hashim Alumni Network exists to preserve the bonds formed within our halls
-            and to channel them into mentorship, opportunity, and giving back. From the first reunion to
-            the next generation's graduation, we walk together.
+            QBH has been graduating Matric students for forty years. Most of them lost touch the week after results came out. This is the place to find them again — and to keep your own details current as life moves around.
           </p>
+
         </div>
 
         {/* Bento grid */}
