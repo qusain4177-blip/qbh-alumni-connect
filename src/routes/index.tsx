@@ -60,42 +60,43 @@ function Landing() {
         </div>
         <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-36">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white/70">
-              <Award className="h-3.5 w-3.5" /> Alumni Network
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
+              <Award className="h-3.5 w-3.5" /> QBH / Alumni
             </div>
-            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Qamar E Bani Hashim School Alumni Portal
+            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              The Matric class, <br className="hidden sm:block" /> still in one room.
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/70 lg:text-lg">
-              Connecting Matric Pass-outs across generations.
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/65 lg:text-lg">
+              The official alumni network of Qamar E Bani Hashim. Find your batch, share what you're working on, and stay in touch.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
               <Link to="/signup">
-                <Button size="lg" className="bg-white text-navy hover:bg-white/90">
-                  Register Now <ArrowRight className="ml-1.5 h-4 w-4" />
+                <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">
+                  Create account <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/directory">
-                <Button size="lg" variant="outline" className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
-                  Find Friends
+                <Button size="lg" variant="outline" className="rounded-md border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
+                  Search directory
                 </Button>
               </Link>
             </div>
 
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Registered Alumni</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">{(stats?.alumniCount ?? 0) + "+"}</dd>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Alumni</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{(stats?.alumniCount ?? 0) + "+"}</dd>
               </div>
               <div>
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Matric Batches</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">40+</dd>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Batches</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">40+</dd>
               </div>
               <div>
-                <dt className="text-[11px] font-medium uppercase tracking-wider text-white/50">Countries</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold text-white">25+</dd>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Countries</dt>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">25+</dd>
               </div>
             </dl>
+
           </div>
         </div>
 
