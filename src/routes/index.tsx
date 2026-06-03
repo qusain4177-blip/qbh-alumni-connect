@@ -146,7 +146,7 @@ function Landing() {
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">01 / Directory</span>
             </div>
             <div className="mt-10">
-              <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">Find anyseamone, any batch.</h3>
+              <h3 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">Find anyone, any batch.</h3>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-white/65">
                 Filter by passing year, city, profession, or stream. No friend-of-a-friend hunts on WhatsApp.
               </p>
