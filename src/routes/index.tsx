@@ -28,12 +28,13 @@ function Landing() {
       .then(({ data }) => {
         const items = (data ?? []).map((n) => n.title);
         setTickerItems(items.length ? items : [
-          "Annual Alumni Reunion 2026 — registration now open",
-          "QBH scholars launch new mentorship initiative",
-          "Matric 2015 batch celebrates 10-year reunion",
-          "School ranks among top institutions in the region",
+          "Alumni Reunion 2026 — registration open",
+          "Matric 2015 marks ten years since graduation",
+          "New mentorship program pairs students with working alumni",
+          "Three QBH graduates named in regional honours list",
         ]);
       });
+
   }, []);
 
   const { data: stats } = useQuery({
