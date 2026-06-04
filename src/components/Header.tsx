@@ -1,5 +1,6 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import qbhLogo from "@/assets/qbh-logo.jpeg.asset.json";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
@@ -20,10 +21,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-navy text-white">
-            <GraduationCap className="h-5 w-5" />
-          </div>
+        <Link to="/" className="flex items-center gap-3" aria-label="QBH Umbrella — Home">
+          <img
+            src={qbhLogo.url}
+            alt="QBH Umbrella logo"
+            width={44}
+            height={44}
+            className="h-10 w-10 shrink-0 rounded-full object-contain sm:h-11 sm:w-11"
+          />
           <div className="leading-tight">
             <div className="font-display text-base font-semibold tracking-tight text-navy">Qamar E Bani Hashim</div>
             <div className="font-mono text-[9px] uppercase tracking-[0.24em] text-muted-foreground">Alumni / Est. 1986</div>

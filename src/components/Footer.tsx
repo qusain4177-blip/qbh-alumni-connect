@@ -1,20 +1,25 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import qbhLogo from "@/assets/qbh-logo.jpeg.asset.json";
 
 export function Footer() {
   return (
     <footer className="bg-navy text-navy-foreground">
       <div className="container mx-auto grid gap-10 px-4 py-14 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-2">
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-10 w-10 place-items-center rounded-md border border-white/15 bg-white/5 text-white">
-              <GraduationCap className="h-5 w-5" />
-            </div>
+          <Link to="/" className="flex items-center gap-3" aria-label="QBH Umbrella — Home">
+            <img
+              src={qbhLogo.url}
+              alt="QBH Umbrella logo"
+              width={48}
+              height={48}
+              className="h-12 w-12 shrink-0 rounded-full bg-white object-contain p-0.5"
+            />
             <div>
               <div className="font-display text-lg font-semibold tracking-tight">Qamar E Bani Hashim</div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">Alumni / Est. 1986</div>
             </div>
-          </div>
+          </Link>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-navy-foreground/65">
             The official alumni network of Qamar E Bani Hashim. Run by old students, for old students.
           </p>
