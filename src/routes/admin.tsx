@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { CheckCircle2, Megaphone, Newspaper, Trash2, Users, CalendarPlus, UserCheck, UserX } from "lucide-react";
+import { CheckCircle2, Download, Megaphone, Newspaper, Search, Trash2, Users, CalendarPlus, UserCheck, UserX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -132,10 +132,36 @@ function Stat({ label, value, tone }: { label: string; value: number | string; t
 
 function AlumniMgmt() {
   const qc = useQueryClient();
+  const [q, setQ] = useState("");
+  const [statusF, setStatusF] = useState("");
+  const [streamF, setStreamF] = useState("");
+  const [yearF, setYearF] = useState("");
+  const [sortKey, setSortKey] = useState<"created_at" | "full_name" | "graduation_year">("created_at");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+
   const { data } = useQuery({
     queryKey: ["admin-profiles"],
     queryFn: async () => (await supabase.from("profiles").select("*").order("created_at", { ascending: false })).data ?? [],
   });
+
+  const rows = useMemo(() => {
+    const pq = q.toLowerCase();
+    let list = (data ?? []).filter((p: any) => {
+      const matchQ = !q || [p.full_name, p.email, p.profession, p.company, p.city].some((v) => v?.toLowerCase().includes(pq));
+      const matchS = !statusF || p.status === statusF;
+      const matchSt = !streamF || p.matric_stream === streamF;
+      const matchY = !yearF || String(p.graduation_year ?? "") === yearF;
+      return matchQ && matchS && matchSt && matchY;
+    });
+    list.sort((a: any, b: any) => {
+      const av = a[sortKey] ?? "";
+      const bv = b[sortKey] ?? "";
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ? 1 : -1;
+      return 0;
+    });
+    return list;
+  }, [data, q, statusF, streamF, yearF, sortKey, sortDir]);
 
   const update = async (id: string, patch: any) => {
     const { error } = await supabase.from("profiles").update(patch).eq("id", id);
@@ -147,40 +173,96 @@ function AlumniMgmt() {
     if (error) toast.error(error.message); else { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin-profiles"] }); }
   };
 
+  const exportCsv = () => {
+    const cols = ["full_name", "email", "phone", "graduation_year", "matric_stream", "roll_number", "higher_education", "profession", "company", "city", "country", "linkedin_url", "website_url", "status", "created_at"];
+    const esc = (v: any) => {
+      if (v == null) return "";
+      const s = String(v).replace(/"/g, '""');
+      return /[",\n]/.test(s) ? `"${s}"` : s;
+    };
+    const csv = [cols.join(","), ...rows.map((r: any) => cols.map((c) => esc(r[c])).join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `alumni-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const toggleSort = (k: typeof sortKey) => {
+    if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
+    else { setSortKey(k); setSortDir("asc"); }
+  };
+
+  const years = Array.from(new Set((data ?? []).map((p: any) => p.graduation_year).filter(Boolean))).sort((a: any, b: any) => b - a);
+
   return (
-    <div className="rounded-xl border border-border bg-card">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-secondary text-left">
-            <tr className="text-xs uppercase tracking-wider text-muted-foreground">
-              <th className="px-5 py-3">Name</th><th className="px-5 py-3">Email</th><th className="px-5 py-3">Matric</th><th className="px-5 py-3">Stream</th>
-              <th className="px-5 py-3">Status</th><th className="px-5 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(data ?? []).map((p: any) => (
-              <tr key={p.id} className="border-t border-border">
-                <td className="px-5 py-3 font-medium text-navy">{p.full_name}</td>
-                <td className="px-5 py-3 text-muted-foreground">{p.email}</td>
-                <td className="px-5 py-3">{p.graduation_year ? `Matric ${p.graduation_year}` : "—"}</td>
-                <td className="px-5 py-3 text-muted-foreground">{p.matric_stream ?? "—"}</td>
-                <td className="px-5 py-3">
-                  <span className={`rounded-full px-2 py-0.5 text-xs ${p.status === "approved" ? "bg-green-100 text-green-800" : p.status === "suspended" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"}`}>
-                    {p.status}
-                  </span>
-                </td>
-                <td className="px-5 py-3">
-                  <div className="flex justify-end gap-1.5">
-                    {p.status !== "approved" && <Button size="sm" variant="outline" onClick={() => update(p.id, { status: "approved" })}><UserCheck className="h-4 w-4" /></Button>}
-                    {p.status !== "suspended" && <Button size="sm" variant="outline" onClick={() => update(p.id, { status: "suspended" })}><UserX className="h-4 w-4" /></Button>}
-                    <Button size="sm" variant="outline" onClick={() => del(p.id)}><Trash2 className="h-4 w-4" /></Button>
-                  </div>
-                </td>
+    <div className="space-y-4">
+      <div className="grid gap-3 rounded-xl border border-border bg-card p-4 md:grid-cols-2 lg:grid-cols-[1.5fr_140px_180px_160px_auto]">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input className="pl-9" placeholder="Search name, email, company..." value={q} onChange={(e) => setQ(e.target.value)} />
+        </div>
+        <select className="h-10 rounded-md border border-input bg-background px-3 text-sm" value={yearF} onChange={(e) => setYearF(e.target.value)}>
+          <option value="">All years</option>
+          {years.map((y: any) => <option key={y} value={y}>Matric {y}</option>)}
+        </select>
+        <select className="h-10 rounded-md border border-input bg-background px-3 text-sm" value={streamF} onChange={(e) => setStreamF(e.target.value)}>
+          <option value="">All streams</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Biology">Biology</option>
+          <option value="Arts/Commerce">Arts/Commerce</option>
+        </select>
+        <select className="h-10 rounded-md border border-input bg-background px-3 text-sm" value={statusF} onChange={(e) => setStatusF(e.target.value)}>
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="suspended">Suspended</option>
+        </select>
+        <Button variant="outline" onClick={exportCsv} className="gap-2"><Download className="h-4 w-4" />Export CSV</Button>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-secondary text-left">
+              <tr className="text-xs uppercase tracking-wider text-muted-foreground">
+                <th className="cursor-pointer px-5 py-3" onClick={() => toggleSort("full_name")}>Name {sortKey === "full_name" && (sortDir === "asc" ? "↑" : "↓")}</th>
+                <th className="px-5 py-3">Email</th>
+                <th className="cursor-pointer px-5 py-3" onClick={() => toggleSort("graduation_year")}>Matric {sortKey === "graduation_year" && (sortDir === "asc" ? "↑" : "↓")}</th>
+                <th className="px-5 py-3">Stream</th>
+                <th className="px-5 py-3">Profession</th>
+                <th className="px-5 py-3">Status</th>
+                <th className="px-5 py-3 text-right">Actions</th>
               </tr>
-            ))}
-            {data && data.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-muted-foreground">No alumni yet.</td></tr>}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((p: any) => (
+                <tr key={p.id} className="border-t border-border">
+                  <td className="px-5 py-3 font-medium text-navy">{p.full_name}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{p.email}</td>
+                  <td className="px-5 py-3">{p.graduation_year ? `Matric ${p.graduation_year}` : "—"}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{p.matric_stream ?? "—"}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{p.profession ?? "—"}{p.company ? ` · ${p.company}` : ""}</td>
+                  <td className="px-5 py-3">
+                    <span className={`rounded-full px-2 py-0.5 text-xs ${p.status === "approved" ? "bg-green-100 text-green-800" : p.status === "suspended" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"}`}>
+                      {p.status}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3">
+                    <div className="flex justify-end gap-1.5">
+                      {p.status !== "approved" && <Button size="sm" variant="outline" onClick={() => update(p.id, { status: "approved" })}><UserCheck className="h-4 w-4" /></Button>}
+                      {p.status !== "suspended" && <Button size="sm" variant="outline" onClick={() => update(p.id, { status: "suspended" })}><UserX className="h-4 w-4" /></Button>}
+                      <Button size="sm" variant="outline" onClick={() => del(p.id)}><Trash2 className="h-4 w-4" /></Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {rows.length === 0 && <tr><td colSpan={7} className="px-5 py-12 text-center text-muted-foreground">No alumni match those filters.</td></tr>}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
