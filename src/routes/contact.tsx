@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, MessageSquare } from "lucide-react";
+import { Mail, MapPin, MessageSquare, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -92,6 +92,56 @@ function ContactPage() {
               {loading ? "Sending..." : "Send Message"}
             </Button>
           </form>
+        </section>
+
+        <section className="border-t border-border bg-secondary/30">
+          <div className="container mx-auto grid gap-12 px-4 py-20 lg:grid-cols-2 lg:px-8">
+            <div className="space-y-8">
+              <div>
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Locations</p>
+                <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-navy lg:text-4xl">Visit us in Karachi.</h2>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card p-6">
+                <div className="flex items-start gap-3">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-navy text-white"><MapPin className="h-4 w-4" strokeWidth={1.75} /></div>
+                  <div className="flex-1">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Head Office</p>
+                    <p className="mt-1 text-sm text-foreground">Ghazi Dawood Brohi Goth, Karachi, Karachi City, Sindh, Pakistan</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card p-6">
+                <div className="flex items-start gap-3">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-navy text-white"><MapPin className="h-4 w-4" strokeWidth={1.75} /></div>
+                  <div className="flex-1">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Branch Office</p>
+                    <p className="mt-1 text-sm text-foreground">8/639 Hasnain Co-operative Housing Society, Malir City, Karachi</p>
+                    <a
+                      href="https://maps.google.com/maps?ll=24.881576,67.19435&z=16&t=m&hl=en&gl=US&mapclient=embed&cid=9729416497845381521"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-navy transition-all duration-300 hover:bg-navy hover:text-navy-foreground"
+                    >
+                      View on Google Maps <ExternalLink className="h-3 w-3" strokeWidth={1.75} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <iframe
+                title="Branch Office — Malir City, Karachi"
+                src="https://maps.google.com/maps?ll=24.881576,67.19435&z=16&t=m&hl=en&gl=US&mapclient=embed&cid=9729416497845381521&output=embed"
+                className="h-full min-h-[360px] w-full"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+          </div>
         </section>
       </main>
       <Footer />
