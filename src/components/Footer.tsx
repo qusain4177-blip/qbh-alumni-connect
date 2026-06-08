@@ -40,17 +40,11 @@ export function Footer() {
           <ul className="mt-5 space-y-4 text-sm text-navy-foreground/75">
             <li className="flex items-start gap-2">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/55" strokeWidth={1.75} />
-              <span>
-                <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">Head Office</span>
-                Ghazi Dawood Brohi Goth, Karachi, Sindh, Pakistan
-              </span>
+              <span>Ghazi Dawood Brohi Goth, Karachi, Sindh, Pakistan</span>
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/55" strokeWidth={1.75} />
-              <span>
-                <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">Branch Office</span>
-                8/639 Hasnain Co-operative Housing Society, Malir City, Karachi
-              </span>
+              <span>8/639 Hasnain Co-operative Housing Society, Malir City, Karachi</span>
             </li>
             <li className="flex items-start gap-2"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-white/55" strokeWidth={1.75} />alumni@qbh.school</li>
           </ul>
