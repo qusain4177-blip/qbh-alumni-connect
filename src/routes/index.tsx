@@ -231,7 +231,7 @@ function Landing() {
                     </div>
                     <div>
                       <h3 className="font-display text-lg font-semibold">{e.title}</h3>
-                      <p className="text-xs text-white/70">{d.toLocaleDateString("en", { weekday: "long", year: "numeric" })}</p>
+                      <p className="text-xs text-white/70">{e.id === "p3" ? "For all pass-outs from 2006 onwards" : d.toLocaleDateString("en", { weekday: "long", year: "numeric" })}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 p-5 text-sm text-muted-foreground">
