@@ -49,7 +49,11 @@ export function Footer() {
           <p>Built by old students.</p>
         </div>
       </div>
-
+      <div className="border-t border-white/5">
+        <p className="py-4 text-center text-xs text-navy-foreground/40">
+          Special thanks to Qusain Zaidi for creating the website
+        </p>
+      </div>
     </footer>
   );
 }
