@@ -106,8 +106,7 @@ function ContactPage() {
                 <div className="flex items-start gap-3">
                   <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-navy text-white"><MapPin className="h-4 w-4" strokeWidth={1.75} /></div>
                   <div className="flex-1">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Head Office</p>
-                    <p className="mt-1 text-sm text-foreground">Ghazi Dawood Brohi Goth, Karachi, Karachi City, Sindh, Pakistan</p>
+                    <p className="text-sm text-foreground">Ghazi Dawood Brohi Goth, Karachi, Sindh, Pakistan</p>
                   </div>
                 </div>
               </div>
@@ -116,15 +115,14 @@ function ContactPage() {
                 <div className="flex items-start gap-3">
                   <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-navy text-white"><MapPin className="h-4 w-4" strokeWidth={1.75} /></div>
                   <div className="flex-1">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Branch Office</p>
-                    <p className="mt-1 text-sm text-foreground">8/639 Hasnain Co-operative Housing Society, Malir City, Karachi</p>
+                    <p className="text-sm text-foreground">8/639 Hasnain Co-operative Housing Society, Malir City, Karachi</p>
                     <a
                       href="https://maps.google.com/maps?ll=24.881576,67.19435&z=16&t=m&hl=en&gl=US&mapclient=embed&cid=9729416497845381521"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-3 inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-navy transition-all duration-300 hover:bg-navy hover:text-navy-foreground"
                     >
-                      View on Google Maps <ExternalLink className="h-3 w-3" strokeWidth={1.75} />
+                      View on Map <ExternalLink className="h-3 w-3" strokeWidth={1.75} />
                     </a>
                   </div>
                 </div>
