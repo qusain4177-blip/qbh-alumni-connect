@@ -215,9 +215,9 @@ function Landing() {
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {(stats?.events?.length ? stats.events : [
-              { id: "p1", title: "Alumni Reunion 2026", event_date: "2026-09-12T18:00:00.000Z", location: "Main Campus, Grand Hall" },
+            { id: "p1", title: "Alumni Reunion 2026", event_date: "2026-09-12T18:00:00.000Z", location: "Ghazi Dawood Brohi Goth, Karachi, Karachi City, Sindh, Pakistan" },
               { id: "p2", title: "Mentorship night", event_date: "2026-07-04T17:00:00.000Z", location: "Online" },
-              { id: "p3", title: "Matric 2010 — 15 years on", event_date: "2026-11-22T17:00:00.000Z", location: "Lahore" },
+              { id: "p3", title: "Matric 2006 — Present & Beyond", event_date: "2026-11-22T17:00:00.000Z", location: "Karachi Malir" },
 
             ]).map((e: any) => {
               const d = new Date(e.event_date);
