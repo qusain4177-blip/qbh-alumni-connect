@@ -104,7 +104,7 @@ function ProfileEdit() {
             <Field label="Phone"><Input {...f("phone")} /></Field>
             <Field label="City"><Input {...f("city")} /></Field>
             <Field label="Country"><Input {...f("country")} /></Field>
-            <Field label="LinkedIn URL"><Input placeholder="https://linkedin.com/in/..." {...f("linkedin_url")} /></Field>
+            <Field label="LinkedIn Profile URL"><Input type="url" placeholder="https://www.linkedin.com/in/yourprofile" pattern="https://(www\.)?linkedin\.com/.*" {...f("linkedin_url")} /></Field>
             <Field label="Personal website"><Input placeholder="https://..." {...f("website_url")} /></Field>
           </Section>
 
