@@ -38,6 +38,10 @@ function ProfileEdit() {
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
+    const linkedin = (form.linkedin_url ?? "").trim();
+    if (linkedin && !/^https:\/\/(www\.)?linkedin\.com\/.+/i.test(linkedin)) {
+      return toast.error("LinkedIn URL must start with https://linkedin.com/ or https://www.linkedin.com/");
+    }
     setSaving(true);
     const { error } = await supabase.from("profiles").update({
       full_name: form.full_name,
@@ -100,7 +104,7 @@ function ProfileEdit() {
             <Field label="Phone"><Input {...f("phone")} /></Field>
             <Field label="City"><Input {...f("city")} /></Field>
             <Field label="Country"><Input {...f("country")} /></Field>
-            <Field label="LinkedIn URL"><Input placeholder="https://linkedin.com/in/..." {...f("linkedin_url")} /></Field>
+            <Field label="LinkedIn Profile URL"><Input type="url" placeholder="https://www.linkedin.com/in/yourprofile" pattern="https://(www\.)?linkedin\.com/.*" {...f("linkedin_url")} /></Field>
             <Field label="Personal website"><Input placeholder="https://..." {...f("website_url")} /></Field>
           </Section>
 
