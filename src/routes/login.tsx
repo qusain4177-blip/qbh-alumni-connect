@@ -11,6 +11,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Login — QBH Alumni" }, { name: "description", content: "Sign in to your alumni account." }] }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
+  }),
   component: LoginPage,
 });
 
@@ -21,6 +24,7 @@ const schema = z.object({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
@@ -33,6 +37,7 @@ function LoginPage() {
     setLoading(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Welcome back!");
+    if (next) { window.location.href = next; return; }
     navigate({ to: "/dashboard" });
   };
 
