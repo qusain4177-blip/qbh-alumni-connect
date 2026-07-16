@@ -27,7 +27,8 @@ export default defineTool({
     if (Object.keys(updates).length === 0) return errorResult("Provide at least one field to update.");
     const { data, error } = await supabaseForUser(ctx)
       .from("profiles")
-      .update(updates)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .update(updates as any)
       .eq("id", ctx.getUserId()!)
       .select()
       .maybeSingle();
