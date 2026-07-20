@@ -13,8 +13,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Qamar E Bani Hashim — Alumni Network" },
       { name: "description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
-      { property: "og:title", content: "Qamar E Bani Hashim Alumni Network" },
-      { property: "og:description", content: "The lifelong community of Qamar E Bani Hashim graduates." },
+      { property: "og:title", content: "Qamar E Bani Hashim — Alumni Network" },
+      { property: "og:description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
     ],
   }),
   component: Landing,
