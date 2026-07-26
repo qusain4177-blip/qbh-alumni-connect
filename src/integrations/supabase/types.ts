@@ -112,7 +112,7 @@ export type Database = {
           company: string | null
           country: string | null
           created_at: string
-          email: string
+          email: string | null
           full_name: string
           graduation_year: number | null
           higher_education: string | null
@@ -133,11 +133,11 @@ export type Database = {
           company?: string | null
           country?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           full_name: string
           graduation_year?: number | null
           higher_education?: string | null
-          id: string
+          id?: string
           linkedin_url?: string | null
           matric_stream?: string | null
           phone?: string | null
@@ -154,7 +154,7 @@ export type Database = {
           company?: string | null
           country?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           full_name?: string
           graduation_year?: number | null
           higher_education?: string | null

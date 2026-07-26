@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -38,7 +38,7 @@ function LoginPage() {
     if (error) { toast.error(error.message); return; }
     toast.success("Welcome back!");
     if (next) { window.location.href = next; return; }
-    navigate({ to: "/dashboard" });
+    navigate({ to: "/admin" });
   };
 
   return (
@@ -63,10 +63,10 @@ function LoginPage() {
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            New to the network?{" "}
-            <Link to="/signup" className="font-medium text-navy hover:text-gold">Create an account</Link>
+          <p className="mt-6 text-center text-xs text-muted-foreground">
+            Admin & alumni-office access only.
           </p>
+
         </div>
       </main>
       <Footer />
