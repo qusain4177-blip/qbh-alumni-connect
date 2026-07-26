@@ -70,16 +70,17 @@ function Landing() {
               The official alumni network of Qamar E Bani Hashim. Find your batch, share what you're working on, and stay in touch.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
-              <Link to="/signup">
-                <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">
-                  Create account <ArrowRight className="ml-1.5 h-4 w-4" />
-                </Button>
-              </Link>
               <Link to="/directory">
-                <Button size="lg" variant="outline" className="rounded-md border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
-                  Search directory
+                <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">
+                  Browse alumni <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Button>
               </Link>
+              <Link to="/contact">
+                <Button size="lg" variant="outline" className="rounded-md border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white">
+                  Contact office
+                </Button>
+              </Link>
+
             </div>
 
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
