@@ -23,15 +23,15 @@ function AdminPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
-      toast.error("Admin access required");
-      navigate({ to: "/dashboard" });
-    }
+    if (loading) return;
+    if (!user) { navigate({ to: "/login" }); return; }
+    if (!isAdmin) { toast.error("Admin access required"); navigate({ to: "/" }); }
   }, [loading, user, isAdmin, navigate]);
 
   if (loading || !user || !isAdmin) {
     return <div className="grid min-h-screen place-items-center text-muted-foreground">Verifying access...</div>;
   }
+
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
