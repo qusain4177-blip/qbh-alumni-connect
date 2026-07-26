@@ -113,9 +113,10 @@ function Directory() {
         {!isLoading && filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
             <h3 className="font-display text-xl text-navy">No alumni match those filters yet.</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Be the first — <Link to="/signup" className="text-navy underline">create your profile</Link>.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Try broadening your search, or <Link to="/contact" className="text-navy underline">contact the alumni office</Link> to be added.</p>
           </div>
         )}
+
       </main>
       <Footer />
     </div>

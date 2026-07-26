@@ -1,9 +1,7 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import qbhLogo from "@/assets/qbh-logo.jpeg.asset.json";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/lib/auth-context";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -15,8 +13,6 @@ const navLinks = [
 ] as const;
 
 export function Header() {
-  const { user, isAdmin, signOut } = useAuth();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,7 +30,6 @@ export function Header() {
             <div className="font-display text-base font-semibold tracking-tight text-navy">Qamar E Bani Hashim</div>
             <div className="font-mono text-[9px] uppercase tracking-[0.24em] text-muted-foreground">Alumni / Est. 1986</div>
           </div>
-
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -50,28 +45,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          {user ? (
-            <>
-              <Link to="/dashboard">
-                <Button variant="ghost" size="sm">Dashboard</Button>
-              </Link>
-              {isAdmin && (
-                <Link to="/admin">
-                  <Button variant="outline" size="sm">Admin</Button>
-                </Link>
-              )}
-              <Button size="sm" variant="default" onClick={async () => { await signOut(); router.navigate({ to: "/" }); }}>
-                Sign Out
-              </Button>
-            </>
-          ) : (
-            <>
-              <Link to="/login"><Button variant="ghost" size="sm">Login</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-navy text-white hover:bg-navy/90">Sign up</Button></Link>
-            </>
-          )}
-        </div>
+        <div className="hidden lg:block w-[44px]" aria-hidden />
 
         <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -86,20 +60,6 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
-            <div className="mt-2 flex flex-col gap-2 border-t border-border pt-3">
-              {user ? (
-                <>
-                  <Link to="/dashboard" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Dashboard</Button></Link>
-                  {isAdmin && <Link to="/admin" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Admin</Button></Link>}
-                  <Button className="w-full" onClick={async () => { await signOut(); setOpen(false); router.navigate({ to: "/" }); }}>Sign Out</Button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Login</Button></Link>
-                  <Link to="/signup" onClick={() => setOpen(false)}><Button className="w-full bg-navy text-white">Sign up</Button></Link>
-                </>
-              )}
-            </div>
           </div>
         </div>
       )}
