@@ -249,17 +249,18 @@ function Landing() {
       <section className="container mx-auto px-4 py-24 lg:px-8">
         <div className="rounded-2xl border border-border bg-navy p-12 text-white lg:p-16">
           <div className="max-w-2xl">
-            <h2 className="font-display text-3xl font-semibold tracking-tight lg:text-5xl">Add yourself to the list.</h2>
+            <h2 className="font-display text-3xl font-semibold tracking-tight lg:text-5xl">Looking for a classmate?</h2>
             <p className="mt-5 text-base leading-relaxed text-white/65">
-              Three fields, two minutes. The alumni office verifies new accounts within a working day.
+              Every verified alumnus is listed in the directory. Search by batch, stream, or profession — no account required.
             </p>
-            <Link to="/signup" className="mt-8 inline-flex">
-              <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">Create my profile</Button>
+            <Link to="/directory" className="mt-8 inline-flex">
+              <Button size="lg" className="rounded-md bg-white text-navy hover:bg-white/90">Open the directory</Button>
             </Link>
           </div>
 
         </div>
       </section>
+
 
       <Footer />
     </div>
