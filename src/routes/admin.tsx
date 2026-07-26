@@ -140,6 +140,7 @@ function AlumniMgmt() {
   const [yearF, setYearF] = useState("");
   const [sortKey, setSortKey] = useState<"created_at" | "full_name" | "graduation_year">("created_at");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [editing, setEditing] = useState<any | null>(null);
 
   const { data } = useQuery({
     queryKey: ["admin-profiles"],
@@ -165,14 +166,11 @@ function AlumniMgmt() {
     return list;
   }, [data, q, statusF, streamF, yearF, sortKey, sortDir]);
 
-  const update = async (id: string, patch: any) => {
-    const { error } = await supabase.from("profiles").update(patch).eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Updated"); qc.invalidateQueries({ queryKey: ["admin-profiles"] }); qc.invalidateQueries({ queryKey: ["admin-stats"] }); }
-  };
   const del = async (id: string) => {
-    if (!confirm("Delete this alumnus account? This cannot be undone.")) return;
+    if (!confirm("Delete this alumni record? This cannot be undone.")) return;
     const { error } = await supabase.from("profiles").delete().eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin-profiles"] }); }
+    if (error) toast.error(error.message);
+    else { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin-profiles"] }); qc.invalidateQueries({ queryKey: ["admin-stats"] }); }
   };
 
   const exportCsv = () => {
@@ -199,9 +197,11 @@ function AlumniMgmt() {
 
   const years = Array.from(new Set((data ?? []).map((p: any) => p.graduation_year).filter(Boolean))).sort((a: any, b: any) => b - a);
 
+  const blank = { full_name: "", email: "", graduation_year: "", matric_stream: "", roll_number: "", profession: "", company: "", higher_education: "", city: "", country: "", phone: "", linkedin_url: "", website_url: "", avatar_url: "", bio: "", status: "approved" };
+
   return (
     <div className="space-y-4">
-      <div className="grid gap-3 rounded-xl border border-border bg-card p-4 md:grid-cols-2 lg:grid-cols-[1.5fr_140px_180px_160px_auto]">
+      <div className="grid gap-3 rounded-xl border border-border bg-card p-4 md:grid-cols-2 lg:grid-cols-[1.5fr_140px_180px_160px_auto_auto]">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input className="pl-9" placeholder="Search name, email, company..." value={q} onChange={(e) => setQ(e.target.value)} />
@@ -223,6 +223,7 @@ function AlumniMgmt() {
           <option value="suspended">Suspended</option>
         </select>
         <Button variant="outline" onClick={exportCsv} className="gap-2"><Download className="h-4 w-4" />Export CSV</Button>
+        <Button onClick={() => setEditing({ ...blank, __new: true })} className="gap-2 bg-navy text-navy-foreground"><Plus className="h-4 w-4" />Add alumni</Button>
       </div>
 
       <div className="rounded-xl border border-border bg-card">
@@ -243,7 +244,7 @@ function AlumniMgmt() {
               {rows.map((p: any) => (
                 <tr key={p.id} className="border-t border-border">
                   <td className="px-5 py-3 font-medium text-navy">{p.full_name}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{p.email}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{p.email ?? "—"}</td>
                   <td className="px-5 py-3">{p.graduation_year ? `Matric ${p.graduation_year}` : "—"}</td>
                   <td className="px-5 py-3 text-muted-foreground">{p.matric_stream ?? "—"}</td>
                   <td className="px-5 py-3 text-muted-foreground">{p.profession ?? "—"}{p.company ? ` · ${p.company}` : ""}</td>
@@ -254,8 +255,7 @@ function AlumniMgmt() {
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex justify-end gap-1.5">
-                      {p.status !== "approved" && <Button size="sm" variant="outline" onClick={() => update(p.id, { status: "approved" })}><UserCheck className="h-4 w-4" /></Button>}
-                      {p.status !== "suspended" && <Button size="sm" variant="outline" onClick={() => update(p.id, { status: "suspended" })}><UserX className="h-4 w-4" /></Button>}
+                      <Button size="sm" variant="outline" onClick={() => setEditing({ ...p })}><Pencil className="h-4 w-4" /></Button>
                       <Button size="sm" variant="outline" onClick={() => del(p.id)}><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </td>
@@ -266,9 +266,110 @@ function AlumniMgmt() {
           </table>
         </div>
       </div>
+
+      <AlumniEditor open={!!editing} initial={editing} onClose={() => setEditing(null)} onSaved={() => { qc.invalidateQueries({ queryKey: ["admin-profiles"] }); qc.invalidateQueries({ queryKey: ["admin-stats"] }); }} />
     </div>
   );
 }
+
+function AlumniEditor({ open, initial, onClose, onSaved }: { open: boolean; initial: any; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState<any>(initial ?? {});
+  const [saving, setSaving] = useState(false);
+  useEffect(() => { if (initial) setForm(initial); }, [initial]);
+  if (!initial) return null;
+
+  const isNew = !!form.__new;
+  const f = (k: string) => ({ value: form[k] ?? "", onChange: (e: any) => setForm({ ...form, [k]: e.target.value }) });
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.full_name?.trim()) return toast.error("Name is required");
+    const linkedin = (form.linkedin_url ?? "").trim();
+    if (linkedin && !/^https:\/\/(www\.)?linkedin\.com\/.+/i.test(linkedin)) {
+      return toast.error("LinkedIn URL must start with https://linkedin.com/");
+    }
+    const payload: any = {
+      full_name: form.full_name.trim(),
+      email: form.email?.trim() || null,
+      avatar_url: form.avatar_url || null,
+      graduation_year: form.graduation_year ? Number(form.graduation_year) : null,
+      matric_stream: form.matric_stream || null,
+      roll_number: form.roll_number || null,
+      profession: form.profession || null,
+      company: form.company || null,
+      higher_education: form.higher_education || null,
+      city: form.city || null,
+      country: form.country || null,
+      phone: form.phone || null,
+      linkedin_url: form.linkedin_url || null,
+      website_url: form.website_url || null,
+      bio: form.bio || null,
+      status: form.status || "approved",
+    };
+    setSaving(true);
+    const { error } = isNew
+      ? await supabase.from("profiles").insert(payload)
+      : await supabase.from("profiles").update(payload).eq("id", form.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success(isNew ? "Alumni added" : "Saved");
+    onSaved();
+    onClose();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-h-[92vh] max-w-3xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{isNew ? "Add alumni" : `Edit — ${initial.full_name}`}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={save} className="grid gap-4 sm:grid-cols-2">
+          <FieldA label="Full name *"><Input {...f("full_name")} required /></FieldA>
+          <FieldA label="Email"><Input type="email" {...f("email")} /></FieldA>
+          <FieldA label="Matric passing year"><Input type="number" min={1950} max={new Date().getFullYear()} {...f("graduation_year")} /></FieldA>
+          <FieldA label="Matric stream">
+            <select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={form.matric_stream ?? ""} onChange={(e) => setForm({ ...form, matric_stream: e.target.value })}>
+              <option value="">—</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Biology">Biology</option>
+              <option value="Arts/Commerce">Arts/Commerce</option>
+            </select>
+          </FieldA>
+          <FieldA label="Roll number"><Input {...f("roll_number")} /></FieldA>
+          <FieldA label="Higher education"><Input {...f("higher_education")} /></FieldA>
+          <FieldA label="Profession"><Input {...f("profession")} /></FieldA>
+          <FieldA label="Company"><Input {...f("company")} /></FieldA>
+          <FieldA label="City"><Input {...f("city")} /></FieldA>
+          <FieldA label="Country"><Input {...f("country")} /></FieldA>
+          <FieldA label="Phone"><Input {...f("phone")} /></FieldA>
+          <FieldA label="LinkedIn URL"><Input type="url" placeholder="https://www.linkedin.com/in/..." {...f("linkedin_url")} /></FieldA>
+          <FieldA label="Website"><Input {...f("website_url")} /></FieldA>
+          <FieldA label="Photo URL"><Input placeholder="https://..." {...f("avatar_url")} /></FieldA>
+          <FieldA label="Status">
+            <select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={form.status ?? "approved"} onChange={(e) => setForm({ ...form, status: e.target.value })}>
+              <option value="approved">Approved (public)</option>
+              <option value="pending">Pending (hidden)</option>
+              <option value="suspended">Suspended (hidden)</option>
+            </select>
+          </FieldA>
+          <div className="sm:col-span-2 space-y-1.5">
+            <Label>Bio</Label>
+            <Textarea rows={3} {...f("bio")} />
+          </div>
+          <DialogFooter className="sm:col-span-2">
+            <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+            <Button type="submit" disabled={saving} className="bg-navy text-navy-foreground">{saving ? "Saving…" : isNew ? "Add alumni" : "Save changes"}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function FieldA({ label, children }: { label: string; children: React.ReactNode }) {
+  return <div className="space-y-1.5"><Label>{label}</Label>{children}</div>;
+}
+
 
 function NewsMgmt() {
   const qc = useQueryClient();
