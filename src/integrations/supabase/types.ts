@@ -113,6 +113,7 @@ export type Database = {
           country: string | null
           created_at: string
           email: string | null
+          father_name: string | null
           full_name: string
           graduation_year: number | null
           higher_education: string | null
@@ -134,6 +135,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           email?: string | null
+          father_name?: string | null
           full_name: string
           graduation_year?: number | null
           higher_education?: string | null
@@ -155,6 +157,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           email?: string | null
+          father_name?: string | null
           full_name?: string
           graduation_year?: number | null
           higher_education?: string | null
