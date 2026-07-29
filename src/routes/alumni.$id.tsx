@@ -94,10 +94,11 @@ function AlumniProfile() {
                   <h1 className="truncate font-display text-3xl font-semibold text-navy sm:text-4xl">
                     {data.full_name}
                   </h1>
-                  {(data.profession || data.company) && (
+                  {(data.profession || data.company || data.graduation_year) && (
                     <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 py-1 text-xs font-medium text-navy">
                       <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                      {[data.profession, data.company].filter(Boolean).join(" @ ")}
+                      {[data.profession, data.company && `@ ${data.company}`, data.graduation_year && `| Batch ${data.graduation_year}`]
+                        .filter(Boolean).join(" ")}
                     </p>
                   )}
 
