@@ -82,7 +82,7 @@ function AlumniProfile() {
 
             <div className="relative px-6 pb-8 pt-0 sm:px-10">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
-                <div className="-mt-16 grid h-32 w-32 shrink-0 place-items-center overflow-hidden rounded-2xl border-4 border-card bg-navy text-3xl font-semibold text-gold shadow-sm sm:-mt-20 sm:h-40 sm:w-40">
+                <div className="-mt-16 grid h-32 w-32 shrink-0 place-items-center overflow-hidden rounded-full border-4 border-card bg-[#a8dc7a] text-3xl font-semibold text-navy shadow-sm ring-4 ring-[#8bc34a]/60 sm:-mt-20 sm:h-40 sm:w-40">
                   {data.avatar_url ? (
                     <img src={data.avatar_url} alt={data.full_name} className="h-full w-full object-cover" />
                   ) : (
