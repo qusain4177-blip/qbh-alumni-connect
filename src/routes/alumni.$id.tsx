@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Briefcase,
+  CalendarDays,
+  Heart,
   BookOpen,
   GraduationCap,
   Globe,
@@ -151,6 +153,14 @@ function AlumniProfile() {
                     value={[data.city, data.country].filter(Boolean).join(", ") || "—"} />
                   <InfoRow icon={<User className="h-4 w-4" />} label="Father's Name"
                     value={data.father_name || "—"} />
+                  {data.date_of_birth && (
+                    <InfoRow icon={<CalendarDays className="h-4 w-4" />} label="Date of Birth"
+                      value={new Date(data.date_of_birth).toLocaleDateString("en-GB")} />
+                  )}
+                  {data.marital_status && (
+                    <InfoRow icon={<Heart className="h-4 w-4" />} label="Marital Status"
+                      value={data.marital_status} />
+                  )}
                   {data.website_url && (
                     <InfoRow icon={<Globe className="h-4 w-4" />} label="Website"
                       value={<a href={data.website_url} target="_blank" rel="noopener noreferrer" className="text-navy hover:underline">{data.website_url}</a>} />
