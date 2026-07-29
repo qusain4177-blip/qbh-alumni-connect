@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS date_of_birth date, ADD COLUMN IF NOT EXISTS marital_status text;

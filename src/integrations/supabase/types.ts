@@ -112,6 +112,7 @@ export type Database = {
           company: string | null
           country: string | null
           created_at: string
+          date_of_birth: string | null
           email: string | null
           father_name: string | null
           full_name: string
@@ -119,6 +120,7 @@ export type Database = {
           higher_education: string | null
           id: string
           linkedin_url: string | null
+          marital_status: string | null
           matric_stream: string | null
           phone: string | null
           profession: string | null
@@ -134,6 +136,7 @@ export type Database = {
           company?: string | null
           country?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           father_name?: string | null
           full_name: string
@@ -141,6 +144,7 @@ export type Database = {
           higher_education?: string | null
           id?: string
           linkedin_url?: string | null
+          marital_status?: string | null
           matric_stream?: string | null
           phone?: string | null
           profession?: string | null
@@ -156,6 +160,7 @@ export type Database = {
           company?: string | null
           country?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           father_name?: string | null
           full_name?: string
@@ -163,6 +168,7 @@ export type Database = {
           higher_education?: string | null
           id?: string
           linkedin_url?: string | null
+          marital_status?: string | null
           matric_stream?: string | null
           phone?: string | null
           profession?: string | null
