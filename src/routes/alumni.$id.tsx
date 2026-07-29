@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Briefcase,
+  CalendarDays,
+  Heart,
   BookOpen,
   GraduationCap,
   Globe,
