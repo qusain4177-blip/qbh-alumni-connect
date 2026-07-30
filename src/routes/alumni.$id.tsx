@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -12,6 +12,7 @@ import {
   Mail,
   MapPin,
   User,
+  School,
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -50,6 +51,21 @@ function AlumniProfile() {
     },
   });
 
+  const badgeText = (() => {
+    const parts: string[] = [];
+    if (data?.profession && data?.company) {
+      parts.push(`${data.profession} | ${data.company} Alumni`);
+    } else if (data?.profession) {
+      parts.push(data.profession);
+    } else if (data?.higher_education) {
+      parts.push(data.higher_education);
+    } else if (data?.company) {
+      parts.push(`${data.company} Alumni`);
+    }
+    if (data?.graduation_year) parts.push(`Batch ${data.graduation_year}`);
+    return parts.filter(Boolean).join(" | ");
+  })();
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
@@ -83,7 +99,8 @@ function AlumniProfile() {
             </div>
 
             <div className="relative px-6 pb-8 pt-0 sm:px-10">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
+              {/* Centered profile header */}
+              <div className="flex flex-col items-center text-center">
                 <div className="-mt-16 grid h-32 w-32 shrink-0 place-items-center overflow-hidden rounded-full border-4 border-card bg-[#a8dc7a] text-3xl font-semibold text-navy shadow-sm ring-4 ring-[#8bc34a]/60 sm:-mt-20 sm:h-40 sm:w-40">
                   {data.avatar_url ? (
                     <img src={data.avatar_url} alt={data.full_name} className="h-full w-full object-cover" />
@@ -92,26 +109,25 @@ function AlumniProfile() {
                   )}
                 </div>
 
-                <div className="min-w-0 flex-1 pt-2">
+                <div className="mt-4 min-w-0 max-w-2xl">
                   <h1 className="truncate font-display text-3xl font-semibold text-navy sm:text-4xl">
                     {data.full_name}
                   </h1>
-                  {(data.profession || data.company || data.graduation_year) && (
-                    <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 py-1 text-xs font-medium text-navy">
+                  {badgeText && (
+                    <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-navy/5 px-3 py-1 text-xs font-medium text-navy">
                       <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                      {[data.profession, data.company && `@ ${data.company}`, data.graduation_year && `| Batch ${data.graduation_year}`]
-                        .filter(Boolean).join(" ")}
+                      {badgeText}
                     </p>
                   )}
 
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap justify-center gap-2">
                     {data.graduation_year && <Chip>#Batch{data.graduation_year}</Chip>}
                     {data.matric_stream && <Chip>#{String(data.matric_stream).replace(/\s+/g, "")}</Chip>}
                     {data.higher_education && <Chip>#{data.higher_education.split(/\s+/)[0]}</Chip>}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 sm:justify-end">
+                <div className="mt-5 flex flex-wrap justify-center gap-2">
                   {data.email && (
                     <Button asChild size="sm">
                       <a href={`mailto:${data.email}`}><Mail className="mr-2 h-4 w-4" />Email</a>
@@ -128,29 +144,38 @@ function AlumniProfile() {
               </div>
 
               {data.bio && (
-                <p className="mt-8 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-muted-foreground">
                   {data.bio}
                 </p>
               )}
 
               {/* Info grid */}
-              <div className="mt-10 grid gap-5 lg:grid-cols-2">
-                <InfoCard title="Academic Information">
-                  <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Matric Batch"
+              <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                <InfoCard title="Academic & Graduation">
+                  <InfoRow icon={<School className="h-4 w-4" />} label="Matric Batch"
                     value={data.graduation_year ? `Matric ${data.graduation_year}` : "—"} />
-                  <InfoRow icon={<BookOpen className="h-4 w-4" />} label="Degree Field"
-                    value={data.matric_stream || "—"} />
-                  <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Current University / Program"
-                    value={[data.higher_education, data.company].filter(Boolean).join(" · ") || "—"} />
+                  <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Highest Qualification"
+                    value={data.higher_education || "—"} />
+                  <InfoRow icon={<BookOpen className="h-4 w-4" />} label="University"
+                    value={data.company || "—"} />
+                  <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Degree Program"
+                    value={data.profession || "—"} />
                 </InfoCard>
 
-                <InfoCard title="Personal & Contact">
+                <InfoCard title="Contact & Location">
                   <InfoRow icon={<Mail className="h-4 w-4" />} label="Email"
                     value={data.email
                       ? <a href={`mailto:${data.email}`} className="text-navy hover:underline">{data.email}</a>
                       : "—"} />
                   <InfoRow icon={<MapPin className="h-4 w-4" />} label="Location"
                     value={[data.city, data.country].filter(Boolean).join(", ") || "—"} />
+                  {data.website_url && (
+                    <InfoRow icon={<Globe className="h-4 w-4" />} label="Website"
+                      value={<a href={data.website_url} target="_blank" rel="noopener noreferrer" className="text-navy hover:underline">{data.website_url}</a>} />
+                  )}
+                </InfoCard>
+
+                <InfoCard title="Personal Details">
                   <InfoRow icon={<User className="h-4 w-4" />} label="Father's Name"
                     value={data.father_name || "—"} />
                   {data.date_of_birth && (
@@ -160,10 +185,6 @@ function AlumniProfile() {
                   {data.marital_status && (
                     <InfoRow icon={<Heart className="h-4 w-4" />} label="Marital Status"
                       value={data.marital_status} />
-                  )}
-                  {data.website_url && (
-                    <InfoRow icon={<Globe className="h-4 w-4" />} label="Website"
-                      value={<a href={data.website_url} target="_blank" rel="noopener noreferrer" className="text-navy hover:underline">{data.website_url}</a>} />
                   )}
                 </InfoCard>
               </div>
@@ -203,7 +224,7 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
       </div>
       <div className="min-w-0 flex-1">
         <dt className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</dt>
-        <dd className="mt-0.5 truncate text-sm text-navy">{value}</dd>
+        <dd className="mt-0.5 text-sm text-navy">{value}</dd>
       </div>
     </div>
   );
