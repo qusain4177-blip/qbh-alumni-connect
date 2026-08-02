@@ -15,7 +15,6 @@ import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -54,11 +53,6 @@ const DirectoryRoute = DirectoryRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin-login',
-  path: '/admin-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -114,7 +108,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/admin-login': typeof AdminLoginRoute
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/events': typeof EventsRoute
@@ -132,7 +125,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/admin-login': typeof AdminLoginRoute
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/events': typeof EventsRoute
@@ -151,7 +143,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/admin-login': typeof AdminLoginRoute
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/events': typeof EventsRoute
@@ -171,7 +162,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/admin-login'
     | '/contact'
     | '/directory'
     | '/events'
@@ -189,7 +179,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/admin-login'
     | '/contact'
     | '/directory'
     | '/events'
@@ -207,7 +196,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/admin-login'
     | '/contact'
     | '/directory'
     | '/events'
@@ -226,7 +214,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
-  AdminLoginRoute: typeof AdminLoginRoute
   ContactRoute: typeof ContactRoute
   DirectoryRoute: typeof DirectoryRoute
   EventsRoute: typeof EventsRoute
@@ -283,13 +270,6 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin-login': {
-      id: '/admin-login'
-      path: '/admin-login'
-      fullPath: '/admin-login'
-      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -362,7 +342,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
-  AdminLoginRoute: AdminLoginRoute,
   ContactRoute: ContactRoute,
   DirectoryRoute: DirectoryRoute,
   EventsRoute: EventsRoute,
