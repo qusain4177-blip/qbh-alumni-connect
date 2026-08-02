@@ -26,10 +26,7 @@ export function Header() {
             height={44}
             className="h-10 w-10 shrink-0 rounded-full object-contain sm:h-11 sm:w-11"
           />
-          <div className="leading-tight">
-            <div className="font-display text-base font-semibold tracking-tight text-navy">Qamar E Bani Hashim</div>
-            <div className="font-mono text-[9px] uppercase tracking-[0.24em] text-muted-foreground">Alumni / Est. 1986</div>
-          </div>
+          <div className="font-display text-base font-semibold tracking-tight text-navy">Qamar E Bani Hashim</div>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
