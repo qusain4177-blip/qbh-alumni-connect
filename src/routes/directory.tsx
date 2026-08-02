@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Briefcase, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen } from "lucide-react";
+import { Briefcase, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
+
 
 export const Route = createFileRoute("/directory")({
   head: () => ({ meta: [{ title: "Alumni Directory — QBH" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
@@ -13,7 +15,9 @@ export const Route = createFileRoute("/directory")({
 });
 
 function Directory() {
+  const { isAdmin } = useAuth();
   const [q, setQ] = useState("");
+
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
   const [pursuit, setPursuit] = useState("");
@@ -73,9 +77,15 @@ function Directory() {
           </div>
         </div>
 
-        <div className="mt-3 text-sm text-muted-foreground">
-          {isLoading ? "Loading..." : `${filtered.length} alumni found`}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
+          <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+          {isAdmin && (
+            <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md bg-navy px-3 py-1.5 text-xs font-medium text-navy-foreground hover:opacity-90">
+              <Plus className="h-3.5 w-3.5" /> Add alumni
+            </Link>
+          )}
         </div>
+
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
@@ -104,10 +114,16 @@ function Directory() {
                 </div>
                 {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
               </Link>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex items-center gap-2">
                 {p.linkedin_url && <a href={p.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label={`${p.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></a>}
                 {p.website_url && <a href={p.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${p.full_name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
+                {isAdmin && (
+                  <Link to="/admin" className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-navy hover:bg-secondary">
+                    <Pencil className="h-3.5 w-3.5" /> Manage
+                  </Link>
+                )}
               </div>
+
             </article>
           ))}
         </div>

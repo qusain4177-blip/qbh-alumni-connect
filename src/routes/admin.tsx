@@ -26,7 +26,7 @@ function AdminPage() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) { navigate({ to: "/login" }); return; }
+    if (!user) { navigate({ to: "/admin/login" }); return; }
     if (!isAdmin) { toast.error("Admin access required"); navigate({ to: "/" }); }
   }, [loading, user, isAdmin, navigate]);
 
