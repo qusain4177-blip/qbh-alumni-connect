@@ -1,5 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   Briefcase,
@@ -11,6 +13,8 @@ import {
   Linkedin,
   Mail,
   MapPin,
+  Pencil,
+  Trash2,
   User,
   School,
 } from "lucide-react";
@@ -18,6 +22,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
+
 
 export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
@@ -37,6 +43,21 @@ function initials(name?: string) {
 
 function AlumniProfile() {
   const { id } = Route.useParams();
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this alumni profile permanently?")) return;
+    setDeleting(true);
+    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    setDeleting(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Profile deleted");
+    navigate({ to: "/directory" });
+  };
+
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["alumni", id],
     queryFn: async () => {
@@ -70,12 +91,30 @@ function AlumniProfile() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="container mx-auto flex-1 px-4 py-14 lg:px-8">
-        <Link
-          to="/directory"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-navy"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to directory
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Link
+            to="/directory"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-navy"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to directory
+          </Link>
+
+          {isAdmin && data && (
+            <div className="flex items-center gap-2">
+              <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-navy hover:bg-secondary">
+                <Pencil className="h-3.5 w-3.5" /> Edit profile
+              </Link>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="inline-flex items-center gap-1.5 rounded-md border border-destructive/40 px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-60"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> {deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          )}
+        </div>
+
 
         {isLoading && (
           <div className="mt-10 h-64 animate-pulse rounded-2xl border border-border bg-card" />
