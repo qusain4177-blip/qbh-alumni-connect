@@ -15,10 +15,7 @@ export function Footer() {
               height={48}
               className="h-12 w-12 shrink-0 rounded-full bg-white object-contain p-0.5"
             />
-            <div>
-              <div className="font-display text-lg font-semibold tracking-tight">Qamar E Bani Hashim</div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">Alumni / Est. 1986</div>
-            </div>
+            <div className="font-display text-lg font-semibold tracking-tight">Qamar E Bani Hashim</div>
           </Link>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-navy-foreground/65">
             The official alumni network of Qamar E Bani Hashim.
