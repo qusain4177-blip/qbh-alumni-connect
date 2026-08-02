@@ -21,7 +21,7 @@ export function Footer() {
             </div>
           </Link>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-navy-foreground/65">
-            The official alumni network of Qamar E Bani Hashim. Run by old students, for old students.
+            The official alumni network of Qamar E Bani Hashim.
           </p>
         </div>
 
