@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Briefcase, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
+import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -21,6 +21,8 @@ function Directory() {
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
   const [pursuit, setPursuit] = useState("");
+  const [location, setLocation] = useState("");
+  const [company, setCompany] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["directory"],
@@ -35,16 +37,48 @@ function Directory() {
     },
   });
 
+  const locationOptions = useMemo(() => {
+    const set = new Set<string>();
+    (data ?? []).forEach((p) => {
+      [p.city, p.country].forEach((v) => v && set.add(String(v).trim()));
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [data]);
+
+  const companyOptions = useMemo(() => {
+    const set = new Set<string>();
+    (data ?? []).forEach((p) => p.company && set.add(String(p.company).trim()));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [data]);
+
   const filtered = useMemo(() => {
     const pq = pursuit.toLowerCase();
+    const lq = location.toLowerCase().trim();
+    const cq = company.toLowerCase().trim();
     return (data ?? []).filter((p) => {
-      const matchQ = !q || [p.full_name, p.profession, p.company].some((v) => v?.toLowerCase().includes(q.toLowerCase()));
+      const matchQ =
+        !q ||
+        [p.full_name, p.profession, p.company, p.city, p.country, String(p.graduation_year ?? "")].some((v) =>
+          v?.toLowerCase?.().includes(q.toLowerCase()),
+        );
       const matchY = !year || String(p.graduation_year ?? "").includes(year);
       const matchS = !stream || p.matric_stream === stream;
       const matchP = !pursuit || [p.profession, p.higher_education, p.company].some((v) => v?.toLowerCase().includes(pq));
-      return matchQ && matchY && matchS && matchP;
+      const matchL = !lq || [p.city, p.country].some((v) => v?.toLowerCase().includes(lq));
+      const matchC = !cq || [p.company, p.higher_education].some((v) => v?.toLowerCase().includes(cq));
+      return matchQ && matchY && matchS && matchP && matchL && matchC;
     });
-  }, [data, q, year, stream, pursuit]);
+  }, [data, q, year, stream, pursuit, location, company]);
+
+  const clearAll = () => {
+    setQ("");
+    setYear("");
+    setStream("");
+    setPursuit("");
+    setLocation("");
+    setCompany("");
+  };
+
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -57,11 +91,39 @@ function Directory() {
         </div>
 
         <div className="mt-10 rounded-xl border border-border bg-card p-4 shadow-card lg:p-5">
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.5fr_140px_180px_1.2fr]">
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search by name, profession, company..." className="pl-9" value={q} onChange={(e) => setQ(e.target.value)} />
+              <Input placeholder="Search by name, profession, company, city..." className="pl-9" value={q} onChange={(e) => setQ(e.target.value)} />
             </div>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                list="directory-locations"
+                placeholder="Work location (city or country)"
+                className="pl-9"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+              <datalist id="directory-locations">
+                {locationOptions.map((o) => <option key={o} value={o} />)}
+              </datalist>
+            </div>
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                list="directory-companies"
+                placeholder="Company or organization"
+                className="pl-9"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
+              <datalist id="directory-companies">
+                {companyOptions.map((o) => <option key={o} value={o} />)}
+              </datalist>
+            </div>
+          </div>
+          <div className="mt-3 grid gap-3 md:grid-cols-2 lg:grid-cols-[140px_180px_1.2fr]">
             <Input placeholder="Matric year" value={year} onChange={(e) => setYear(e.target.value)} />
             <select
               className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
@@ -78,13 +140,29 @@ function Directory() {
         </div>
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
-          <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+          <span className="flex flex-wrap items-center gap-2">
+            <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+            {location && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
+                <MapPin className="h-3 w-3 text-gold" /> {location}
+              </span>
+            )}
+            {company && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
+                <Building2 className="h-3 w-3 text-gold" /> {company}
+              </span>
+            )}
+            {(q || year || stream || pursuit || location || company) && (
+              <button onClick={clearAll} className="text-xs underline underline-offset-4 hover:text-navy">Clear filters</button>
+            )}
+          </span>
           {isAdmin && (
             <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md bg-navy px-3 py-1.5 text-xs font-medium text-navy-foreground hover:opacity-90">
               <Plus className="h-3.5 w-3.5" /> Add alumni
             </Link>
           )}
         </div>
+
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -108,10 +186,16 @@ function Directory() {
                   </div>
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  {p.profession && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{p.profession}{p.company ? ` · ${p.company}` : ""}</p>}
+                  {p.profession && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{p.profession}</p>}
+                  {p.company && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gold" />{p.company}</p>}
                   {p.higher_education && <p className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-gold" />{p.higher_education}</p>}
-                  {p.city && <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-gold" />{p.city}{p.country ? `, ${p.country}` : ""}</p>}
                 </div>
+                {(p.city || p.country) && (
+                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-navy">
+                    <MapPin className="h-3.5 w-3.5 text-gold" />
+                    {[p.city, p.country].filter(Boolean).join(", ")}
+                  </span>
+                )}
                 {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
               </Link>
               <div className="mt-4 flex items-center gap-2">
@@ -130,7 +214,13 @@ function Directory() {
 
         {!isLoading && filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
-            <h3 className="font-display text-xl text-navy">No alumni match those filters yet.</h3>
+            <h3 className="font-display text-xl text-navy">
+              {location
+                ? `No alumni found in ${location}.`
+                : company
+                  ? `No alumni found at ${company}.`
+                  : "No alumni match those filters yet."}
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">Try broadening your search, or <Link to="/contact" className="text-navy underline">contact the alumni office</Link> to be added.</p>
           </div>
         )}
