@@ -214,7 +214,13 @@ function Directory() {
 
         {!isLoading && filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
-            <h3 className="font-display text-xl text-navy">No alumni match those filters yet.</h3>
+            <h3 className="font-display text-xl text-navy">
+              {location
+                ? `No alumni found in ${location}.`
+                : company
+                  ? `No alumni found at ${company}.`
+                  : "No alumni match those filters yet."}
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">Try broadening your search, or <Link to="/contact" className="text-navy underline">contact the alumni office</Link> to be added.</p>
           </div>
         )}
