@@ -21,6 +21,8 @@ function Directory() {
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
   const [pursuit, setPursuit] = useState("");
+  const [location, setLocation] = useState("");
+  const [company, setCompany] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["directory"],
@@ -35,16 +37,48 @@ function Directory() {
     },
   });
 
+  const locationOptions = useMemo(() => {
+    const set = new Set<string>();
+    (data ?? []).forEach((p) => {
+      [p.city, p.country].forEach((v) => v && set.add(String(v).trim()));
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [data]);
+
+  const companyOptions = useMemo(() => {
+    const set = new Set<string>();
+    (data ?? []).forEach((p) => p.company && set.add(String(p.company).trim()));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [data]);
+
   const filtered = useMemo(() => {
     const pq = pursuit.toLowerCase();
+    const lq = location.toLowerCase().trim();
+    const cq = company.toLowerCase().trim();
     return (data ?? []).filter((p) => {
-      const matchQ = !q || [p.full_name, p.profession, p.company].some((v) => v?.toLowerCase().includes(q.toLowerCase()));
+      const matchQ =
+        !q ||
+        [p.full_name, p.profession, p.company, p.city, p.country, String(p.graduation_year ?? "")].some((v) =>
+          v?.toLowerCase?.().includes(q.toLowerCase()),
+        );
       const matchY = !year || String(p.graduation_year ?? "").includes(year);
       const matchS = !stream || p.matric_stream === stream;
       const matchP = !pursuit || [p.profession, p.higher_education, p.company].some((v) => v?.toLowerCase().includes(pq));
-      return matchQ && matchY && matchS && matchP;
+      const matchL = !lq || [p.city, p.country].some((v) => v?.toLowerCase().includes(lq));
+      const matchC = !cq || [p.company, p.higher_education].some((v) => v?.toLowerCase().includes(cq));
+      return matchQ && matchY && matchS && matchP && matchL && matchC;
     });
-  }, [data, q, year, stream, pursuit]);
+  }, [data, q, year, stream, pursuit, location, company]);
+
+  const clearAll = () => {
+    setQ("");
+    setYear("");
+    setStream("");
+    setPursuit("");
+    setLocation("");
+    setCompany("");
+  };
+
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
