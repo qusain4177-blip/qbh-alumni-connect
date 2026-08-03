@@ -186,10 +186,16 @@ function Directory() {
                   </div>
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  {p.profession && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{p.profession}{p.company ? ` · ${p.company}` : ""}</p>}
+                  {p.profession && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{p.profession}</p>}
+                  {p.company && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gold" />{p.company}</p>}
                   {p.higher_education && <p className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-gold" />{p.higher_education}</p>}
-                  {p.city && <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-gold" />{p.city}{p.country ? `, ${p.country}` : ""}</p>}
                 </div>
+                {(p.city || p.country) && (
+                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-navy">
+                    <MapPin className="h-3.5 w-3.5 text-gold" />
+                    {[p.city, p.country].filter(Boolean).join(", ")}
+                  </span>
+                )}
                 {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
               </Link>
               <div className="mt-4 flex items-center gap-2">
