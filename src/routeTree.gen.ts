@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JobsRouteImport } from './routes/jobs'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -38,6 +39,11 @@ const LoginRoute = LoginRouteImport.update({
 const JobsRoute = JobsRouteImport.update({
   id: '/jobs',
   path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsRoute = EventsRouteImport.update({
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/events': typeof EventsRoute
+  '/gallery': typeof GalleryRoute
   '/jobs': typeof JobsRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/events': typeof EventsRoute
+  '/gallery': typeof GalleryRoute
   '/jobs': typeof JobsRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/directory': typeof DirectoryRoute
   '/events': typeof EventsRoute
+  '/gallery': typeof GalleryRoute
   '/jobs': typeof JobsRoute
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/events'
+    | '/gallery'
     | '/jobs'
     | '/login'
     | '/mcp'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/events'
+    | '/gallery'
     | '/jobs'
     | '/login'
     | '/mcp'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/directory'
     | '/events'
+    | '/gallery'
     | '/jobs'
     | '/login'
     | '/mcp'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DirectoryRoute: typeof DirectoryRoute
   EventsRoute: typeof EventsRoute
+  GalleryRoute: typeof GalleryRoute
   JobsRoute: typeof JobsRoute
   LoginRoute: typeof LoginRoute
   McpRoute: typeof McpRoute
@@ -249,6 +262,13 @@ declare module '@tanstack/react-router' {
       path: '/jobs'
       fullPath: '/jobs'
       preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events': {
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DirectoryRoute: DirectoryRoute,
   EventsRoute: EventsRoute,
+  GalleryRoute: GalleryRoute,
   JobsRoute: JobsRoute,
   LoginRoute: LoginRoute,
   McpRoute: McpRoute,

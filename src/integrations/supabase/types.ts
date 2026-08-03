@@ -68,6 +68,39 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          sort_order: number
+          storage_path: string
+          taken_on: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          sort_order?: number
+          storage_path: string
+          taken_on?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          sort_order?: number
+          storage_path?: string
+          taken_on?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           author_id: string | null
