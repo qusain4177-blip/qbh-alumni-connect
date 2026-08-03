@@ -91,11 +91,39 @@ function Directory() {
         </div>
 
         <div className="mt-10 rounded-xl border border-border bg-card p-4 shadow-card lg:p-5">
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.5fr_140px_180px_1.2fr]">
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search by name, profession, company..." className="pl-9" value={q} onChange={(e) => setQ(e.target.value)} />
+              <Input placeholder="Search by name, profession, company, city..." className="pl-9" value={q} onChange={(e) => setQ(e.target.value)} />
             </div>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                list="directory-locations"
+                placeholder="Work location (city or country)"
+                className="pl-9"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+              <datalist id="directory-locations">
+                {locationOptions.map((o) => <option key={o} value={o} />)}
+              </datalist>
+            </div>
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                list="directory-companies"
+                placeholder="Company or organization"
+                className="pl-9"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
+              <datalist id="directory-companies">
+                {companyOptions.map((o) => <option key={o} value={o} />)}
+              </datalist>
+            </div>
+          </div>
+          <div className="mt-3 grid gap-3 md:grid-cols-2 lg:grid-cols-[140px_180px_1.2fr]">
             <Input placeholder="Matric year" value={year} onChange={(e) => setYear(e.target.value)} />
             <select
               className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
@@ -112,13 +140,29 @@ function Directory() {
         </div>
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
-          <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+          <span className="flex flex-wrap items-center gap-2">
+            <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+            {location && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
+                <MapPin className="h-3 w-3 text-gold" /> {location}
+              </span>
+            )}
+            {company && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
+                <Building2 className="h-3 w-3 text-gold" /> {company}
+              </span>
+            )}
+            {(q || year || stream || pursuit || location || company) && (
+              <button onClick={clearAll} className="text-xs underline underline-offset-4 hover:text-navy">Clear filters</button>
+            )}
+          </span>
           {isAdmin && (
             <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md bg-navy px-3 py-1.5 text-xs font-medium text-navy-foreground hover:opacity-90">
               <Plus className="h-3.5 w-3.5" /> Add alumni
             </Link>
           )}
         </div>
+
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
