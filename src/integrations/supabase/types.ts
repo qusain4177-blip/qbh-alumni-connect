@@ -212,6 +212,66 @@ export type Database = {
         }
         Relationships: []
       }
+      success_stories: {
+        Row: {
+          alumni_name: string
+          badge: string | null
+          batch_year: number | null
+          category: string
+          congrats_notes: string[]
+          created_at: string
+          degree: string | null
+          gallery_paths: string[]
+          id: string
+          institute: string | null
+          poster_path: string | null
+          poster_url: string | null
+          published: boolean
+          snippet: string | null
+          sort_order: number
+          story: string | null
+          updated_at: string
+        }
+        Insert: {
+          alumni_name: string
+          badge?: string | null
+          batch_year?: number | null
+          category?: string
+          congrats_notes?: string[]
+          created_at?: string
+          degree?: string | null
+          gallery_paths?: string[]
+          id?: string
+          institute?: string | null
+          poster_path?: string | null
+          poster_url?: string | null
+          published?: boolean
+          snippet?: string | null
+          sort_order?: number
+          story?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alumni_name?: string
+          badge?: string | null
+          batch_year?: number | null
+          category?: string
+          congrats_notes?: string[]
+          created_at?: string
+          degree?: string | null
+          gallery_paths?: string[]
+          id?: string
+          institute?: string | null
+          poster_path?: string | null
+          poster_url?: string | null
+          published?: boolean
+          snippet?: string | null
+          sort_order?: number
+          story?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           created_at: string
