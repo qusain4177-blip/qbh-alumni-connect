@@ -104,7 +104,7 @@ function WallOfFamePage() {
       const map = await signPaths(paths);
       return rows.map((r) => ({
         ...r,
-        posterSrc: r.poster_path ? map.get(r.poster_path) : r.poster_url ?? undefined,
+        posterSrc: (r.poster_path ? map.get(r.poster_path) : r.poster_url) ?? undefined,
         gallerySrc: (r.gallery_paths ?? []).map((p) => map.get(p)).filter(Boolean) as string[],
       }));
     },
