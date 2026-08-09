@@ -11,6 +11,7 @@ const navLinks = [
   { to: "/directory", label: "Directory" },
   { to: "/events", label: "Events & News" },
   { to: "/gallery", label: "Gallery" },
+  { to: "/wall-of-fame", label: "Wall of Fame" },
   { to: "/jobs", label: "Jobs" },
   { to: "/contact", label: "Contact" },
 ] as const;
