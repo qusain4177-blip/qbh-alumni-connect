@@ -18,6 +18,7 @@ import {
   User,
   School,
 } from "lucide-react";
+import { LinkedInLink } from "@/components/LinkedInLink";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
