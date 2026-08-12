@@ -139,6 +139,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          alumni_id: string | null
           avatar_url: string | null
           bio: string | null
           city: string | null
@@ -163,6 +164,7 @@ export type Database = {
           website_url: string | null
         }
         Insert: {
+          alumni_id?: string | null
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
@@ -187,6 +189,7 @@ export type Database = {
           website_url?: string | null
         }
         Update: {
+          alumni_id?: string | null
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
