@@ -174,9 +174,9 @@ function AlumniProfile() {
                   )}
                   {data.linkedin_url && (
                     <Button asChild size="sm" variant="outline">
-                      <a href={data.linkedin_url} target="_blank" rel="noopener noreferrer">
+                      <LinkedInLink url={data.linkedin_url}>
                         <Linkedin className="mr-2 h-4 w-4" />LinkedIn
-                      </a>
+                      </LinkedInLink>
                     </Button>
                   )}
                 </div>
