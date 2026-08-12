@@ -174,7 +174,7 @@ function AlumniMgmt() {
   };
 
   const exportCsv = () => {
-    const cols = ["full_name", "email", "phone", "graduation_year", "matric_stream", "roll_number", "higher_education", "profession", "company", "city", "country", "linkedin_url", "website_url", "status", "created_at"];
+    const cols = ["alumni_id", "full_name", "email", "phone", "graduation_year", "matric_stream", "roll_number", "higher_education", "profession", "company", "city", "country", "linkedin_url", "website_url", "status", "created_at"];
     const esc = (v: any) => {
       if (v == null) return "";
       const s = String(v).replace(/"/g, '""');
@@ -197,7 +197,7 @@ function AlumniMgmt() {
 
   const years = Array.from(new Set((data ?? []).map((p: any) => p.graduation_year).filter(Boolean))).sort((a: any, b: any) => b - a);
 
-  const blank = { full_name: "", email: "", graduation_year: "", matric_stream: "", roll_number: "", profession: "", company: "", higher_education: "", city: "", country: "", phone: "", linkedin_url: "", website_url: "", avatar_url: "", bio: "", status: "approved" };
+  const blank = { alumni_id: "", full_name: "", email: "", graduation_year: "", matric_stream: "", roll_number: "", profession: "", company: "", higher_education: "", city: "", country: "", phone: "", linkedin_url: "", website_url: "", avatar_url: "", bio: "", status: "approved" };
 
   return (
     <div className="space-y-4">
@@ -295,6 +295,7 @@ function AlumniEditor({ open, initial, onClose, onSaved }: { open: boolean; init
       graduation_year: form.graduation_year ? Number(form.graduation_year) : null,
       matric_stream: form.matric_stream || null,
       roll_number: form.roll_number || null,
+      alumni_id: form.alumni_id?.trim() || null,
       profession: form.profession || null,
       company: form.company || null,
       higher_education: form.higher_education || null,
@@ -336,6 +337,7 @@ function AlumniEditor({ open, initial, onClose, onSaved }: { open: boolean; init
             </select>
           </FieldA>
           <FieldA label="Roll number"><Input {...f("roll_number")} /></FieldA>
+          <FieldA label="Alumni ID (admin only)"><Input placeholder="Auto: UMBRELLA-001" {...f("alumni_id")} /></FieldA>
           <FieldA label="Higher education"><Input {...f("higher_education")} /></FieldA>
           <FieldA label="Profession"><Input {...f("profession")} /></FieldA>
           <FieldA label="Company"><Input {...f("company")} /></FieldA>

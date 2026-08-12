@@ -150,6 +150,11 @@ function AlumniProfile() {
                 </div>
 
                 <div className="mt-4 min-w-0 max-w-2xl">
+                  {data.alumni_id && (
+                    <p className="mb-3 inline-flex items-center gap-2 rounded-md bg-navy px-3 py-1 font-mono text-xs font-semibold tracking-widest text-gold">
+                      {data.alumni_id}
+                    </p>
+                  )}
                   <h1 className="truncate font-display text-3xl font-semibold text-navy sm:text-4xl">
                     {data.full_name}
                   </h1>
