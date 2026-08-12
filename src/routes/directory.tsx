@@ -30,7 +30,7 @@ function Directory() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
+        .select("id, alumni_id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
         .eq("status", "approved")
         .order("graduation_year", { ascending: false });
       if (error) throw error;
@@ -59,7 +59,7 @@ function Directory() {
     return (data ?? []).filter((p) => {
       const matchQ =
         !q ||
-        [p.full_name, p.profession, p.company, p.city, p.country, String(p.graduation_year ?? "")].some((v) =>
+        [p.full_name, p.alumni_id, p.profession, p.company, p.city, p.country, String(p.graduation_year ?? "")].some((v) =>
           v?.toLowerCase?.().includes(q.toLowerCase()),
         );
       const matchY = !year || String(p.graduation_year ?? "").includes(year);
@@ -177,6 +177,9 @@ function Directory() {
                       : p.full_name?.split(" ").map((x: string) => x[0]).slice(0, 2).join("")}
                   </div>
                   <div className="min-w-0">
+                    {p.alumni_id && (
+                      <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{p.alumni_id}</span>
+                    )}
                     <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{p.full_name}</h3>
                     {p.graduation_year && (
                       <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
