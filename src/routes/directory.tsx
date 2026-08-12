@@ -200,7 +200,7 @@ function Directory() {
                 {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
               </Link>
               <div className="mt-4 flex items-center gap-2">
-                {p.linkedin_url && <a href={p.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label={`${p.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></a>}
+                {p.linkedin_url && <LinkedInLink url={p.linkedin_url} aria-label={`${p.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
                 {p.website_url && <a href={p.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${p.full_name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
                 {isAdmin && (
                   <Link to="/admin" className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-navy hover:bg-secondary">
