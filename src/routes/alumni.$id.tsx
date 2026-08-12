@@ -18,6 +18,7 @@ import {
   User,
   School,
 } from "lucide-react";
+import { LinkedInLink } from "@/components/LinkedInLink";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -174,9 +175,9 @@ function AlumniProfile() {
                   )}
                   {data.linkedin_url && (
                     <Button asChild size="sm" variant="outline">
-                      <a href={data.linkedin_url} target="_blank" rel="noopener noreferrer">
+                      <LinkedInLink url={data.linkedin_url}>
                         <Linkedin className="mr-2 h-4 w-4" />LinkedIn
-                      </a>
+                      </LinkedInLink>
                     </Button>
                   )}
                 </div>
@@ -210,7 +211,8 @@ function AlumniProfile() {
                     value={[data.city, data.country].filter(Boolean).join(", ") || "—"} />
                   {data.linkedin_url && (
                     <InfoRow icon={<Linkedin className="h-4 w-4" />} label="LinkedIn"
-                      value={<a href={data.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-navy hover:underline">View profile</a>} />
+                      value={<LinkedInLink url={data.linkedin_url} className="text-navy hover:underline">View profile</LinkedInLink>} />
+
                   )}
                   {data.website_url && (
                     <InfoRow icon={<Globe className="h-4 w-4" />} label="Website"
