@@ -295,7 +295,7 @@ function AlumniEditor({ open, initial, onClose, onSaved }: { open: boolean; init
       graduation_year: form.graduation_year ? Number(form.graduation_year) : null,
       matric_stream: form.matric_stream || null,
       roll_number: form.roll_number || null,
-      alumni_id: form.alumni_id?.trim() || null,
+      ...(form.alumni_id?.trim() ? { alumni_id: form.alumni_id.trim() } : {}),
       profession: form.profession || null,
       company: form.company || null,
       higher_education: form.higher_education || null,
