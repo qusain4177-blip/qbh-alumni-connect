@@ -13,7 +13,7 @@
     "server": {
       "name": "qbh-alumni-mcp",
       "version": "0.1.0",
-      "title": "QBH Alumni Portal"
+      "title": "QBHS UMBRELLA Alumni Portal"
     },
     "tools": [
       {
@@ -109,7 +109,7 @@
       {
         "name": "search_alumni",
         "title": "Search alumni directory",
-        "description": "Search the QBH alumni directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
+        "description": "Search the QBHS UMBRELLA alumni directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,

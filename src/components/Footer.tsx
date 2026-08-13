@@ -7,18 +7,18 @@ export function Footer() {
     <footer className="bg-navy text-navy-foreground">
       <div className="container mx-auto grid gap-10 px-4 py-14 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-2">
-          <Link to="/" className="flex items-center gap-3" aria-label="QBH Umbrella — Home">
+          <Link to="/" className="flex items-center gap-3" aria-label="QBHS UMBRELLA — Home">
             <img
               src={qbhLogo.url}
-              alt="QBH Umbrella logo"
+              alt="QBHS UMBRELLA logo"
               width={48}
               height={48}
               className="h-12 w-12 shrink-0 rounded-full bg-white object-contain p-0.5"
             />
-            <div className="font-display text-lg font-semibold tracking-tight">Qamar E Bani Hashim</div>
+            <div className="font-display text-lg font-semibold tracking-tight">QBHS UMBRELLA</div>
           </Link>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-navy-foreground/65">
-            The official alumni network of Qamar E Bani Hashim.
+            The official alumni network of QBHS UMBRELLA.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 py-5 font-mono text-[11px] text-navy-foreground/55 lg:flex-row lg:px-8">
-          <p>© {new Date().getFullYear()} QBH Alumni Association</p>
+          <p>© {new Date().getFullYear()} QBHS UMBRELLA. All rights reserved.</p>
           <p>Built by old students.</p>
         </div>
       </div>

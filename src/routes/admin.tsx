@@ -16,7 +16,7 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin Console — QBH Alumni" }] }),
+  head: () => ({ meta: [{ title: "Admin Console — QBHS UMBRELLA" }] }),
   component: AdminPage,
 });
 

@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth-context";
 
 
 export const Route = createFileRoute("/directory")({
-  head: () => ({ meta: [{ title: "Alumni Directory — QBH" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
+  head: () => ({ meta: [{ title: "Alumni Directory — QBHS UMBRELLA" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
   component: Directory,
 });
 

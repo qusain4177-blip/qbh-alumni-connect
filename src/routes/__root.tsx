@@ -45,10 +45,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Qamar E Bani Hashim — Alumni Network" },
+      { title: "QBHS UMBRELLA - Alumni Directory Portal" },
       { name: "description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
-      { property: "og:title", content: "Qamar E Bani Hashim — Alumni Network" },
-      { name: "twitter:title", content: "Qamar E Bani Hashim — Alumni Network" },
+      { property: "og:title", content: "QBHS UMBRELLA - Alumni Directory Portal" },
+      { name: "twitter:title", content: "QBHS UMBRELLA - Alumni Directory Portal" },
       { property: "og:description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
       { name: "twitter:description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e84405aa-0307-4275-b8df-7ff4365a6a1e/id-preview-3bf50dca--32e27c7f-4ea4-400f-9d23-70d862346a69.lovable.app-1779918965052.png" },

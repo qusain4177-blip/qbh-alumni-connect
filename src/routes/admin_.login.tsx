@@ -14,10 +14,10 @@ import { ADMIN_EMAIL } from "@/lib/admin";
 export const Route = createFileRoute("/admin_/login")({
   head: () => ({
     meta: [
-      { title: "Admin Sign In — QBH Alumni" },
-      { name: "description", content: "Restricted sign-in for the Qamar E Bani Hashim alumni portal administrator." },
-      { property: "og:title", content: "Admin Sign In — QBH Alumni" },
-      { property: "og:description", content: "Restricted administrator access to the QBH alumni portal." },
+      { title: "Admin Sign In — QBHS UMBRELLA" },
+      { name: "description", content: "Restricted sign-in for the QBHS UMBRELLA alumni portal administrator." },
+      { property: "og:title", content: "Admin Sign In — QBHS UMBRELLA" },
+      { property: "og:description", content: "Restricted administrator access to the QBHS UMBRELLA alumni portal." },
       { name: "robots", content: "noindex" },
     ],
   }),
