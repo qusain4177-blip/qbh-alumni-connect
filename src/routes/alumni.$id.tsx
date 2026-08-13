@@ -30,9 +30,9 @@ export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
     meta: [
       { title: `Alumni Profile — QBH` },
-      { name: "description", content: `Alumni profile page for a Qamar E Bani Hashim Matric graduate.` },
+      { name: "description", content: `Alumni profile page for a QBHS UMBRELLA Matric graduate.` },
       { property: "og:title", content: `Alumni Profile — QBH` },
-      { property: "og:description", content: `Qamar E Bani Hashim alumni profile.` },
+      { property: "og:description", content: `QBHS UMBRELLA alumni profile.` },
     ],
   }),
   component: AlumniProfile,

@@ -11,10 +11,10 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Events & Memories — QBH Alumni Gallery" },
-      { name: "description", content: "Photos from reunions, alumni meets, and campus events at Qamar E Bani Hashim." },
-      { property: "og:title", content: "Events & Memories — QBH Alumni Gallery" },
-      { property: "og:description", content: "Photos from reunions, alumni meets, and campus events at Qamar E Bani Hashim." },
+      { title: "Events & Memories — QBHS UMBRELLA Gallery" },
+      { name: "description", content: "Photos from reunions, alumni meets, and campus events at QBHS UMBRELLA." },
+      { property: "og:title", content: "Events & Memories — QBHS UMBRELLA Gallery" },
+      { property: "og:description", content: "Photos from reunions, alumni meets, and campus events at QBHS UMBRELLA." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

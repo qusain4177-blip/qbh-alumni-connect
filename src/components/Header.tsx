@@ -47,15 +47,15 @@ export function Header() {
         </div>
       )}
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-3" aria-label="QBH Umbrella — Home">
+        <Link to="/" className="flex items-center gap-3" aria-label="QBHS UMBRELLA — Home">
           <img
             src={qbhLogo.url}
-            alt="QBH Umbrella logo"
+            alt="QBHS UMBRELLA logo"
             width={44}
             height={44}
             className="h-10 w-10 shrink-0 rounded-full object-contain sm:h-11 sm:w-11"
           />
-          <div className="font-display text-base font-semibold tracking-tight text-navy">Qamar E Bani Hashim</div>
+          <div className="font-display text-base font-semibold tracking-tight text-navy">QBHS UMBRELLA</div>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
