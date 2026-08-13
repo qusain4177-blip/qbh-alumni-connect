@@ -31,7 +31,7 @@ function Landing() {
           "Alumni Reunion 2026 — registration open",
           "Matric 2015 marks ten years since graduation",
           "New mentorship program pairs students with working alumni",
-          "Three QBH graduates named in regional honours list",
+          "Three QBHS UMBRELLA graduates named in regional honours list",
         ]);
       });
 
@@ -61,7 +61,7 @@ function Landing() {
         <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-36">
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
-              <Award className="h-3.5 w-3.5" /> QBH / Alumni
+              <Award className="h-3.5 w-3.5" /> QBHS UMBRELLA
             </div>
             <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
               The Matric class, <br className="hidden sm:block" /> still in one room.
@@ -131,7 +131,7 @@ function Landing() {
             </h2>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-2 lg:text-lg">
-            QBH has been graduating Matric students for forty years. Most of them lost touch the week after results came out. This is the place to find them again — and to keep your own details current as life moves around.
+            QBHS UMBRELLA has been graduating Matric students for forty years. Most of them lost touch the week after results came out. This is the place to find them again — and to keep your own details current as life moves around.
           </p>
 
         </div>
