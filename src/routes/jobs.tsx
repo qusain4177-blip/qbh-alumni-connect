@@ -11,7 +11,7 @@ export const Route = createFileRoute("/jobs")({
   head: () => ({
     meta: [
       { title: "Jobs Board — QBHS UMBRELLA" },
-      { name: "description", content: "Job opportunities shared by and for QBH Matric alumni." },
+      { name: "description", content: "Job opportunities shared by and for QBHS UMBRELLA Matric alumni." },
     ],
   }),
   component: JobsPage,

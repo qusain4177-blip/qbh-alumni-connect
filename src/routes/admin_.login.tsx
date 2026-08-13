@@ -17,7 +17,7 @@ export const Route = createFileRoute("/admin_/login")({
       { title: "Admin Sign In — QBHS UMBRELLA" },
       { name: "description", content: "Restricted sign-in for the QBHS UMBRELLA alumni portal administrator." },
       { property: "og:title", content: "Admin Sign In — QBHS UMBRELLA" },
-      { property: "og:description", content: "Restricted administrator access to the QBH alumni portal." },
+      { property: "og:description", content: "Restricted administrator access to the QBHS UMBRELLA alumni portal." },
       { name: "robots", content: "noindex" },
     ],
   }),
