@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
+import { Avatar } from "@/components/Avatar";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -171,11 +172,7 @@ function Directory() {
             <article key={p.id} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: p.id }} className="block">
                 <div className="flex items-center gap-4">
-                  <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-full bg-navy text-gold font-display text-xl font-semibold">
-                    {p.avatar_url
-                      ? <img src={p.avatar_url} alt={p.full_name} className="h-full w-full object-cover" />
-                      : p.full_name?.split(" ").map((x: string) => x[0]).slice(0, 2).join("")}
-                  </div>
+                  <Avatar name={p.full_name} src={p.avatar_url} />
                   <div className="min-w-0">
                     {p.alumni_id && (
                       <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{p.alumni_id}</span>

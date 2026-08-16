@@ -19,6 +19,7 @@ import {
   School,
 } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
+import { Avatar } from "@/components/Avatar";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -38,9 +39,6 @@ export const Route = createFileRoute("/alumni/$id")({
   component: AlumniProfile,
 });
 
-function initials(name?: string) {
-  return (name ?? "").split(" ").map((x) => x[0]).slice(0, 2).join("").toUpperCase();
-}
 
 function AlumniProfile() {
   const { id } = Route.useParams();
@@ -141,13 +139,12 @@ function AlumniProfile() {
             <div className="relative px-6 pb-8 pt-0 sm:px-10">
               {/* Centered profile header */}
               <div className="flex flex-col items-center text-center">
-                <div className="-mt-16 grid h-32 w-32 shrink-0 place-items-center overflow-hidden rounded-full border-4 border-card bg-[#a8dc7a] text-3xl font-semibold text-navy shadow-sm ring-4 ring-[#8bc34a]/60 sm:-mt-20 sm:h-40 sm:w-40">
-                  {data.avatar_url ? (
-                    <img src={data.avatar_url} alt={data.full_name} className="h-full w-full object-cover" />
-                  ) : (
-                    initials(data.full_name)
-                  )}
-                </div>
+                <Avatar
+                  name={data.full_name}
+                  src={data.avatar_url}
+                  size="lg"
+                  className="-mt-16 border-4 border-card shadow-sm ring-4 ring-[#8bc34a]/60 sm:-mt-20"
+                />
 
                 <div className="mt-4 min-w-0 max-w-2xl">
                   {data.alumni_id && (
