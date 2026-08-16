@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { LayoutDashboard, LogOut, Menu, ShieldCheck, X } from "lucide-react";
-import qbhLogo from "@/assets/qbh-logo.jpeg.asset.json";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 
@@ -49,7 +48,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-3" aria-label="QBHS UMBRELLA — Home">
           <img
-            src={qbhLogo.url}
+            src="/qbh-logo.svg"
             alt="QBHS UMBRELLA logo"
             width={44}
             height={44}

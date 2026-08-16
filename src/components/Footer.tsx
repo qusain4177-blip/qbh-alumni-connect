@@ -1,7 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin } from "lucide-react";
-import qbhLogo from "@/assets/qbh-logo.jpeg.asset.json";
-
 export function Footer() {
   return (
     <footer className="bg-navy text-navy-foreground">
@@ -9,7 +7,7 @@ export function Footer() {
         <div className="lg:col-span-2">
           <Link to="/" className="flex items-center gap-3" aria-label="QBHS UMBRELLA — Home">
             <img
-              src={qbhLogo.url}
+              src="/qbh-logo.svg"
               alt="QBHS UMBRELLA logo"
               width={48}
               height={48}
