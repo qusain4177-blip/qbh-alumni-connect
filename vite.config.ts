@@ -15,7 +15,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  ...(isVercel ? { nitro: { preset: "vercel" } } : {}),
+  nitro: {
+    output: { dir: "dist" },
+    ...(isVercel ? { preset: "vercel" } : {}),
+  },
   vite: {
     plugins: [mcpPlugin()],
     ...(isVercel
