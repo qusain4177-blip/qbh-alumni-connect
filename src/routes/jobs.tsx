@@ -65,6 +65,9 @@ function JobsPage() {
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {isLoading && Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-32 animate-pulse rounded-xl border border-border bg-card" />
+          ))}
           {filtered.map((j: any) => (
             <article
               key={j.id}

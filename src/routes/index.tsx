@@ -21,23 +21,17 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
-  const [tickerItems, setTickerItems] = useState<string[]>([]);
+  const [tickerItems, setTickerItems] = useState<string[] | null>(null);
 
   useEffect(() => {
     supabase.from("news").select("title").eq("published", true).order("created_at", { ascending: false }).limit(8)
       .then(({ data }) => {
-        const items = (data ?? []).map((n) => n.title);
-        setTickerItems(items.length ? items : [
-          "Alumni Reunion 2026 — registration open",
-          "Matric 2015 marks ten years since graduation",
-          "New mentorship program pairs students with working alumni",
-          "Three QBH UMBRELLA graduates named in regional honours list",
-        ]);
+        setTickerItems((data ?? []).map((n) => n.title));
       });
 
   }, []);
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["landing-stats"],
     queryFn: async () => {
       const [{ count: alumniCount }, { data: events }] = await Promise.all([
@@ -87,7 +81,7 @@ function Landing() {
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Alumni</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{(stats?.alumniCount ?? 0) + "+"}</dd>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{statsLoading ? "—" : `${stats?.alumniCount ?? 0}+`}</dd>
               </div>
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Batches</dt>
@@ -104,6 +98,7 @@ function Landing() {
 
 
         {/* News ticker */}
+        {tickerItems && tickerItems.length > 0 && (
         <div className="relative border-t border-white/10 bg-navy">
           <div className="container mx-auto flex items-center gap-4 overflow-hidden px-4 py-3 lg:px-8">
             <span className="shrink-0 rounded border border-white/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-white/70">Latest</span>
@@ -118,6 +113,7 @@ function Landing() {
             </div>
           </div>
         </div>
+        )}
       </section>
 
 
@@ -164,7 +160,7 @@ function Landing() {
               <Sparkles className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{(stats?.alumniCount ?? 0) + "+"}</p>
+              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{statsLoading ? "—" : `${stats?.alumniCount ?? 0}+`}</p>
               <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Verified alumni</p>
             </div>
           </article>
@@ -216,12 +212,15 @@ function Landing() {
             <Link to="/events" className="hidden text-sm font-medium text-navy hover:text-gold sm:inline-flex">All events →</Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {(stats?.events?.length ? stats.events : [
-            { id: "p1", title: "Alumni Reunion 2026", event_date: "2026-09-12T18:00:00.000Z", location: "Ghazi Dawood Brohi Goth, Karachi, Karachi City, Sindh, Pakistan" },
-              { id: "p2", title: "Mentorship night", event_date: "2026-07-04T17:00:00.000Z", location: "Online" },
-              { id: "p3", title: "Matric 2006 — Present & Beyond", event_date: "2026-11-22T17:00:00.000Z", location: "Karachi Malir" },
-
-            ]).map((e: any) => {
+            {statsLoading && Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-40 animate-pulse rounded-xl border border-border bg-card" />
+            ))}
+            {!statsLoading && stats?.events?.length === 0 && (
+              <div className="col-span-full rounded-xl border border-dashed border-border p-12 text-center">
+                <p className="text-sm text-muted-foreground">No upcoming events right now. Check back soon.</p>
+              </div>
+            )}
+            {!statsLoading && (stats?.events ?? []).map((e: any) => {
               const d = new Date(e.event_date);
               return (
                 <article key={e.id} className="overflow-hidden rounded-xl border border-border bg-card">
@@ -229,11 +228,10 @@ function Landing() {
                     <div className="flex flex-col items-center justify-center rounded-lg bg-white/10 px-3 py-2 text-center backdrop-blur">
                       <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">{d.toLocaleString("en", { month: "short" })}</span>
                       <span className="font-display text-2xl font-semibold tracking-tight">{d.getDate()}</span>
-
                     </div>
                     <div>
                       <h3 className="font-display text-lg font-semibold">{e.title}</h3>
-                      <p className="text-xs text-white/70">{e.id === "p3" ? "For all pass-outs from 2006 onwards" : d.toLocaleDateString("en", { weekday: "long", year: "numeric" })}</p>
+                      <p className="text-xs text-white/70">{d.toLocaleDateString("en", { weekday: "long", year: "numeric" })}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 p-5 text-sm text-muted-foreground">

@@ -11,11 +11,11 @@ export const Route = createFileRoute("/events")({
 });
 
 function EventsPage() {
-  const { data: events } = useQuery({
+  const { data: events, isLoading: eventsLoading } = useQuery({
     queryKey: ["events-all"],
     queryFn: async () => (await supabase.from("events").select("*").order("event_date")).data ?? [],
   });
-  const { data: news } = useQuery({
+  const { data: news, isLoading: newsLoading } = useQuery({
     queryKey: ["news-all"],
     queryFn: async () => (await supabase.from("news").select("*").eq("published", true).order("created_at", { ascending: false })).data ?? [],
   });
@@ -36,7 +36,13 @@ function EventsPage() {
           <h2 className="font-display text-3xl font-semibold tracking-tight text-navy">Coming up</h2>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {(events ?? []).map((e) => {
+            {eventsLoading && Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-40 animate-pulse rounded-xl border border-border bg-card" />
+            ))}
+            {!eventsLoading && (events ?? []).length === 0 && (
+              <p className="text-muted-foreground">Nothing on the calendar yet. Check back in a few weeks.</p>
+            )}
+            {!eventsLoading && (events ?? []).map((e) => {
               const d = new Date(e.event_date);
               return (
                 <article key={e.id} className="overflow-hidden rounded-xl border border-border bg-card">
@@ -55,7 +61,6 @@ function EventsPage() {
                 </article>
               );
             })}
-            {events && events.length === 0 && <p className="text-muted-foreground">Nothing on the calendar yet. Check back in a few weeks.</p>}
           </div>
         </section>
 
@@ -63,7 +68,13 @@ function EventsPage() {
           <div className="container mx-auto px-4 lg:px-8">
             <h2 className="font-display text-3xl font-semibold text-navy">Recent news</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-2">
-              {(news ?? []).map((n) => (
+              {newsLoading && Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="h-32 animate-pulse rounded-xl border border-border bg-card" />
+              ))}
+              {!newsLoading && (news ?? []).length === 0 && (
+                <p className="text-muted-foreground">No announcements right now.</p>
+              )}
+              {!newsLoading && (news ?? []).map((n) => (
                 <article key={n.id} className="rounded-xl border border-border bg-card p-6">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-gold">
                     <Newspaper className="h-3.5 w-3.5" /> {new Date(n.created_at).toLocaleDateString("en", { dateStyle: "long" })}
@@ -72,7 +83,6 @@ function EventsPage() {
                   {n.excerpt && <p className="mt-2 text-sm text-muted-foreground">{n.excerpt}</p>}
                 </article>
               ))}
-              {news && news.length === 0 && <p className="text-muted-foreground">No announcements right now.</p>}
             </div>
           </div>
         </section>
