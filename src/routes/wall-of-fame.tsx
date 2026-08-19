@@ -22,17 +22,17 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/wall-of-fame")({
   head: () => ({
     meta: [
-      { title: "Alumni Wall of Fame — QBHS UMBRELLA Success Stories" },
+      { title: "Alumni Wall of Fame — QBH UMBRELLA Success Stories" },
       {
         name: "description",
         content:
-          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBHS UMBRELLA alumni.",
+          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBH UMBRELLA alumni.",
       },
-      { property: "og:title", content: "Alumni Wall of Fame — QBHS UMBRELLA Success Stories" },
+      { property: "og:title", content: "Alumni Wall of Fame — QBH UMBRELLA Success Stories" },
       {
         property: "og:description",
         content:
-          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBHS UMBRELLA alumni.",
+          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBH UMBRELLA alumni.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

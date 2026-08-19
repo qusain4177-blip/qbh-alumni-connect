@@ -30,10 +30,10 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
     meta: [
-      { title: `Alumni Profile — QBHS UMBRELLA` },
-      { name: "description", content: `Alumni profile page for a QBHS UMBRELLA Matric graduate.` },
-      { property: "og:title", content: `Alumni Profile — QBHS UMBRELLA` },
-      { property: "og:description", content: `QBHS UMBRELLA alumni profile.` },
+      { title: `Alumni Profile — QBH UMBRELLA` },
+      { name: "description", content: `Alumni profile page for a QBH UMBRELLA Matric graduate.` },
+      { property: "og:title", content: `Alumni Profile — QBH UMBRELLA` },
+      { property: "og:description", content: `QBH UMBRELLA alumni profile.` },
     ],
   }),
   component: AlumniProfile,

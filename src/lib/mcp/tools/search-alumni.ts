@@ -5,7 +5,7 @@ import { supabaseForUser, textResult, errorResult } from "../supabase";
 export default defineTool({
   name: "search_alumni",
   title: "Search alumni directory",
-  description: "Search the QBHS UMBRELLA alumni directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
+  description: "Search the QBH UMBRELLA alumni directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
   inputSchema: {
     query: z.string().trim().optional().describe("Free-text match on full name."),
     matric_year: z.number().int().min(1950).max(2100).optional().describe("Matric passing year, e.g. 2018."),

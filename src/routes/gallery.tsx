@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Calendar, ImagePlus, Loader2, Trash2, X } from "lucide-react";
+import { Calendar, ImagePlus, Loader as Loader2, Trash2, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -11,10 +11,10 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Events & Memories — QBHS UMBRELLA Gallery" },
-      { name: "description", content: "Photos from reunions, alumni meets, and campus events at QBHS UMBRELLA." },
-      { property: "og:title", content: "Events & Memories — QBHS UMBRELLA Gallery" },
-      { property: "og:description", content: "Photos from reunions, alumni meets, and campus events at QBHS UMBRELLA." },
+      { title: "Events & Memories — QBH UMBRELLA Gallery" },
+      { name: "description", content: "Photos from reunions, alumni meets, and campus events at QBH UMBRELLA." },
+      { property: "og:title", content: "Events & Memories — QBH UMBRELLA Gallery" },
+      { property: "og:description", content: "Photos from reunions, alumni meets, and campus events at QBH UMBRELLA." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
