@@ -21,29 +21,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => {
-      setSession(s);
-      if (s?.user) {
-        // Defer role fetch
-        setTimeout(async () => {
-          const { data } = await supabase.from("user_roles").select("role").eq("user_id", s.user.id);
-          setRoles((data ?? []).map((r) => r.role as Role));
-        }, 0);
-      } else {
-        setRoles([]);
-      }
-    });
+    let subscription: { unsubscribe: () => void } | undefined;
+    try {
+      const { data } = supabase.auth.onAuthStateChange((_e, s) => {
+        setSession(s);
+        if (s?.user) {
+          setTimeout(async () => {
+            try {
+              const { data } = await supabase.from("user_roles").select("role").eq("user_id", s.user.id);
+              setRoles((data ?? []).map((r) => r.role as Role));
+            } catch (err) {
+              console.error("[Auth] Failed to fetch roles:", err);
+            }
+          }, 0);
+        } else {
+          setRoles([]);
+        }
+      });
+      subscription = data.subscription;
 
-    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
-      setSession(s);
-      if (s?.user) {
-        const { data } = await supabase.from("user_roles").select("role").eq("user_id", s.user.id);
-        setRoles((data ?? []).map((r) => r.role as Role));
-      }
+      supabase.auth.getSession().then(async ({ data: { session: s } }) => {
+        setSession(s);
+        if (s?.user) {
+          try {
+            const { data } = await supabase.from("user_roles").select("role").eq("user_id", s.user.id);
+            setRoles((data ?? []).map((r) => r.role as Role));
+          } catch (err) {
+            console.error("[Auth] Failed to fetch roles:", err);
+          }
+        }
+        setLoading(false);
+      }).catch((err) => {
+        console.error("[Auth] Failed to get session:", err);
+        setLoading(false);
+      });
+    } catch (err) {
+      console.error("[Auth] Supabase initialization failed:", err);
       setLoading(false);
-    });
+    }
 
-    return () => subscription.unsubscribe();
+    return () => subscription?.unsubscribe();
   }, []);
 
   return (
