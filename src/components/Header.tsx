@@ -45,16 +45,23 @@ export function Header() {
           </div>
         </div>
       )}
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-3" aria-label="QBHS UMBRELLA — Home">
+      <div className="container mx-auto flex h-[72px] items-center justify-between px-4 lg:px-8">
+        <Link to="/" className="group flex min-w-0 items-center gap-3" aria-label="QBHS UMBRELLA — Home">
           <img
-            src="/qbh-logo.svg"
+            src="/images/image.png"
             alt="QBHS UMBRELLA logo"
-            width={44}
-            height={44}
-            className="h-10 w-10 shrink-0 rounded-full object-contain sm:h-11 sm:w-11"
+            width={56}
+            height={56}
+            className="h-11 w-11 shrink-0 rounded-xl object-cover shadow-sm transition-transform duration-200 group-hover:scale-[1.04] sm:h-12 sm:w-12"
           />
-          <div className="font-display text-base font-semibold tracking-tight text-navy">QBHS UMBRELLA</div>
+          <span className="min-w-0">
+            <span className="block truncate font-display text-[15px] font-bold tracking-tight text-navy sm:text-base">
+              QBHS UMBRELLA
+            </span>
+            <span className="mt-0.5 block truncate text-[10px] font-medium tracking-[0.08em] text-brand-purple sm:text-[11px]">
+              an umbrella of opportunities
+            </span>
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -62,8 +69,8 @@ export function Header() {
             <Link
               key={l.to}
               to={l.to}
-              className="text-sm font-medium text-foreground/75 transition-colors hover:text-navy"
-              activeProps={{ className: "text-navy" }}
+              className="text-sm font-medium text-foreground/75 transition-colors hover:text-brand-purple"
+              activeProps={{ className: "text-brand-purple" }}
             >
               {l.label}
             </Link>
@@ -74,21 +81,21 @@ export function Header() {
           {isAdmin ? (
             <Link
               to="/admin"
-              className="flex items-center gap-1.5 rounded-md bg-navy px-3.5 py-2 text-xs font-medium text-navy-foreground hover:opacity-90"
+              className="flex items-center gap-1.5 rounded-md bg-brand-purple px-3.5 py-2 text-xs font-medium text-white hover:bg-brand-purple-dark"
             >
               <LayoutDashboard className="h-3.5 w-3.5" /> Admin
             </Link>
           ) : (
             <Link
               to="/admin/login"
-              className="rounded-md border border-border px-3.5 py-2 text-xs font-medium text-foreground/75 transition-colors hover:text-navy"
+              className="rounded-md border border-border px-3.5 py-2 text-xs font-medium text-foreground/75 transition-colors hover:border-brand-purple/40 hover:text-brand-purple"
             >
               Sign In
             </Link>
           )}
         </div>
 
-        <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+        <button className="rounded-md p-2 text-navy transition-colors hover:bg-brand-purple/10 hover:text-brand-purple lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
@@ -97,21 +104,21 @@ export function Header() {
         <div className="border-t border-border bg-background lg:hidden">
           <div className="container mx-auto flex flex-col gap-1 px-4 py-4">
             {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="rounded px-3 py-2 text-sm font-medium hover:bg-secondary">
+              <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-brand-purple/10 hover:text-brand-purple">
                 {l.label}
               </Link>
             ))}
             {isAdmin ? (
               <>
-                <Link to="/admin" onClick={() => setOpen(false)} className="rounded px-3 py-2 text-sm font-medium text-navy hover:bg-secondary">
+                <Link to="/admin" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium text-brand-purple hover:bg-brand-purple/10">
                   Admin Dashboard
                 </Link>
-                <button onClick={handleSignOut} className="rounded px-3 py-2 text-left text-sm font-medium text-navy hover:bg-secondary">
+                <button onClick={handleSignOut} className="rounded-md px-3 py-2 text-left text-sm font-medium text-brand-purple hover:bg-brand-purple/10">
                   Log out
                 </button>
               </>
             ) : (
-              <Link to="/admin/login" onClick={() => setOpen(false)} className="rounded px-3 py-2 text-sm font-medium text-navy hover:bg-secondary">
+              <Link to="/admin/login" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm font-medium text-brand-purple hover:bg-brand-purple/10">
                 Sign In
               </Link>
             )}

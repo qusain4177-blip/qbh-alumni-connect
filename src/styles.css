@@ -34,6 +34,8 @@
   --color-gold-foreground: var(--gold-foreground);
   --color-navy: var(--navy);
   --color-navy-foreground: var(--navy-foreground);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-purple-dark: var(--brand-purple-dark);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -71,6 +73,10 @@
   /* Legacy "gold" token kept for compatibility — bright QBH purple accent */
   --gold: oklch(0.52 0.27 293);
   --gold-foreground: oklch(0.99 0 0);
+
+  /* Official brand purple — matches logo background (#5B16D0) */
+  --brand-purple: oklch(0.45 0.28 293);
+  --brand-purple-dark: oklch(0.38 0.26 293);
 
   --secondary: oklch(0.975 0.008 293);
   --secondary-foreground: oklch(0.28 0.18 293);
