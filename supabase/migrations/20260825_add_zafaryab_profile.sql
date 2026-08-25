@@ -16,7 +16,7 @@ VALUES (
   'Bachelors in Civil Engineering',
   'NED University of Engineering and Technology',
   'Engineering',
-  '/assets/ufaque-avatar.png',
+  '/images/zafaryab-avatar.svg',
   'approved',
   now()
 );
