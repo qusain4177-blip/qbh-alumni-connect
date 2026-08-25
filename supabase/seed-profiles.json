@@ -1,0 +1,21 @@
+[
+  {
+    "id": "zafaryab-haider-local-2021",
+    "full_name": "Zafaryab Haider",
+    "gender": "Male",
+    "email": "Zafaryab.s3522@gmail.com",
+    "graduation_year": 2021,
+    "country": "Pakistan",
+    "father_name": "Muhammad Ali",
+    "date_of_birth": "2005-11-21",
+    "marital_status": "Single",
+    "city": "Karachi",
+    "profession": "Bachelors in Civil Engineering",
+    "company": "NED University of Engineering and Technology",
+    "higher_education": "Engineering",
+    "avatar_url": "/images/zafaryab-avatar.svg",
+    "status": "approved",
+    "bio": "",
+    "created_at": "2026-08-25T00:00:00Z"
+  }
+]

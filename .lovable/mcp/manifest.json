@@ -1,0 +1,200 @@
+{
+  "version": 1,
+  "sdk_version": "0.22.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://mzulidjwgwtedpfindjc.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "qbh-alumni-mcp",
+      "version": "0.1.0",
+      "title": "QBHS UMBRELLA Alumni Portal"
+    },
+    "tools": [
+      {
+        "name": "get_my_profile",
+        "title": "Get my alumni profile",
+        "description": "Returns the signed-in alumnus's own profile record (name, Matric year, stream, contact, LinkedIn, etc.).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_my_profile",
+        "title": "Update my alumni profile",
+        "description": "Update the signed-in alumnus's own profile fields. Only fields provided are changed.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "full_name": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 120
+            },
+            "bio": {
+              "type": "string",
+              "maxLength": 2000
+            },
+            "phone": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "city": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "country": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "company": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "profession": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "higher_education": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "linkedin_url": {
+              "type": "string",
+              "maxLength": 300,
+              "format": "uri"
+            },
+            "website_url": {
+              "type": "string",
+              "maxLength": 300,
+              "format": "uri"
+            },
+            "matric_stream": {
+              "type": "string",
+              "enum": [
+                "Computer Science",
+                "Biology",
+                "Arts/Commerce"
+              ]
+            },
+            "graduation_year": {
+              "type": "integer",
+              "minimum": 1950,
+              "maximum": 2100
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_alumni",
+        "title": "Search alumni directory",
+        "description": "Search the QBHS UMBRELLA alumni directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Free-text match on full name.",
+              "type": "string"
+            },
+            "matric_year": {
+              "description": "Matric passing year, e.g. 2018.",
+              "type": "integer",
+              "minimum": 1950,
+              "maximum": 2100
+            },
+            "matric_stream": {
+              "type": "string",
+              "enum": [
+                "Computer Science",
+                "Biology",
+                "Arts/Commerce"
+              ]
+            },
+            "limit": {
+              "description": "Max rows to return. Default 20.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_events",
+        "title": "List alumni events",
+        "description": "List upcoming alumni events (reunions, mentorship nights, batch meetups).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "upcoming_only": {
+              "description": "If true, only return events with a start date >= today. Default true.",
+              "type": "boolean"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_announcements",
+        "title": "List announcements",
+        "description": "List alumni announcements posted by the school (news, general updates, job posts).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
