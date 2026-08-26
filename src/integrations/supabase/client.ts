@@ -2,21 +2,37 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
+// Seed data for fallback when Supabase is not configured
+const SEED_PROFILES = [
+  { id: "abiha-khan-local-2020", full_name: "Abiha Khan", email: "abiha@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Khan Ali", date_of_birth: "2001-03-15", marital_status: "Single", city: "Lahore", profession: "Software Developer", company: "Tech Startup", higher_education: "Computer Science", avatar_url: "/images/abiha-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "adeel-malik-local-2019", full_name: "Adeel Malik", email: "adeel@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Malik Hassan", date_of_birth: "2000-06-22", marital_status: "Single", city: "Karachi", profession: "Business Analyst", company: "Consulting Firm", higher_education: "Business Administration", avatar_url: "/images/adeel-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "alishbah-ahmed-local-2021", full_name: "Alishbah Ahmed", email: "alishbah@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Ahmed Qasim", date_of_birth: "2002-09-10", marital_status: "Single", city: "Islamabad", profession: "Graphic Designer", company: "Digital Agency", higher_education: "Graphic Design", avatar_url: "/images/alishbah-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "baqir-hassan-local-2020", full_name: "Baqir Hassan", email: "baqir@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Hassan Raza", date_of_birth: "2001-01-25", marital_status: "Single", city: "Rawalpindi", profession: "Civil Engineer", company: "Construction Company", higher_education: "Civil Engineering", avatar_url: "/images/baqir-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "danish-syed-local-2018", full_name: "Danish Syed", email: "danish@example.com", graduation_year: 2018, country: "Pakistan", father_name: "Syed Tariq", date_of_birth: "1999-11-30", marital_status: "Married", city: "Multan", profession: "Project Manager", company: "IT Solutions", higher_education: "Information Technology", avatar_url: "/images/danish-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "fawad-khan-local-2022", full_name: "Fawad Khan", email: "fawad@example.com", graduation_year: 2022, country: "Pakistan", father_name: "Khan Muhammad", date_of_birth: "2003-07-14", marital_status: "Single", city: "Peshawar", profession: "Medical Student", company: "Peshawar Medical College", higher_education: "Medicine", avatar_url: "/images/fawad-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "fizza-iqbal-local-2020", full_name: "Fizza Iqbal", email: "fizza@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Iqbal Hussain", date_of_birth: "2001-05-18", marital_status: "Single", city: "Lahore", profession: "Accountant", company: "Finance Corporation", higher_education: "Accounting", avatar_url: "/images/fizza-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "hassan-ali-local-2019", full_name: "Hassan Ali", email: "hassan@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Ali Raza", date_of_birth: "2000-02-28", marital_status: "Single", city: "Karachi", profession: "Electrical Engineer", company: "Power Distribution", higher_education: "Electrical Engineering", avatar_url: "/images/hassan-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "hiba-noor-local-2021", full_name: "Hiba Noor", email: "hiba@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Noor Ahmed", date_of_birth: "2002-12-08", marital_status: "Single", city: "Lahore", profession: "Marketing Executive", company: "E-commerce Platform", higher_education: "Business", avatar_url: "/images/hiba-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "hooria-fatima-local-2020", full_name: "Hooria Fatima", email: "hooria@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Fatima Khan", date_of_birth: "2001-08-19", marital_status: "Single", city: "Islamabad", profession: "Data Analyst", company: "Research Institute", higher_education: "Data Science", avatar_url: "/images/hooria-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "laila-hassan-local-2022", full_name: "Laila Hassan", email: "laila@example.com", graduation_year: 2022, country: "Pakistan", father_name: "Hassan Malik", date_of_birth: "2003-04-03", marital_status: "Single", city: "Multan", profession: "Law Student", company: "University of Law", higher_education: "Law", avatar_url: "/images/laila-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "masooma-ali-local-2019", full_name: "Masooma Ali", email: "masooma@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Ali Siddiqui", date_of_birth: "2000-09-12", marital_status: "Married", city: "Quetta", profession: "Teacher", company: "Private School", higher_education: "Education", avatar_url: "/images/masooma-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "mohsin-ahmed-local-2021", full_name: "Mohsin Ahmed", email: "mohsin@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Ahmed Hassan", date_of_birth: "2002-10-05", marital_status: "Single", city: "Karachi", profession: "Mechanical Engineer", company: "Manufacturing Sector", higher_education: "Mechanical Engineering", avatar_url: "/images/mohsin-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "mohsin-sherazi-local-2020", full_name: "Mohsin Sherazi", email: "mohsin.sherazi@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Sherazi Muhammad", date_of_birth: "2001-06-20", marital_status: "Single", city: "Lahore", profession: "Backend Developer", company: "Web Solutions", higher_education: "Computer Science", avatar_url: "/images/mohsin-sherazi-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "osaja-khan-local-2021", full_name: "Osaja Khan", email: "osaja@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Khan Ali", date_of_birth: "2002-11-11", marital_status: "Single", city: "Islamabad", profession: "Architect", company: "Design Studio", higher_education: "Architecture", avatar_url: "/images/osaja-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "shan-ahmed-local-2018", full_name: "Shan Ahmed", email: "shan@example.com", graduation_year: 2018, country: "Pakistan", father_name: "Ahmed Tariq", date_of_birth: "1999-03-07", marital_status: "Single", city: "Peshawar", profession: "Entrepreneur", company: "Tech Startup", higher_education: "Computer Science", avatar_url: "/images/shan-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "ufaque-hassan-local-2019", full_name: "Ufaque Hassan", email: "ufaque@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Hassan Malik", date_of_birth: "2000-07-23", marital_status: "Single", city: "Karachi", profession: "HR Manager", company: "Corporate Company", higher_education: "Human Resources", avatar_url: "/images/ufaque-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "wajahat-ali-local-2020", full_name: "Wajahat Ali", email: "wajahat@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Ali Muhammad", date_of_birth: "2001-02-14", marital_status: "Single", city: "Lahore", profession: "Financial Analyst", company: "Investment Bank", higher_education: "Finance", avatar_url: "/images/wajahat-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "wania-khan-local-2021", full_name: "Wania Khan", email: "wania@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Khan Siddiqui", date_of_birth: "2002-05-29", marital_status: "Single", city: "Islamabad", profession: "Content Writer", company: "Media Company", higher_education: "Communication", avatar_url: "/images/wania-avatar.svg", status: "approved", bio: "", alumni_id: null },
+  { id: "zafaryab-haider-local-2021", full_name: "Zafaryab Haider", email: "Zafaryab.s3522@gmail.com", graduation_year: 2021, country: "Pakistan", father_name: "Muhammad Ali", date_of_birth: "2005-11-21", marital_status: "Single", city: "Karachi", profession: "Bachelors in Civil Engineering", company: "NED University of Engineering and Technology", higher_education: "Engineering", avatar_url: "/images/zafaryab-avatar.svg", status: "approved", bio: "", alumni_id: null }
+];
+
 function createSupabaseClient() {
-  // Use import.meta.env for client-side (Vite build-time replacement)
-  // Fall back to process.env for SSR (server-side rendering)
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
   const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    const missing = [
-      ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
-      ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
-    ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Falling back to mock data.`;
-    console.warn(`[Supabase] ${message}`);
-    // Return a mock client that uses fallback data
-    return createMockClient();
+    console.warn(`[Supabase] Using mock data (${SEED_PROFILES.length} alumni).`);
+    return createMockSupabaseClient() as any;
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
@@ -28,88 +44,40 @@ function createSupabaseClient() {
   });
 }
 
-// Mock client for fallback when Supabase is not configured
-function createMockClient() {
-  const seedProfiles = [
-    { id: "abiha-khan-local-2020", full_name: "Abiha Khan", email: "abiha@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Khan Ali", date_of_birth: "2001-03-15", marital_status: "Single", city: "Lahore", profession: "Software Developer", company: "Tech Startup", higher_education: "Computer Science", avatar_url: "/images/abiha-avatar.svg", status: "approved", bio: "" },
-    { id: "adeel-malik-local-2019", full_name: "Adeel Malik", email: "adeel@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Malik Hassan", date_of_birth: "2000-06-22", marital_status: "Single", city: "Karachi", profession: "Business Analyst", company: "Consulting Firm", higher_education: "Business Administration", avatar_url: "/images/adeel-avatar.svg", status: "approved", bio: "" },
-    { id: "alishbah-ahmed-local-2021", full_name: "Alishbah Ahmed", email: "alishbah@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Ahmed Qasim", date_of_birth: "2002-09-10", marital_status: "Single", city: "Islamabad", profession: "Graphic Designer", company: "Digital Agency", higher_education: "Graphic Design", avatar_url: "/images/alishbah-avatar.svg", status: "approved", bio: "" },
-    { id: "baqir-hassan-local-2020", full_name: "Baqir Hassan", email: "baqir@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Hassan Raza", date_of_birth: "2001-01-25", marital_status: "Single", city: "Rawalpindi", profession: "Civil Engineer", company: "Construction Company", higher_education: "Civil Engineering", avatar_url: "/images/baqir-avatar.svg", status: "approved", bio: "" },
-    { id: "danish-syed-local-2018", full_name: "Danish Syed", email: "danish@example.com", graduation_year: 2018, country: "Pakistan", father_name: "Syed Tariq", date_of_birth: "1999-11-30", marital_status: "Married", city: "Multan", profession: "Project Manager", company: "IT Solutions", higher_education: "Information Technology", avatar_url: "/images/danish-avatar.svg", status: "approved", bio: "" },
-    { id: "fawad-khan-local-2022", full_name: "Fawad Khan", email: "fawad@example.com", graduation_year: 2022, country: "Pakistan", father_name: "Khan Muhammad", date_of_birth: "2003-07-14", marital_status: "Single", city: "Peshawar", profession: "Medical Student", company: "Peshawar Medical College", higher_education: "Medicine", avatar_url: "/images/fawad-avatar.svg", status: "approved", bio: "" },
-    { id: "fizza-iqbal-local-2020", full_name: "Fizza Iqbal", email: "fizza@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Iqbal Hussain", date_of_birth: "2001-05-18", marital_status: "Single", city: "Lahore", profession: "Accountant", company: "Finance Corporation", higher_education: "Accounting", avatar_url: "/images/fizza-avatar.svg", status: "approved", bio: "" },
-    { id: "hassan-ali-local-2019", full_name: "Hassan Ali", email: "hassan@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Ali Raza", date_of_birth: "2000-02-28", marital_status: "Single", city: "Karachi", profession: "Electrical Engineer", company: "Power Distribution", higher_education: "Electrical Engineering", avatar_url: "/images/hassan-avatar.svg", status: "approved", bio: "" },
-    { id: "hiba-noor-local-2021", full_name: "Hiba Noor", email: "hiba@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Noor Ahmed", date_of_birth: "2002-12-08", marital_status: "Single", city: "Lahore", profession: "Marketing Executive", company: "E-commerce Platform", higher_education: "Business", avatar_url: "/images/hiba-avatar.svg", status: "approved", bio: "" },
-    { id: "hooria-fatima-local-2020", full_name: "Hooria Fatima", email: "hooria@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Fatima Khan", date_of_birth: "2001-08-19", marital_status: "Single", city: "Islamabad", profession: "Data Analyst", company: "Research Institute", higher_education: "Data Science", avatar_url: "/images/hooria-avatar.svg", status: "approved", bio: "" },
-    { id: "laila-hassan-local-2022", full_name: "Laila Hassan", email: "laila@example.com", graduation_year: 2022, country: "Pakistan", father_name: "Hassan Malik", date_of_birth: "2003-04-03", marital_status: "Single", city: "Multan", profession: "Law Student", company: "University of Law", higher_education: "Law", avatar_url: "/images/laila-avatar.svg", status: "approved", bio: "" },
-    { id: "masooma-ali-local-2019", full_name: "Masooma Ali", email: "masooma@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Ali Siddiqui", date_of_birth: "2000-09-12", marital_status: "Married", city: "Quetta", profession: "Teacher", company: "Private School", higher_education: "Education", avatar_url: "/images/masooma-avatar.svg", status: "approved", bio: "" },
-    { id: "mohsin-ahmed-local-2021", full_name: "Mohsin Ahmed", email: "mohsin@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Ahmed Hassan", date_of_birth: "2002-10-05", marital_status: "Single", city: "Karachi", profession: "Mechanical Engineer", company: "Manufacturing Sector", higher_education: "Mechanical Engineering", avatar_url: "/images/mohsin-avatar.svg", status: "approved", bio: "" },
-    { id: "mohsin-sherazi-local-2020", full_name: "Mohsin Sherazi", email: "mohsin.sherazi@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Sherazi Muhammad", date_of_birth: "2001-06-20", marital_status: "Single", city: "Lahore", profession: "Backend Developer", company: "Web Solutions", higher_education: "Computer Science", avatar_url: "/images/mohsin-sherazi-avatar.svg", status: "approved", bio: "" },
-    { id: "osaja-khan-local-2021", full_name: "Osaja Khan", email: "osaja@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Khan Ali", date_of_birth: "2002-11-11", marital_status: "Single", city: "Islamabad", profession: "Architect", company: "Design Studio", higher_education: "Architecture", avatar_url: "/images/osaja-avatar.svg", status: "approved", bio: "" },
-    { id: "shan-ahmed-local-2018", full_name: "Shan Ahmed", email: "shan@example.com", graduation_year: 2018, country: "Pakistan", father_name: "Ahmed Tariq", date_of_birth: "1999-03-07", marital_status: "Single", city: "Peshawar", profession: "Entrepreneur", company: "Tech Startup", higher_education: "Computer Science", avatar_url: "/images/shan-avatar.svg", status: "approved", bio: "" },
-    { id: "ufaque-hassan-local-2019", full_name: "Ufaque Hassan", email: "ufaque@example.com", graduation_year: 2019, country: "Pakistan", father_name: "Hassan Malik", date_of_birth: "2000-07-23", marital_status: "Single", city: "Karachi", profession: "HR Manager", company: "Corporate Company", higher_education: "Human Resources", avatar_url: "/images/ufaque-avatar.svg", status: "approved", bio: "" },
-    { id: "wajahat-ali-local-2020", full_name: "Wajahat Ali", email: "wajahat@example.com", graduation_year: 2020, country: "Pakistan", father_name: "Ali Muhammad", date_of_birth: "2001-02-14", marital_status: "Single", city: "Lahore", profession: "Financial Analyst", company: "Investment Bank", higher_education: "Finance", avatar_url: "/images/wajahat-avatar.svg", status: "approved", bio: "" },
-    { id: "wania-khan-local-2021", full_name: "Wania Khan", email: "wania@example.com", graduation_year: 2021, country: "Pakistan", father_name: "Khan Siddiqui", date_of_birth: "2002-05-29", marital_status: "Single", city: "Islamabad", profession: "Content Writer", company: "Media Company", higher_education: "Communication", avatar_url: "/images/wania-avatar.svg", status: "approved", bio: "" },
-    { id: "zafaryab-haider-local-2021", full_name: "Zafaryab Haider", email: "Zafaryab.s3522@gmail.com", graduation_year: 2021, country: "Pakistan", father_name: "Muhammad Ali", date_of_birth: "2005-11-21", marital_status: "Single", city: "Karachi", profession: "Bachelors in Civil Engineering", company: "NED University of Engineering and Technology", higher_education: "Engineering", avatar_url: "/images/zafaryab-avatar.svg", status: "approved", bio: "" }
-  ];
-
+function createMockSupabaseClient() {
   return {
     from: (table: string) => ({
-      select: (...args: any[]) => ({
+      select: () => ({
         eq: (col: string, val: any) => ({
-          order: (orderCol: string, opts: any) => ({
-            then: (cb: any) => {
-              if (table === 'profiles' && col === 'status' && val === 'approved') {
-                const sorted = [...seedProfiles].sort((a, b) => 
-                  opts.ascending ? 
-                  new Date(a.date_of_birth).getTime() - new Date(b.date_of_birth).getTime() :
-                  new Date(b.date_of_birth).getTime() - new Date(a.date_of_birth).getTime()
-                );
-                return cb({ data: sorted, error: null });
-              }
-              return cb({ data: [], error: null });
-            }
+          order: () => Promise.resolve({
+            data: SEED_PROFILES.filter(p => p.status === 'approved'),
+            error: null,
           }),
-          count: (opts: any) => ({
-            then: (cb: any) => cb({ count: seedProfiles.length, data: null, error: null })
+          maybeSingle: () => Promise.resolve({
+            data: SEED_PROFILES.find(p => p.id === val),
+            error: null,
           }),
-          maybeSingle: () => ({
-            then: (cb: any) => {
-              const profile = seedProfiles.find(p => p.id === val);
-              return cb({ data: profile, error: null });
-            }
-          })
+          count: () => Promise.resolve({
+            count: SEED_PROFILES.length,
+            data: null,
+            error: null,
+          }),
         }),
-        order: (orderCol: string, opts: any) => ({
-          limit: (n: number) => ({
-            then: (cb: any) => cb({ data: [], error: null })
-          }),
-          then: (cb: any) => cb({ data: [], error: null })
-        }),
-        then: (cb: any) => cb({ data: [], error: null })
       }),
-      delete: () => ({
-        eq: () => ({ then: (cb: any) => cb({ error: null }) })
-      }),
-      insert: (data: any) => ({
-        then: (cb: any) => cb({ data, error: null })
-      }),
-      update: (data: any) => ({
-        eq: () => ({ then: (cb: any) => cb({ data, error: null }) })
-      })
+      delete: () => ({ eq: () => Promise.resolve({ error: null }) }),
+      insert: (data: any) => Promise.resolve({ data, error: null }),
+      update: (data: any) => ({ eq: () => Promise.resolve({ data, error: null }) }),
     }),
     auth: {
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-      getSession: async () => ({ data: { session: null } }),
-      signOut: async () => ({ error: null })
+      getSession: () => Promise.resolve({ data: { session: null } }),
+      signOut: () => Promise.resolve({ error: null }),
     }
   };
 }
 
 let _supabase: ReturnType<typeof createSupabaseClient> | undefined;
 
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
 export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
   get(_, prop, receiver) {
     if (!_supabase) _supabase = createSupabaseClient();
