@@ -5,7 +5,6 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 import path from "path";
 
 const isVercel = process.env.VERCEL === "1";
@@ -23,7 +22,7 @@ export default defineConfig({
   },
   vite: {
     root: projectRoot,
-    plugins: [mcpPlugin()],
+    plugins: [],
     ...(isVercel
       ? {
           build: {
