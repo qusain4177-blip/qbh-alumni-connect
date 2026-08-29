@@ -1,0 +1,6 @@
+name = "qbh-alumni-connect"
+compatibility_date = "2024-09-25"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "./dist/public"
