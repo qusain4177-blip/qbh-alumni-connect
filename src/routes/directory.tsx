@@ -43,8 +43,7 @@ function Directory() {
     queryKey: ["directory"],
     queryFn: async () => {
       try {
-        const response = await supabase
-          ?.from("alumni")
+        const response = await supabase?.from("alumni")
           .select("*")
           .eq("status", "approved")
           .order("graduation_year", { ascending: false });
