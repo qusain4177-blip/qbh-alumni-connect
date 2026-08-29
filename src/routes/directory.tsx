@@ -7,7 +7,7 @@ import { Avatar } from "@/components/Avatar";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import type { AlumniRecord } from "@/lib/alumni-mock-data";
 
@@ -75,15 +75,12 @@ function Directory() {
     queryKey: ["directory"],
     queryFn: async () => {
       try {
-        const response = await supabase?.from("alumni")
-          .select("*")
-          .order("created_at", { ascending: false });
+        const response = await supabase?.from("alumni").select("*");
         if (!response) return [];
 
         const { data, error } = response;
+        console.log("Supabase Alumni Data:", data, "Error:", error);
         if (error) throw error;
-
-        console.info("[Supabase] Alumni response:", { data, error });
         const safeData = Array.isArray(data) ? data : [];
         return safeData?.map(mapAlumniRecord);
       } catch (error) {
