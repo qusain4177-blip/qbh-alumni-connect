@@ -35,17 +35,44 @@ function Directory() {
   const [location, setLocation] = useState("");
   const [company, setCompany] = useState("");
 
-  const { data: remoteData, isLoading: remoteLoading } = useQuery<AlumniRecord[]>({
+  const {
+    data: remoteData,
+    error: remoteError,
+    isLoading: remoteLoading,
+  } = useQuery<AlumniRecord[]>({
     queryKey: ["directory"],
     queryFn: async () => {
-      if (!supabase) return [];
-      const { data, error } = await supabase
-        .from("alumni")
-        .select("id, alumni_id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
-        .eq("status", "approved")
-        .order("graduation_year", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as AlumniRecord[];
+      try {
+        if (!supabase) {
+          throw new Error("Supabase is not configured. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.");
+        }
+
+        const { data, error } = await supabase
+          .from("alumni")
+          .select("*")
+          .eq("status", "approved")
+          .order("graduation_year", { ascending: false });
+
+        if (error) throw error;
+
+        return (data ?? []).map((item) => {
+          const record = item as Record<string, unknown>;
+          return {
+            ...record,
+            id: String(record?.id ?? record?.alumni_id ?? "unknown-alumni"),
+            alumni_id: (record?.alumni_id ?? record?.id ?? null) as string | null,
+            full_name: String(record?.name ?? record?.full_name ?? "Unnamed alumni"),
+            avatar_url: (record?.avatar_url ?? null) as string | null,
+            graduation_year: (record?.batch ?? record?.graduation_year ?? null) as number | null,
+            higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
+            profession: (record?.occupation ?? record?.profession ?? null) as string | null,
+            phone: (record?.contact ?? record?.phone ?? null) as string | null,
+          } as AlumniRecord;
+        });
+      } catch (error) {
+        console.error("[Supabase] Alumni fetch failed:", error);
+        throw error;
+      }
     },
     retry: false,
     staleTime: 60_000,
@@ -154,6 +181,12 @@ function Directory() {
             <Input placeholder="Profession or higher education (e.g. Bachelors, Job)" value={pursuit} onChange={(e) => setPursuit(e.target.value)} />
           </div>
         </div>
+
+        {remoteError && !isLoading && (
+          <div role="alert" className="mt-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+            We couldn&apos;t load the alumni directory right now. Please check your connection or try again later.
+          </div>
+        )}
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
           <span className="flex flex-wrap items-center gap-2">
