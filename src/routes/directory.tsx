@@ -107,10 +107,10 @@ function Directory() {
           String(v ?? "").toLowerCase().includes(q.toLowerCase()),
         );
       const matchY = !year || String(p?.graduation_year ?? "").includes(year);
-      const matchS = !stream || p.matric_stream === stream;
-      const matchP = !pursuit || [p.profession, p.higher_education, p.company].some((v) => v?.toLowerCase().includes(pq));
-      const matchL = !lq || [p.city, p.country].some((v) => v?.toLowerCase().includes(lq));
-      const matchC = !cq || [p.company, p.higher_education].some((v) => v?.toLowerCase().includes(cq));
+      const matchS = !stream || p?.matric_stream === stream;
+      const matchP = !pursuit || [p?.profession, p?.higher_education, p?.company].some((v) => String(v ?? "").toLowerCase().includes(pq));
+      const matchL = !lq || [p?.city, p?.country].some((v) => String(v ?? "").toLowerCase().includes(lq));
+      const matchC = !cq || [p?.company, p?.higher_education].some((v) => String(v ?? "").toLowerCase().includes(cq));
       return matchQ && matchY && matchS && matchP && matchL && matchC;
     });
   }, [data, q, year, stream, pursuit, location, company]);
@@ -274,13 +274,14 @@ function Directory() {
 
         {!isLoading && filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
-            <h3 className="font-display text-xl text-navy">
+            <h3 className="font-display text-xl text-navy">No Data Available</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
               {location
                 ? `No alumni found in ${location}.`
                 : company
                   ? `No alumni found at ${company}.`
                   : "No alumni registered yet"}
-            </h3>
+            </p>
             <p className="mt-2 text-sm text-muted-foreground">Try broadening your search, or <Link to="/contact" className="text-navy underline">contact the alumni office</Link> to be added.</p>
           </div>
         )}
