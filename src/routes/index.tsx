@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, Award, Briefcase, Calendar, Globe, Sparkles, 
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { FeaturedHighlights } from "@/components/FeaturedHighlights";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-school.jpg";
 
@@ -116,7 +117,7 @@ function Landing() {
         )}
       </section>
 
-
+      <FeaturedHighlights />
 
       {/* Mission + Bento */}
       <section className="container mx-auto px-4 py-28 lg:px-8 lg:py-32">
