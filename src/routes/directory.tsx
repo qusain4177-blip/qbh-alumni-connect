@@ -9,7 +9,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
-import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
+import type { AlumniRecord } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/directory")({
   head: () => ({ meta: [{ title: "QBH UMBRELLA Alumni Directory" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
@@ -50,13 +50,8 @@ function Directory() {
     retry: false,
     staleTime: 60_000,
   });
-  const [fallbackReady, setFallbackReady] = useState(false);
-  useEffect(() => {
-    const timeout = window.setTimeout(() => setFallbackReady(true), 800);
-    return () => window.clearTimeout(timeout);
-  }, []);
-  const data = remoteData?.length ? remoteData : (remoteLoading && !fallbackReady ? [] : ALUMNI_MOCK_DATA);
-  const isLoading = remoteLoading && !fallbackReady;
+  const data = remoteData ?? [];
+  const isLoading = remoteLoading;
 
   const locationOptions = useMemo(() => {
     const set = new Set<string>();
