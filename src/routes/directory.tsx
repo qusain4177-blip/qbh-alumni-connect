@@ -24,7 +24,7 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
     ...record,
     id: String(record?.id ?? record?.alumni_id ?? "unknown-alumni"),
     alumni_id: (record?.alumni_id ?? record?.id ?? null) as string | null,
-    full_name: String(record?.name ?? record?.full_name ?? "Unnamed alumni"),
+    full_name: String(record?.full_name ?? record?.name ?? "Unnamed alumni"),
     avatar_url: (record?.avatar_url ?? null) as string | null,
     graduation_year: (record?.batch ?? record?.graduation_year ?? null) as number | null,
     higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
@@ -229,7 +229,7 @@ function Directory() {
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered?.map((item) => {
+          {filtered?.map((item, index) => {
             const name = item?.full_name || "Alumni Member";
             const batch = item?.graduation_year ? String(item?.graduation_year) : "N/A";
             const qualification = item?.higher_education || "";
@@ -242,7 +242,7 @@ function Directory() {
                   ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=male`
                   : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F172A&color=fff&bold=true`);
             return (
-            <article key={item?.id || `alumni-${item?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
+            <article key={item?.alumni_id || index} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: item?.id || "unknown" }} className="block">
                 <div className="flex items-center gap-4">
                   <Avatar
