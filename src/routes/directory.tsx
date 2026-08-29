@@ -7,9 +7,9 @@ import { Avatar } from "@/components/Avatar";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
-import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
+import type { AlumniRecord } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/directory")({
   head: () => ({ meta: [{ title: "QBH UMBRELLA Alumni Directory" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
@@ -22,6 +22,7 @@ function Directory() {
   const [q, setQ] = useState("");
 
   useEffect(() => {
+    if (!supabase) return;
     const channel = supabase.channel("alumni-directory").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
       queryClient.invalidateQueries({ queryKey: ["directory"] });
     }).subscribe();
@@ -34,27 +35,49 @@ function Directory() {
   const [location, setLocation] = useState("");
   const [company, setCompany] = useState("");
 
-  const { data: remoteData, isLoading: remoteLoading } = useQuery<AlumniRecord[]>({
+  const {
+    data: remoteData,
+    error: remoteError,
+    isLoading: remoteLoading,
+  } = useQuery<AlumniRecord[]>({
     queryKey: ["directory"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("alumni")
-        .select("id, alumni_id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
-        .eq("status", "approved")
-        .order("graduation_year", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as AlumniRecord[];
+      try {
+        const response = await supabase?.from("alumni")
+          .select("*")
+          .eq("status", "approved")
+          .order("graduation_year", { ascending: false });
+        if (!response) return [];
+
+        const { data, error } = response;
+        if (error) throw error;
+
+        console.info("[Supabase] Alumni response:", { data, error });
+        const safeData = Array.isArray(data) ? data : [];
+        return safeData?.map((item) => {
+          const record = item as Record<string, unknown>;
+          return {
+            ...record,
+            id: String(record?.id ?? record?.alumni_id ?? "unknown-alumni"),
+            alumni_id: (record?.alumni_id ?? record?.id ?? null) as string | null,
+            full_name: String(record?.name ?? record?.full_name ?? "Unnamed alumni"),
+            avatar_url: (record?.avatar_url ?? null) as string | null,
+            graduation_year: (record?.batch ?? record?.graduation_year ?? null) as number | null,
+            higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
+            profession: (record?.occupation ?? record?.profession ?? null) as string | null,
+            phone: (record?.contact ?? record?.phone ?? null) as string | null,
+          } as AlumniRecord;
+        });
+      } catch (error) {
+        console.error("[Supabase] Alumni fetch failed:", error);
+        return [];
+      }
     },
     retry: false,
     staleTime: 60_000,
   });
-  const [fallbackReady, setFallbackReady] = useState(false);
-  useEffect(() => {
-    const timeout = window.setTimeout(() => setFallbackReady(true), 800);
-    return () => window.clearTimeout(timeout);
-  }, []);
-  const data = remoteData?.length ? remoteData : (remoteLoading && !fallbackReady ? [] : ALUMNI_MOCK_DATA);
-  const isLoading = remoteLoading && !fallbackReady;
+  const data = remoteData ?? [];
+  const isLoading = remoteLoading;
 
   const locationOptions = useMemo(() => {
     const set = new Set<string>();
@@ -77,14 +100,14 @@ function Directory() {
     return (data ?? []).filter((p) => {
       const matchQ =
         !q ||
-        [p.full_name, p.alumni_id, p.profession, p.company, p.city, p.country, String(p.graduation_year ?? "")].some((v) =>
-          v?.toLowerCase?.().includes(q.toLowerCase()),
+        [p?.full_name, p?.alumni_id, p?.profession, p?.company, p?.city, p?.country, p?.graduation_year].some((v) =>
+          String(v ?? "").toLowerCase().includes(q.toLowerCase()),
         );
-      const matchY = !year || String(p.graduation_year ?? "").includes(year);
-      const matchS = !stream || p.matric_stream === stream;
-      const matchP = !pursuit || [p.profession, p.higher_education, p.company].some((v) => v?.toLowerCase().includes(pq));
-      const matchL = !lq || [p.city, p.country].some((v) => v?.toLowerCase().includes(lq));
-      const matchC = !cq || [p.company, p.higher_education].some((v) => v?.toLowerCase().includes(cq));
+      const matchY = !year || String(p?.graduation_year ?? "").includes(year);
+      const matchS = !stream || p?.matric_stream === stream;
+      const matchP = !pursuit || [p?.profession, p?.higher_education, p?.company].some((v) => String(v ?? "").toLowerCase().includes(pq));
+      const matchL = !lq || [p?.city, p?.country].some((v) => String(v ?? "").toLowerCase().includes(lq));
+      const matchC = !cq || [p?.company, p?.higher_education].some((v) => String(v ?? "").toLowerCase().includes(cq));
       return matchQ && matchY && matchS && matchP && matchL && matchC;
     });
   }, [data, q, year, stream, pursuit, location, company]);
@@ -158,6 +181,12 @@ function Directory() {
           </div>
         </div>
 
+        {remoteError && !isLoading && (
+          <div role="alert" className="mt-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+            We couldn&apos;t load the alumni directory right now. Please check your connection or try again later.
+          </div>
+        )}
+
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
           <span className="flex flex-wrap items-center gap-2">
             <span>{isLoading ? "Loading..." : `${filtered?.length || 0} alumni found`}</span>
@@ -185,40 +214,49 @@ function Directory() {
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered?.map((p) => (
-            <article key={p.id} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
-              <Link to="/alumni/$id" params={{ id: p.id }} className="block">
+          {filtered?.map((item) => {
+            const name = item?.full_name || "Alumni Member";
+            const batch = item?.graduation_year ? String(item?.graduation_year) : "N/A";
+            const qualification = item?.higher_education || "";
+            const occupation = item?.profession || "";
+            const avatarUrl = item?.avatar_url || "https://ui-avatars.com/api/?name=Alumni";
+            return (
+            <article key={item?.id || `alumni-${item?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
+              <Link to="/alumni/$id" params={{ id: item?.id || "unknown" }} className="block">
                 <div className="flex items-center gap-4">
-                  <Avatar name={p.full_name} src={p.avatar_url} />
+                  <Avatar
+                    name={name}
+                    src={avatarUrl}
+                  />
                   <div className="min-w-0">
-                    {p.alumni_id && (
-                      <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{p.alumni_id}</span>
+                    {item?.alumni_id && (
+                      <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{item?.alumni_id}</span>
                     )}
-                    <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{p.full_name}</h3>
-                    {p.graduation_year && (
+                    <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{name}</h3>
+                    {batch !== "N/A" && (
                       <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <GraduationCap className="h-3.5 w-3.5 text-gold" /> Matric {p.graduation_year}
-                        {p.matric_stream ? ` · ${p.matric_stream}` : ""}
+                        <GraduationCap className="h-3.5 w-3.5 text-gold" /> Matric {batch}
+                        {item?.matric_stream ? ` · ${item?.matric_stream}` : ""}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  {p.profession && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{p.profession}</p>}
-                  {p.company && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gold" />{p.company}</p>}
-                  {p.higher_education && <p className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-gold" />{p.higher_education}</p>}
+                  {occupation && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{occupation}</p>}
+{item?.company && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gold" />{item?.company}</p>}
+                  {qualification && <p className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-gold" />{qualification}</p>}
                 </div>
-                {(p.city || p.country) && (
+                {(item?.city || item?.country) && (
                   <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-navy">
                     <MapPin className="h-3.5 w-3.5 text-gold" />
-                    {[p.city, p.country].filter(Boolean).join(", ")}
+                    {[item?.city, item?.country].filter(Boolean).join(", ")}
                   </span>
                 )}
-                {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
+                {item?.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{item?.bio}</p>}
               </Link>
               <div className="mt-4 flex items-center gap-2">
-                {p.linkedin_url && <LinkedInLink url={p.linkedin_url} aria-label={`${p.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
-                {p.website_url && <a href={p.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${p.full_name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
+                {item?.linkedin_url && <LinkedInLink url={item?.linkedin_url} aria-label={`${name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
+                {item?.website_url && <a href={item?.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
                 {isAdmin && (
                   <Link to="/admin" className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-navy hover:bg-secondary">
                     <Pencil className="h-3.5 w-3.5" /> Manage
@@ -227,18 +265,20 @@ function Directory() {
               </div>
 
             </article>
-          ))}
+              );
+          })}
         </div>
 
         {!isLoading && filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
-            <h3 className="font-display text-xl text-navy">
+            <h3 className="font-display text-xl text-navy">No Data Available</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
               {location
                 ? `No alumni found in ${location}.`
                 : company
                   ? `No alumni found at ${company}.`
-                  : "No alumni match those filters yet."}
-            </h3>
+                  : "No alumni registered yet"}
+            </p>
             <p className="mt-2 text-sm text-muted-foreground">Try broadening your search, or <Link to="/contact" className="text-navy underline">contact the alumni office</Link> to be added.</p>
           </div>
         )}

@@ -7,7 +7,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FeaturedHighlights } from "@/components/FeaturedHighlights";
 import { supabase } from "@/integrations/supabase/client";
-import { ALUMNI_MOCK_DATA } from "@/lib/alumni-mock-data";
 import heroImg from "@/assets/hero-school.jpg";
 
 export const Route = createFileRoute("/")({
@@ -34,12 +33,12 @@ function Landing() {
   }, []);
 
   const queryClient = useQueryClient();
-  const { data: alumni = ALUMNI_MOCK_DATA } = useQuery({
+  const { data: alumni = [] } = useQuery({
     queryKey: ["homepage-alumni"],
     queryFn: async () => {
       const { data, error } = await supabase.from("alumni").select("id, full_name, status").eq("status", "approved");
-      if (error || !data?.length) return ALUMNI_MOCK_DATA;
-      return data;
+      if (error) throw error;
+      return data ?? [];
     },
     retry: false,
   });
