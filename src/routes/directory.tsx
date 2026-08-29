@@ -55,8 +55,9 @@ function Directory() {
 
         if (error) throw error;
 
-        const alumni = data ?? [];
-        return alumni?.map((item) => {
+        console.info("[Supabase] Alumni response:", { data, error });
+        const safeData = Array.isArray(data) ? data : [];
+        return safeData?.map((item) => {
           const record = item as Record<string, unknown>;
           return {
             ...record,
@@ -102,10 +103,10 @@ function Directory() {
     return (data ?? []).filter((p) => {
       const matchQ =
         !q ||
-        [p.full_name, p.alumni_id, p.profession, p.company, p.city, p.country, String(p.graduation_year ?? "")].some((v) =>
-          v?.toLowerCase?.().includes(q.toLowerCase()),
+        [p?.full_name, p?.alumni_id, p?.profession, p?.company, p?.city, p?.country, p?.graduation_year].some((v) =>
+          String(v ?? "").toLowerCase().includes(q.toLowerCase()),
         );
-      const matchY = !year || String(p.graduation_year ?? "").includes(year);
+      const matchY = !year || String(p?.graduation_year ?? "").includes(year);
       const matchS = !stream || p.matric_stream === stream;
       const matchP = !pursuit || [p.profession, p.higher_education, p.company].some((v) => v?.toLowerCase().includes(pq));
       const matchL = !lq || [p.city, p.country].some((v) => v?.toLowerCase().includes(lq));
@@ -216,8 +217,10 @@ function Directory() {
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered?.map((p) => (
-            <article key={p.id} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
+          {filtered?.map((p) => {
+            try {
+              return (
+            <article key={p?.id || `alumni-${p?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: p.id }} className="block">
                 <div className="flex items-center gap-4">
                   <Avatar
@@ -228,10 +231,10 @@ function Directory() {
                     {p.alumni_id && (
                       <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{p.alumni_id}</span>
                     )}
-                    <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{p.full_name}</h3>
-                    {p.graduation_year && (
+                    <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{p?.full_name}</h3>
+                    {p?.graduation_year && (
                       <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <GraduationCap className="h-3.5 w-3.5 text-gold" /> Matric {p.graduation_year}
+                        <GraduationCap className="h-3.5 w-3.5 text-gold" /> Matric {p?.graduation_year}
                         {p.matric_stream ? ` · ${p.matric_stream}` : ""}
                       </p>
                     )}
@@ -251,8 +254,8 @@ function Directory() {
                 {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
               </Link>
               <div className="mt-4 flex items-center gap-2">
-                {p.linkedin_url && <LinkedInLink url={p.linkedin_url} aria-label={`${p.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
-                {p.website_url && <a href={p.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${p.full_name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
+                {p.linkedin_url && <LinkedInLink url={p.linkedin_url} aria-label={`${p?.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
+                {p.website_url && <a href={p.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${p?.full_name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
                 {isAdmin && (
                   <Link to="/admin" className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-navy hover:bg-secondary">
                     <Pencil className="h-3.5 w-3.5" /> Manage
@@ -261,7 +264,17 @@ function Directory() {
               </div>
 
             </article>
-          ))}
+              );
+            } catch (error) {
+              console.error("[Alumni] Card render failed:", error, p);
+              return (
+                <article key={`fallback-${p?.id || p?.alumni_id || "unknown"}`} className="rounded-xl border border-border bg-card p-6">
+                  <p className="font-medium text-navy">Alumni profile unavailable</p>
+                  <p className="mt-2 text-sm text-muted-foreground">This profile could not be displayed safely.</p>
+                </article>
+              );
+            }
+          })}
         </div>
 
         {!isLoading && filtered.length === 0 && (
