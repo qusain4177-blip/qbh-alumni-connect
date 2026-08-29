@@ -45,16 +45,23 @@ function createSupabaseClient() {
 }
 
 function createMockSupabaseClient() {
+  const result = (data: unknown[] = SEED_PROFILES) => {
+    const response = Promise.resolve({ data, error: null, count: data.length });
+    return {
+      limit: (_count: number) => response,
+      then: response.then.bind(response),
+    };
+  };
+
   return {
-    from: (table: string) => ({
+    from: (_table: string) => ({
       select: () => ({
-        eq: (col: string, val: any) => ({
-          order: () => Promise.resolve({
-            data: SEED_PROFILES.filter(p => p.status === 'approved'),
-            error: null,
-          }),
+        eq: (_col: string, val: any) => ({
+          order: () => result(SEED_PROFILES.filter((p) => p.status === "approved")),
+          gte: () => result(SEED_PROFILES),
+          limit: (_count: number) => result(SEED_PROFILES),
           maybeSingle: () => Promise.resolve({
-            data: SEED_PROFILES.find(p => p.id === val),
+            data: SEED_PROFILES.find((p) => p.id === val),
             error: null,
           }),
           count: () => Promise.resolve({
@@ -63,6 +70,9 @@ function createMockSupabaseClient() {
             error: null,
           }),
         }),
+        order: () => result(SEED_PROFILES),
+        gte: () => result(SEED_PROFILES),
+        limit: (_count: number) => result(SEED_PROFILES),
       }),
       delete: () => ({ eq: () => Promise.resolve({ error: null }) }),
       insert: (data: any) => Promise.resolve({ data, error: null }),

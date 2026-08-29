@@ -50,7 +50,7 @@ function GalleryPage() {
       const { data: signed } = await supabase.storage
         .from("gallery")
         .createSignedUrls(rows.map((r) => r.storage_path), 60 * 60);
-      const map = new Map((signed ?? []).map((s) => [s.path, s.signedUrl]));
+      const map = new Map<string, string>((signed ?? []).flatMap((s) => s.path && s.signedUrl ? [[s.path, s.signedUrl] as [string, string]] : []));
       return rows.map((r) => ({ ...r, url: map.get(r.storage_path) ?? undefined }));
     },
   });

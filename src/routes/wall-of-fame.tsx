@@ -80,7 +80,7 @@ function categoryLabel(key: string) {
 async function signPaths(paths: string[]) {
   if (paths.length === 0) return new Map<string, string>();
   const { data } = await supabase.storage.from("gallery").createSignedUrls(paths, 60 * 60);
-  return new Map((data ?? []).map((s) => [s.path, s.signedUrl]));
+  return new Map<string, string>((data ?? []).flatMap((s) => s.path && s.signedUrl ? [[s.path, s.signedUrl] as [string, string]] : []));
 }
 
 function WallOfFamePage() {
