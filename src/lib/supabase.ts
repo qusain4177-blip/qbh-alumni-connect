@@ -1,17 +1,16 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-const env = typeof import.meta !== "undefined" ? import.meta.env : undefined;
-const nodeEnv = typeof process !== "undefined" ? process.env : undefined;
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL ||
+  (typeof process !== "undefined" ? process.env.VITE_SUPABASE_URL : undefined) ||
+  "https://rjbjmswdtkoxtjstmmcu.supabase.co";
+const SUPABASE_ANON_KEY =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  (typeof process !== "undefined" ? process.env.VITE_SUPABASE_ANON_KEY : undefined) ||
+  "process.env.JWT";
 
-const supabaseUrl =
-  env?.VITE_SUPABASE_URL || nodeEnv?.VITE_SUPABASE_URL || "https://ngexxgbkjyxgotvjuczi.supabase.co";
-const supabaseAnonKey =
-  env?.VITE_SUPABASE_ANON_KEY ||
-  nodeEnv?.VITE_SUPABASE_ANON_KEY ||
-  "sb_publishable_oxGhxy9p2857FbYB1H5RHg_53VkCNx_";
-
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,

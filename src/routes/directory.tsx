@@ -48,7 +48,7 @@ function Directory() {
         }
 
         const { data, error } = await supabase
-          ?.from("alumni")
+          .from("alumni")
           .select("*")
           .eq("status", "approved")
           .order("graduation_year", { ascending: false });
