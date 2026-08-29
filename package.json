@@ -11,7 +11,8 @@
     "dev": "vite dev",
     "build": "nitro build",
     "build:dev": "vite build --mode development",
-    "preview": "wrangler pages dev .output/public",
+    "preview": "wrangler pages dev dist",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

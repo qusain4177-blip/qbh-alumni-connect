@@ -17,7 +17,7 @@ export default defineConfig({
     server: { entry: "server" },
   },
   nitro: {
-    output: { dir: "dist" },
+    // Cloudflare Pages consumes Nitro's standard .output directory.
     // Cloudflare Pages consumes the static assets plus the generated _worker.js.
     // Keep Vercel's preset when building for Vercel deployments.
     ...(isVercel ? { preset: "vercel" } : { preset: "cloudflare-pages" }),
