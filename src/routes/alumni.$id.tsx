@@ -25,15 +25,15 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-
+import { ZAFARYAB_PROFILE } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
     meta: [
-      { title: `Alumni Profile — QBH UMBRELLA` },
-      { name: "description", content: `Alumni profile page for a QBH UMBRELLA Matric graduate.` },
-      { property: "og:title", content: `Alumni Profile — QBH UMBRELLA` },
-      { property: "og:description", content: `QBH UMBRELLA alumni profile.` },
+      { title: `Alumni Profile — Qamar E Bani Hashim School Alumni` },
+      { name: "description", content: `Alumni profile page for a Qamar E Bani Hashim School Alumni Matric graduate.` },
+      { property: "og:title", content: `Alumni Profile — Qamar E Bani Hashim School Alumni` },
+      { property: "og:description", content: `Qamar E Bani Hashim School Alumni alumni profile.` },
     ],
   }),
   component: AlumniProfile,
@@ -60,24 +60,7 @@ function AlumniProfile() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["alumni", id],
     queryFn: async () => {
-      if (id === "zafaryab-haider") {
-        return {
-          id,
-          full_name: "Zafaryab Haider",
-          gender: "Male",
-          email: "Zafaryab.s3522@gmail.com",
-          graduation_year: 2021,
-          country: "Pakistan",
-          father_name: "Muhammad Ali",
-          date_of_birth: "2005-11-21",
-          marital_status: "Single",
-          city: "Karachi",
-          higher_education: "Doing bachelors in civil engineering from NED University",
-          university: "NED university of engineering and technology",
-          degree_program: "Engineering",
-          avatar_url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KRUseq1ESk9X1e52mVUApJF03hujLv.png",
-        };
-      }
+      if (id === ZAFARYAB_PROFILE.id) return ZAFARYAB_PROFILE;
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -86,30 +69,12 @@ function AlumniProfile() {
         .maybeSingle();
       if (error) throw error;
       if (data) return data as any;
-      if (id === "zafaryab-haider") {
-        return {
-          id,
-          full_name: "Zafaryab Haider",
-          gender: "Male",
-          email: "Zafaryab.s3522@gmail.com",
-          graduation_year: 2021,
-          country: "Pakistan",
-          father_name: "Muhammad Ali",
-          date_of_birth: "2005-11-21",
-          marital_status: "Single",
-          city: "Karachi",
-          higher_education: "Doing bachelors in civil engineering from NED University",
-          university: "NED university of engineering and technology",
-          degree_program: "Engineering",
-          avatar_url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KRUseq1ESk9X1e52mVUApJF03hujLv.png",
-        };
-      }
       return null;
     },
   });
 
   const profileName = data?.full_name || "Zafaryab Haider";
-  const profileGender = data?.gender || "Male";
+  const profileGender = "Male";
   const profileBatch = data?.graduation_year || 2021;
   const badgeText = (() => {
     const parts: string[] = [];
@@ -242,9 +207,9 @@ function AlumniProfile() {
                   <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Highest Qualification"
                     value={data.higher_education || "—"} />
                   <InfoRow icon={<BookOpen className="h-4 w-4" />} label="University"
-                    value={data.university || data.company || "—"} />
+                    value={data.company || "NED University of Engineering and Technology"} />
                   <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Degree Program"
-                    value={data.degree_program || data.profession || "—"} />
+                    value={data.profession || "—"} />
                 </InfoCard>
 
                 <InfoCard title="Contact & Location">

@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About — QBH UMBRELLA" }, { name: "description", content: "The history, mission, and heritage of QBH UMBRELLA." }] }),
+  head: () => ({ meta: [{ title: "About — Qamar E Bani Hashim School Alumni" }, { name: "description", content: "The history, mission, and heritage of Qamar E Bani Hashim School Alumni." }] }),
   component: About,
 });
 
@@ -18,7 +18,7 @@ function About() {
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/60">About</p>
             <h1 className="mt-4 max-w-3xl font-display text-5xl font-semibold tracking-tight lg:text-7xl">A school, and the people who left it.</h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
-              QBH UMBRELLA has been graduating Matric students since 1986. This page is the short version of what we stand for, and why the alumni network exists.
+              Qamar E Bani Hashim School Alumni has been graduating Matric students since 1986. This page is the short version of what we stand for, and why the alumni network exists.
             </p>
           </div>
         </section>

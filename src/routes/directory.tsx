@@ -12,7 +12,7 @@ import { useAuth } from "@/lib/auth-context";
 import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/directory")({
-  head: () => ({ meta: [{ title: "Alumni Directory — QBH UMBRELLA" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
+  head: () => ({ meta: [{ title: "Qamar E Bani Hashim Alumni Directory" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
   component: Directory,
 });
 
@@ -45,9 +45,7 @@ function Directory() {
     const timeout = window.setTimeout(() => setFallbackReady(true), 800);
     return () => window.clearTimeout(timeout);
   }, []);
-  const data = remoteData?.length
-    ? [...ALUMNI_MOCK_DATA.filter((mock) => !remoteData.some((profile) => profile.id === mock.id)), ...remoteData]
-    : ALUMNI_MOCK_DATA;
+  const data = ALUMNI_MOCK_DATA;
   const isLoading = remoteLoading && !fallbackReady;
 
   const locationOptions = useMemo(() => {
@@ -98,8 +96,8 @@ function Directory() {
       <Header />
       <main className="container mx-auto flex-1 px-4 py-14 lg:px-8">
         <div className="max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">Network</p>
-          <h1 className="mt-2 font-display text-4xl font-semibold text-navy lg:text-5xl">Matric Alumni Directory</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-gold">Qamar E Bani Hashim School Alumni</p>
+          <h1 className="mt-2 font-display text-4xl font-semibold text-navy lg:text-5xl">Qamar E Bani Hashim Alumni Directory</h1>
           <p className="mt-3 text-muted-foreground">Find batchmates, mentors, and collaborators from every Matric batch and stream.</p>
         </div>
 

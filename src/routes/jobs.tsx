@@ -10,8 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/jobs")({
   head: () => ({
     meta: [
-      { title: "Jobs Board — QBH UMBRELLA" },
-      { name: "description", content: "Job opportunities shared by and for QBH UMBRELLA Matric alumni." },
+      { title: "Jobs Board — Qamar E Bani Hashim School Alumni" },
+      { name: "description", content: "Job opportunities shared by and for Qamar E Bani Hashim School Alumni Matric alumni." },
     ],
   }),
   component: JobsPage,

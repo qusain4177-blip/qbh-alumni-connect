@@ -46,20 +46,20 @@ export function Header() {
         </div>
       )}
       <div className="container mx-auto flex h-[72px] items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="group flex min-w-0 items-center gap-3" aria-label="QBH UMBRELLA — Home">
+        <Link to="/" className="group flex min-w-0 items-center gap-3" aria-label="Qamar E Bani Hashim School Alumni — Home">
           <img
             src="/images/image.png"
-            alt="QBH UMBRELLA logo"
+            alt="Qamar E Bani Hashim School Alumni logo"
             width={56}
             height={56}
             className="h-11 w-11 shrink-0 rounded-xl object-cover shadow-sm transition-transform duration-200 group-hover:scale-[1.04] sm:h-12 sm:w-12"
           />
           <span className="min-w-0">
             <span className="block truncate font-display text-[15px] font-bold tracking-tight text-navy sm:text-base">
-              QBH UMBRELLA
+              Qamar E Bani Hashim School Alumni
             </span>
             <span className="mt-0.5 block truncate text-[10px] font-medium tracking-[0.08em] text-brand-purple sm:text-[11px]">
-              an umbrella of opportunities
+              Qamar E Bani Hashim Alumni Directory
             </span>
           </span>
         </Link>

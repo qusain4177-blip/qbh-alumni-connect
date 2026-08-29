@@ -41,7 +41,7 @@ export function FeaturedHighlights() {
         id: item.id,
         category: "Promotion" as const,
         title: item.title,
-        caption: item.excerpt ?? item.description ?? "Read the latest story from our alumni community.",
+        caption: item.excerpt ?? item.description ?? "Read the latest story from Qamar E Bani Hashim School Alumni.",
         image: getImage(item),
         href: "/wall-of-fame",
       }));
@@ -49,7 +49,7 @@ export function FeaturedHighlights() {
         id: item.id,
         category: "Announcement" as const,
         title: item.title,
-        caption: item.excerpt ?? item.description ?? "Read the latest update from QBH UMBRELLA.",
+        caption: item.excerpt ?? item.description ?? "Read the latest update from Qamar E Bani Hashim School Alumni.",
         image: getImage(item),
         href: `/events#announcement-${item.id}`,
       }));
