@@ -55,7 +55,8 @@ function Directory() {
 
         if (error) throw error;
 
-        return (data ?? []).map((item) => {
+        const alumni = data ?? [];
+        return alumni?.map((item) => {
           const record = item as Record<string, unknown>;
           return {
             ...record,
@@ -219,7 +220,10 @@ function Directory() {
             <article key={p.id} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: p.id }} className="block">
                 <div className="flex items-center gap-4">
-                  <Avatar name={p.full_name} src={p.avatar_url} />
+                  <Avatar
+                    name={p?.full_name || "Alumni"}
+                    src={p?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(p?.full_name || "Alumni")}`}
+                  />
                   <div className="min-w-0">
                     {p.alumni_id && (
                       <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{p.alumni_id}</span>

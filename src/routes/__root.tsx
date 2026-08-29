@@ -1,3 +1,4 @@
+import { Component, type ErrorInfo, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -25,6 +26,32 @@ function NotFoundComponent() {
 
     </div>
   );
+}
+
+type BoundaryState = { hasError: boolean };
+
+class VisualErrorBoundary extends Component<{ children: ReactNode }, BoundaryState> {
+  state: BoundaryState = { hasError: false };
+
+  static getDerivedStateFromError(): BoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("[UI] Component rendering failed:", error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div role="alert" className="mx-auto my-8 max-w-2xl rounded-xl border border-destructive/30 bg-destructive/5 px-5 py-4 text-sm text-destructive">
+          This section could not be displayed. Please refresh the page and try again.
+          <button className="ml-3 underline underline-offset-4" onClick={() => this.setState({ hasError: false })}>Try again</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
@@ -83,7 +110,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        <VisualErrorBoundary>
+          <Outlet />
+        </VisualErrorBoundary>
         <Toaster richColors position="top-right" />
       </AuthProvider>
     </QueryClientProvider>
