@@ -255,8 +255,24 @@ function AlumniMgmt() {
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex justify-end gap-1.5">
-                      <Button size="sm" variant="outline" onClick={() => setEditing({ ...p })}><Pencil className="h-4 w-4" /></Button>
-                      <Button size="sm" variant="outline" onClick={() => del(p.id)}><Trash2 className="h-4 w-4" /></Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setEditing({ ...p });
+                        }}
+                      ><Pencil className="h-4 w-4" /></Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          void del(p.id);
+                        }}
+                      ><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </td>
                 </tr>
