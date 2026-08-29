@@ -60,6 +60,24 @@ function AlumniProfile() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["alumni", id],
     queryFn: async () => {
+      if (id === "zafaryab-haider") {
+        return {
+          id,
+          full_name: "Zafaryab Haider",
+          gender: "Male",
+          email: "Zafaryab.s3522@gmail.com",
+          graduation_year: 2021,
+          country: "Pakistan",
+          father_name: "Muhammad Ali",
+          date_of_birth: "2005-11-21",
+          marital_status: "Single",
+          city: "Karachi",
+          higher_education: "Doing bachelors in civil engineering from NED University",
+          university: "NED university of engineering and technology",
+          degree_program: "Engineering",
+          avatar_url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KRUseq1ESk9X1e52mVUApJF03hujLv.png",
+        };
+      }
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -67,10 +85,32 @@ function AlumniProfile() {
         .eq("status", "approved")
         .maybeSingle();
       if (error) throw error;
-      return data as any;
+      if (data) return data as any;
+      if (id === "zafaryab-haider") {
+        return {
+          id,
+          full_name: "Zafaryab Haider",
+          gender: "Male",
+          email: "Zafaryab.s3522@gmail.com",
+          graduation_year: 2021,
+          country: "Pakistan",
+          father_name: "Muhammad Ali",
+          date_of_birth: "2005-11-21",
+          marital_status: "Single",
+          city: "Karachi",
+          higher_education: "Doing bachelors in civil engineering from NED University",
+          university: "NED university of engineering and technology",
+          degree_program: "Engineering",
+          avatar_url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KRUseq1ESk9X1e52mVUApJF03hujLv.png",
+        };
+      }
+      return null;
     },
   });
 
+  const profileName = data?.full_name || "Zafaryab Haider";
+  const profileGender = data?.gender || "Male";
+  const profileBatch = data?.graduation_year || 2021;
   const badgeText = (() => {
     const parts: string[] = [];
     if (data?.profession && data?.company) {
@@ -140,8 +180,8 @@ function AlumniProfile() {
               {/* Centered profile header */}
               <div className="flex flex-col items-center text-center">
                 <Avatar
-                  name={data.full_name}
-                  src={data.avatar_url}
+                  name={profileName}
+                  src={data.avatar_url || "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KRUseq1ESk9X1e52mVUApJF03hujLv.png"}
                   size="lg"
                   className="-mt-16 border-4 border-card shadow-sm ring-4 ring-[#8bc34a]/60 sm:-mt-20"
                 />
@@ -172,9 +212,12 @@ function AlumniProfile() {
                 <div className="mt-5 flex flex-wrap justify-center gap-2">
                   {data.email && (
                     <Button asChild size="sm">
-                      <a href={`mailto:${data.email}`}><Mail className="mr-2 h-4 w-4" />Email</a>
+                      <a href={`mailto:${data.email}`}><Mail className="mr-2 h-4 w-4" />Send Email</a>
                     </Button>
                   )}
+                  <Button asChild size="sm" variant="outline">
+                    <Link to="/directory"><ArrowLeft className="mr-2 h-4 w-4" />Go Back to Directory</Link>
+                  </Button>
                   {data.linkedin_url && (
                     <Button asChild size="sm" variant="outline">
                       <LinkedInLink url={data.linkedin_url}>
@@ -199,9 +242,9 @@ function AlumniProfile() {
                   <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Highest Qualification"
                     value={data.higher_education || "—"} />
                   <InfoRow icon={<BookOpen className="h-4 w-4" />} label="University"
-                    value={data.company || "—"} />
+                    value={data.university || data.company || "—"} />
                   <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Degree Program"
-                    value={data.profession || "—"} />
+                    value={data.degree_program || data.profession || "—"} />
                 </InfoCard>
 
                 <InfoCard title="Contact & Location">
@@ -223,6 +266,8 @@ function AlumniProfile() {
                 </InfoCard>
 
                 <InfoCard title="Personal Details">
+                  <InfoRow icon={<User className="h-4 w-4" />} label="Name" value={profileName} />
+                  <InfoRow icon={<User className="h-4 w-4" />} label="Gender" value={profileGender} />
                   <InfoRow icon={<User className="h-4 w-4" />} label="Father's Name"
                     value={data.father_name || "—"} />
                   {data.date_of_birth && (
