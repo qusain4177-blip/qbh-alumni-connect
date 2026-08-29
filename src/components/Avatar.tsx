@@ -28,7 +28,7 @@ export function Avatar({ name, src, size = "sm", className }: AvatarProps) {
   return (
     <div
       className={cn(
-        "grid shrink-0 place-items-center overflow-hidden rounded-full bg-navy font-display font-semibold text-gold",
+        "grid shrink-0 place-items-center overflow-hidden rounded-full border border-border/80 bg-navy font-display font-semibold text-gold shadow-sm",
         sizeClass,
         className,
       )}

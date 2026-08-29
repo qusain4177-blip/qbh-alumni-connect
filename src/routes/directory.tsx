@@ -230,7 +230,13 @@ function Directory() {
             const batch = item?.graduation_year ? String(item?.graduation_year) : "N/A";
             const qualification = item?.higher_education || "";
             const occupation = item?.profession || "";
-            const avatarUrl = item?.avatar_url || "https://ui-avatars.com/api/?name=Alumni";
+            const gender = String((item as AlumniRecord & { gender?: string })?.gender ?? "").toLowerCase();
+            const avatarUrl = item?.avatar_url ||
+              (gender === "female"
+                ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=female&hair=long01,long02,straight01&style=circle`
+                : gender === "male"
+                  ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=male&style=circle`
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=fff&bold=true`);
             return (
             <article key={item?.id || `alumni-${item?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: item?.id || "unknown" }} className="block">
