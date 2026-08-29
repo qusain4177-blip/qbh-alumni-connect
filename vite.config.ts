@@ -1,23 +1,13 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, nitro (build-only using cloudflare as a default target),
-//     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
-//     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+// @lovable.dev/vite-tanstack-config provides the TanStack Start, Vite, and Nitro plugins.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-import path from "path";
 
 const isVercel = process.env.VERCEL === "1";
-const projectRoot = path.resolve(process.cwd()).split(path.sep).join("/");
 
 export default defineConfig({
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
     server: { entry: "server" },
   },
   nitro: {
-    // Cloudflare Pages expects the complete deployable output in dist.
     ...(isVercel
       ? { preset: "vercel" }
       : {
@@ -26,27 +16,19 @@ export default defineConfig({
             dir: "dist",
             publicDir: "dist",
           },
-          prerender: {
-            routes: ["/"],
-          },
-        },
-  },
+          codeSplitting: false,
         }),
   },
   vite: {
-    root: projectRoot,
-    plugins: [],
     build: {
       outDir: "dist",
-    },
-    ...(isVercel
-      ? {
-          build: {
+      ...(isVercel
+        ? {
             rollupOptions: {
               external: ["cloudflare:workers"],
             },
-          },
-        }
-      : {}),
+          }
+        : {}),
+    },
   },
 });
