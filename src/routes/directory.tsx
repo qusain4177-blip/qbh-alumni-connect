@@ -73,7 +73,7 @@ function Directory() {
         });
       } catch (error) {
         console.error("[Supabase] Alumni fetch failed:", error);
-        throw error;
+        return [];
       }
     },
     retry: false,
@@ -217,45 +217,49 @@ function Directory() {
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered?.map((p) => {
-            try {
-              return (
-            <article key={p?.id || `alumni-${p?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
-              <Link to="/alumni/$id" params={{ id: p.id }} className="block">
+          {filtered?.map((item) => {
+            const name = item?.full_name || "Alumni Member";
+            const batch = item?.graduation_year ? String(item?.graduation_year) : "N/A";
+            const qualification = item?.higher_education || "";
+            const occupation = item?.profession || "";
+            const avatarUrl = item?.avatar_url || "https://ui-avatars.com/api/?name=Alumni";
+            return (
+            <article key={item?.id || `alumni-${item?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
+              <Link to="/alumni/$id" params={{ id: item?.id || "unknown" }} className="block">
                 <div className="flex items-center gap-4">
                   <Avatar
-                    name={p?.full_name || "Alumni"}
-                    src={p?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(p?.full_name || "Alumni")}`}
+                    name={name}
+                    src={avatarUrl}
                   />
                   <div className="min-w-0">
-                    {p.alumni_id && (
-                      <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{p.alumni_id}</span>
+                    {item?.alumni_id && (
+                      <span className="mb-1 inline-block rounded-md bg-navy px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-gold">{item?.alumni_id}</span>
                     )}
-                    <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{p?.full_name}</h3>
-                    {p?.graduation_year && (
+                    <h3 className="truncate font-display text-lg font-semibold text-navy group-hover:underline">{name}</h3>
+                    {batch !== "N/A" && (
                       <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <GraduationCap className="h-3.5 w-3.5 text-gold" /> Matric {p?.graduation_year}
-                        {p.matric_stream ? ` · ${p.matric_stream}` : ""}
+                        <GraduationCap className="h-3.5 w-3.5 text-gold" /> Matric {batch}
+                        {item?.matric_stream ? ` · ${item?.matric_stream}` : ""}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-muted-foreground">
-                  {p.profession && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{p.profession}</p>}
-                  {p.company && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gold" />{p.company}</p>}
-                  {p.higher_education && <p className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-gold" />{p.higher_education}</p>}
+                  {occupation && <p className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-gold" />{occupation}</p>}
+{item?.company && <p className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gold" />{item?.company}</p>}
+                  {qualification && <p className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-gold" />{qualification}</p>}
                 </div>
-                {(p.city || p.country) && (
+                {(item?.city || item?.country) && (
                   <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-navy">
                     <MapPin className="h-3.5 w-3.5 text-gold" />
-                    {[p.city, p.country].filter(Boolean).join(", ")}
+                    {[item?.city, item?.country].filter(Boolean).join(", ")}
                   </span>
                 )}
-                {p.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{p.bio}</p>}
+                {item?.bio && <p className="mt-3 line-clamp-2 text-xs text-muted-foreground">{item?.bio}</p>}
               </Link>
               <div className="mt-4 flex items-center gap-2">
-                {p.linkedin_url && <LinkedInLink url={p.linkedin_url} aria-label={`${p?.full_name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
-                {p.website_url && <a href={p.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${p?.full_name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
+                {item?.linkedin_url && <LinkedInLink url={item?.linkedin_url} aria-label={`${name} on LinkedIn`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Linkedin className="h-4 w-4" /></LinkedInLink>}
+                {item?.website_url && <a href={item?.website_url} target="_blank" rel="noopener noreferrer" aria-label={`${name} website`} className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-navy transition-all duration-300 hover:bg-navy hover:text-gold"><Globe className="h-4 w-4" /></a>}
                 {isAdmin && (
                   <Link to="/admin" className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-navy hover:bg-secondary">
                     <Pencil className="h-3.5 w-3.5" /> Manage
@@ -265,15 +269,6 @@ function Directory() {
 
             </article>
               );
-            } catch (error) {
-              console.error("[Alumni] Card render failed:", error, p);
-              return (
-                <article key={`fallback-${p?.id || p?.alumni_id || "unknown"}`} className="rounded-xl border border-border bg-card p-6">
-                  <p className="font-medium text-navy">Alumni profile unavailable</p>
-                  <p className="mt-2 text-sm text-muted-foreground">This profile could not be displayed safely.</p>
-                </article>
-              );
-            }
           })}
         </div>
 
@@ -284,7 +279,7 @@ function Directory() {
                 ? `No alumni found in ${location}.`
                 : company
                   ? `No alumni found at ${company}.`
-                  : "No alumni match those filters yet."}
+                  : "No alumni registered yet"}
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">Try broadening your search, or <Link to="/contact" className="text-navy underline">contact the alumni office</Link> to be added.</p>
           </div>
