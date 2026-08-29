@@ -16,7 +16,7 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin Console — QBH UMBRELLA" }] }),
+  head: () => ({ meta: [{ title: "Admin Console — QBH UMBRELLA Alumni" }] }),
   component: AdminPage,
 });
 
@@ -69,10 +69,10 @@ function Stats() {
     queryKey: ["admin-stats"],
     queryFn: async () => {
       const [{ count: total }, { count: pending }, { data: recent }, { data: rows }] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
-        supabase.from("profiles").select("id, full_name, created_at").order("created_at", { ascending: false }).limit(5),
-        supabase.from("profiles").select("graduation_year, matric_stream"),
+        supabase.from("alumni").select("*", { count: "exact", head: true }),
+        supabase.from("alumni").select("*", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("alumni").select("id, full_name, created_at").order("created_at", { ascending: false }).limit(5),
+        supabase.from("alumni").select("graduation_year, matric_stream"),
       ]);
       const yearMap: Record<string, number> = {};
       const streamMap: Record<string, number> = {};
@@ -144,7 +144,7 @@ function AlumniMgmt() {
 
   const { data } = useQuery({
     queryKey: ["admin-profiles"],
-    queryFn: async () => (await supabase.from("profiles").select("*").order("created_at", { ascending: false })).data ?? [],
+    queryFn: async () => (await supabase.from("alumni").select("*").order("created_at", { ascending: false })).data ?? [],
   });
 
   const rows = useMemo(() => {
@@ -168,7 +168,7 @@ function AlumniMgmt() {
 
   const del = async (id: string) => {
     if (!confirm("Delete this alumni record? This cannot be undone.")) return;
-    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    const { error } = await supabase.from("alumni").delete().eq("id", id);
     if (error) toast.error(error.message);
     else { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin-profiles"] }); qc.invalidateQueries({ queryKey: ["admin-stats"] }); }
   };
@@ -309,8 +309,8 @@ function AlumniEditor({ open, initial, onClose, onSaved }: { open: boolean; init
     };
     setSaving(true);
     const { error } = isNew
-      ? await supabase.from("profiles").insert(payload)
-      : await supabase.from("profiles").update(payload).eq("id", form.id);
+      ? await supabase.from("alumni").insert(payload)
+      : await supabase.from("alumni").update(payload).eq("id", form.id);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success(isNew ? "Alumni added" : "Saved");

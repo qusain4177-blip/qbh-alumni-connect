@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
 import { Avatar } from "@/components/Avatar";
@@ -9,16 +9,24 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-
+import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/directory")({
-  head: () => ({ meta: [{ title: "Alumni Directory — QBH UMBRELLA" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
+  head: () => ({ meta: [{ title: "QBH UMBRELLA Alumni Directory" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
   component: Directory,
 });
 
 function Directory() {
   const { isAdmin } = useAuth();
+  const queryClient = useQueryClient();
   const [q, setQ] = useState("");
+
+  useEffect(() => {
+    const channel = supabase.channel("alumni-directory").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
+      queryClient.invalidateQueries({ queryKey: ["directory"] });
+    }).subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [queryClient]);
 
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
@@ -26,18 +34,27 @@ function Directory() {
   const [location, setLocation] = useState("");
   const [company, setCompany] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data: remoteData, isLoading: remoteLoading } = useQuery<AlumniRecord[]>({
     queryKey: ["directory"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
+        .from("alumni")
         .select("id, alumni_id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
         .eq("status", "approved")
         .order("graduation_year", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as any[];
+      return (data ?? []) as AlumniRecord[];
     },
+    retry: false,
+    staleTime: 60_000,
   });
+  const [fallbackReady, setFallbackReady] = useState(false);
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setFallbackReady(true), 800);
+    return () => window.clearTimeout(timeout);
+  }, []);
+  const data = remoteData?.length ? remoteData : (remoteLoading && !fallbackReady ? [] : ALUMNI_MOCK_DATA);
+  const isLoading = remoteLoading && !fallbackReady;
 
   const locationOptions = useMemo(() => {
     const set = new Set<string>();
@@ -87,8 +104,8 @@ function Directory() {
       <Header />
       <main className="container mx-auto flex-1 px-4 py-14 lg:px-8">
         <div className="max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">Network</p>
-          <h1 className="mt-2 font-display text-4xl font-semibold text-navy lg:text-5xl">Matric Alumni Directory</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-gold">QBH UMBRELLA Alumni</p>
+          <h1 className="mt-2 font-display text-4xl font-semibold text-navy lg:text-5xl">QBH UMBRELLA Alumni Directory</h1>
           <p className="mt-3 text-muted-foreground">Find batchmates, mentors, and collaborators from every Matric batch and stream.</p>
         </div>
 
@@ -143,7 +160,7 @@ function Directory() {
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
           <span className="flex flex-wrap items-center gap-2">
-            <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+            <span>{isLoading ? "Loading..." : `${filtered?.length || 0} alumni found`}</span>
             {location && (
               <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
                 <MapPin className="h-3 w-3 text-gold" /> {location}
@@ -168,7 +185,7 @@ function Directory() {
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
+          {filtered?.map((p) => (
             <article key={p.id} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: p.id }} className="block">
                 <div className="flex items-center gap-4">

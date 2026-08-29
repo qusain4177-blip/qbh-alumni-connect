@@ -5,7 +5,7 @@ import { supabaseForUser, textResult, errorResult } from "../supabase";
 export default defineTool({
   name: "search_alumni",
   title: "Search alumni directory",
-  description: "Search the QBH UMBRELLA alumni directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
+  description: "Search the QBH UMBRELLA Alumni Directory. Filter by name, Matric passing year, or Matric stream. Row-level security limits results to what the signed-in user can see.",
   inputSchema: {
     query: z.string().trim().optional().describe("Free-text match on full name."),
     matric_year: z.number().int().min(1950).max(2100).optional().describe("Matric passing year, e.g. 2018."),
@@ -16,7 +16,7 @@ export default defineTool({
   handler: async ({ query, matric_year, matric_stream, limit }, ctx) => {
     if (!ctx.isAuthenticated()) return errorResult("Not authenticated");
     let q = supabaseForUser(ctx)
-      .from("profiles")
+      .from("alumni")
       .select("id, full_name, graduation_year, matric_stream, profession, higher_education, company, city, country, linkedin_url")
       .limit(limit ?? 20);
     if (query) q = q.ilike("full_name", `%${query}%`);

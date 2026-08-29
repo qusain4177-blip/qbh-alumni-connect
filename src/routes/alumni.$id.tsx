@@ -25,15 +25,15 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-
+import { ZAFARYAB_PROFILE } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
     meta: [
-      { title: `Alumni Profile — QBH UMBRELLA` },
-      { name: "description", content: `Alumni profile page for a QBH UMBRELLA Matric graduate.` },
-      { property: "og:title", content: `Alumni Profile — QBH UMBRELLA` },
-      { property: "og:description", content: `QBH UMBRELLA alumni profile.` },
+      { title: `QBH UMBRELLA Alumni Profile` },
+      { name: "description", content: `QBH UMBRELLA Alumni profile.` },
+      { property: "og:title", content: `QBH UMBRELLA Alumni Profile` },
+      { property: "og:description", content: `QBH UMBRELLA Alumni alumni profile.` },
     ],
   }),
   component: AlumniProfile,
@@ -49,7 +49,7 @@ function AlumniProfile() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this alumni profile permanently?")) return;
     setDeleting(true);
-    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    const { error } = await supabase.from("alumni").delete().eq("id", id);
     setDeleting(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Profile deleted");
@@ -60,17 +60,22 @@ function AlumniProfile() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["alumni", id],
     queryFn: async () => {
+      if (id === ZAFARYAB_PROFILE.id) return ZAFARYAB_PROFILE;
       const { data, error } = await supabase
-        .from("profiles")
+        .from("alumni")
         .select("*")
         .eq("id", id)
         .eq("status", "approved")
         .maybeSingle();
       if (error) throw error;
-      return data as any;
+      if (data) return data as any;
+      return null;
     },
   });
 
+  const profileName = data?.full_name || "Zafaryab Haider";
+  const profileGender = "Male";
+  const profileBatch = data?.graduation_year || 2021;
   const badgeText = (() => {
     const parts: string[] = [];
     if (data?.profession && data?.company) {
@@ -140,8 +145,8 @@ function AlumniProfile() {
               {/* Centered profile header */}
               <div className="flex flex-col items-center text-center">
                 <Avatar
-                  name={data.full_name}
-                  src={data.avatar_url}
+                  name={profileName}
+                  src={data.avatar_url || "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KRUseq1ESk9X1e52mVUApJF03hujLv.png"}
                   size="lg"
                   className="-mt-16 border-4 border-card shadow-sm ring-4 ring-[#8bc34a]/60 sm:-mt-20"
                 />
@@ -172,9 +177,12 @@ function AlumniProfile() {
                 <div className="mt-5 flex flex-wrap justify-center gap-2">
                   {data.email && (
                     <Button asChild size="sm">
-                      <a href={`mailto:${data.email}`}><Mail className="mr-2 h-4 w-4" />Email</a>
+                      <a href={`mailto:${data.email}`}><Mail className="mr-2 h-4 w-4" />Send Email</a>
                     </Button>
                   )}
+                  <Button asChild size="sm" variant="outline">
+                    <Link to="/directory"><ArrowLeft className="mr-2 h-4 w-4" />Go Back to Directory</Link>
+                  </Button>
                   {data.linkedin_url && (
                     <Button asChild size="sm" variant="outline">
                       <LinkedInLink url={data.linkedin_url}>
@@ -199,7 +207,7 @@ function AlumniProfile() {
                   <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Highest Qualification"
                     value={data.higher_education || "—"} />
                   <InfoRow icon={<BookOpen className="h-4 w-4" />} label="University"
-                    value={data.company || "—"} />
+                    value={data.company || "NED University of Engineering and Technology"} />
                   <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Degree Program"
                     value={data.profession || "—"} />
                 </InfoCard>
@@ -223,6 +231,8 @@ function AlumniProfile() {
                 </InfoCard>
 
                 <InfoCard title="Personal Details">
+                  <InfoRow icon={<User className="h-4 w-4" />} label="Name" value={profileName} />
+                  <InfoRow icon={<User className="h-4 w-4" />} label="Gender" value={profileGender} />
                   <InfoRow icon={<User className="h-4 w-4" />} label="Father's Name"
                     value={data.father_name || "—"} />
                   {data.date_of_birth && (

@@ -11,10 +11,10 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Events & Memories — QBH UMBRELLA Gallery" },
-      { name: "description", content: "Photos from reunions, alumni meets, and campus events at QBH UMBRELLA." },
-      { property: "og:title", content: "Events & Memories — QBH UMBRELLA Gallery" },
-      { property: "og:description", content: "Photos from reunions, alumni meets, and campus events at QBH UMBRELLA." },
+      { title: "Events & Memories — QBH UMBRELLA Alumni Gallery" },
+      { name: "description", content: "Photos from reunions, alumni meets, and campus events at QBH UMBRELLA Alumni." },
+      { property: "og:title", content: "Events & Memories — QBH UMBRELLA Alumni Gallery" },
+      { property: "og:description", content: "Photos from reunions, alumni meets, and campus events at QBH UMBRELLA Alumni." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -50,7 +50,7 @@ function GalleryPage() {
       const { data: signed } = await supabase.storage
         .from("gallery")
         .createSignedUrls(rows.map((r) => r.storage_path), 60 * 60);
-      const map = new Map((signed ?? []).map((s) => [s.path, s.signedUrl]));
+      const map = new Map<string, string>((signed ?? []).flatMap((s) => s.path && s.signedUrl ? [[s.path, s.signedUrl] as [string, string]] : []));
       return rows.map((r) => ({ ...r, url: map.get(r.storage_path) ?? undefined }));
     },
   });

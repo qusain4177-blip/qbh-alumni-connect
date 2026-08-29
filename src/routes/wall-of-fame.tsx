@@ -22,17 +22,17 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/wall-of-fame")({
   head: () => ({
     meta: [
-      { title: "Alumni Wall of Fame — QBH UMBRELLA Success Stories" },
+      { title: "Alumni Wall of Fame — QBH UMBRELLA Alumni Success Stories" },
       {
         name: "description",
         content:
-          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBH UMBRELLA alumni.",
+          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBH UMBRELLA Alumni alumni.",
       },
-      { property: "og:title", content: "Alumni Wall of Fame — QBH UMBRELLA Success Stories" },
+      { property: "og:title", content: "Alumni Wall of Fame — QBH UMBRELLA Alumni Success Stories" },
       {
         property: "og:description",
         content:
-          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBH UMBRELLA alumni.",
+          "Celebrating higher education milestones, PhDs, Master's degrees and career successes of QBH UMBRELLA Alumni alumni.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -80,7 +80,7 @@ function categoryLabel(key: string) {
 async function signPaths(paths: string[]) {
   if (paths.length === 0) return new Map<string, string>();
   const { data } = await supabase.storage.from("gallery").createSignedUrls(paths, 60 * 60);
-  return new Map((data ?? []).map((s) => [s.path, s.signedUrl]));
+  return new Map<string, string>((data ?? []).flatMap((s) => s.path && s.signedUrl ? [[s.path, s.signedUrl] as [string, string]] : []));
 }
 
 function WallOfFamePage() {

@@ -10,7 +10,7 @@ export default defineTool({
   handler: async (_input, ctx) => {
     if (!ctx.isAuthenticated()) return errorResult("Not authenticated");
     const { data, error } = await supabaseForUser(ctx)
-      .from("profiles")
+      .from("alumni")
       .select("*")
       .eq("id", ctx.getUserId()!)
       .maybeSingle();

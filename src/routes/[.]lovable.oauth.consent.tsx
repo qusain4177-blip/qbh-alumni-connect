@@ -87,7 +87,7 @@ function Consent() {
           Connect {clientName} to your QBH UMBRELLA account
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">
-          {clientName} will be able to call the QBH UMBRELLA Alumni Portal tools while you are signed in — reading and updating your own profile and browsing the alumni directory, events and announcements as you.
+          {clientName} will be able to call the QBH UMBRELLA Alumni tools while you are signed in — reading and updating your own profile and browsing the alumni directory, events and announcements as you.
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
           This does not bypass this app's permissions or backend policies.

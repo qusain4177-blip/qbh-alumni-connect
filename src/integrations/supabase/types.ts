@@ -137,7 +137,7 @@ export type Database = {
         }
         Relationships: []
       }
-      profiles: {
+      alumni: {
         Row: {
           alumni_id: string | null
           avatar_url: string | null

@@ -12,7 +12,7 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({ meta: [{ title: "Contact Support — QBH UMBRELLA" }, { name: "description", content: "Get technical support or contact the alumni office." }] }),
+  head: () => ({ meta: [{ title: "Contact Support — QBH UMBRELLA Alumni" }, { name: "description", content: "Get technical support or contact the alumni office." }] }),
   component: ContactPage,
 });
 

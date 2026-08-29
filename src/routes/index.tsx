@@ -1,19 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { ArrowRight, ArrowUpRight, Award, Briefcase, Calendar, Globe, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { FeaturedHighlights } from "@/components/FeaturedHighlights";
 import { supabase } from "@/integrations/supabase/client";
+import { ALUMNI_MOCK_DATA } from "@/lib/alumni-mock-data";
 import heroImg from "@/assets/hero-school.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "QBH UMBRELLA - Alumni Directory Portal" },
+      { title: "QBH UMBRELLA Alumni" },
       { name: "description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
-      { property: "og:title", content: "QBH UMBRELLA - Alumni Directory Portal" },
+      { property: "og:title", content: "QBH UMBRELLA Alumni" },
       { property: "og:description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
     ],
   }),
@@ -31,11 +33,29 @@ function Landing() {
 
   }, []);
 
+  const queryClient = useQueryClient();
+  const { data: alumni = ALUMNI_MOCK_DATA } = useQuery({
+    queryKey: ["homepage-alumni"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("alumni").select("id, full_name, status").eq("status", "approved");
+      if (error || !data?.length) return ALUMNI_MOCK_DATA;
+      return data;
+    },
+    retry: false,
+  });
+  useEffect(() => {
+    const channel = supabase.channel("homepage-alumni").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
+      queryClient.invalidateQueries({ queryKey: ["homepage-alumni"] });
+    }).subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [queryClient]);
+
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["landing-stats"],
+    retry: false,
     queryFn: async () => {
       const [{ count: alumniCount }, { data: events }] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "approved"),
+        supabase.from("alumni").select("*", { count: "exact", head: true }).eq("status", "approved"),
         supabase.from("events").select("*").gte("event_date", new Date().toISOString()).order("event_date").limit(3),
       ]);
       return { alumniCount: alumniCount ?? 0, events: events ?? [] };
@@ -49,20 +69,20 @@ function Landing() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border bg-navy">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="QBH UMBRELLA campus building" className="h-full w-full object-cover object-center opacity-30" width={1600} height={1100} />
+          <img src={heroImg} alt="QBH UMBRELLA Alumni" className="h-full w-full object-cover object-center opacity-30" width={1600} height={1100} />
           <div className="absolute inset-0 bg-navy/70" />
         </div>
         <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-36">
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
-              <Award className="h-3.5 w-3.5" /> QBH UMBRELLA
+              <Award className="h-3.5 w-3.5" /> QBH UMBRELLA Alumni
             </div>
             <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
-              The Matric class, <br className="hidden sm:block" /> still in one room.
+              QBH UMBRELLA Alumni, <br className="hidden sm:block" /> still connected.
             </h1>
             <p className="mt-3 font-mono text-xs font-medium uppercase tracking-[0.2em] text-white/50">an umbrella of opportunities</p>
             <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/65 lg:text-lg">
-              The official alumni network of QBH UMBRELLA. Find your batch, share what you're working on, and stay in touch.
+              QBH UMBRELLA — an umbrella of opportunities. Find your batch, share what you're working on, and stay in touch.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
               <Link to="/directory">
@@ -81,7 +101,7 @@ function Landing() {
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Alumni</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{statsLoading ? "—" : `${stats?.alumniCount ?? 0}+`}</dd>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{`${alumni?.length || 0}+`}</dd>
               </div>
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Batches</dt>
@@ -116,7 +136,7 @@ function Landing() {
         )}
       </section>
 
-
+      <FeaturedHighlights />
 
       {/* Mission + Bento */}
       <section className="container mx-auto px-4 py-28 lg:px-8 lg:py-32">
@@ -128,7 +148,7 @@ function Landing() {
             </h2>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-2 lg:text-lg">
-            QBH UMBRELLA has been graduating Matric students for forty years. Most of them lost touch the week after results came out. This is the place to find them again — and to keep your own details current as life moves around.
+            QBH UMBRELLA connects alumni across generations. This is the place to find fellow alumni again and keep your details current as life moves forward.
           </p>
 
         </div>
@@ -160,7 +180,7 @@ function Landing() {
               <Sparkles className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{statsLoading ? "—" : `${stats?.alumniCount ?? 0}+`}</p>
+              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{`${alumni?.length || 0}+`}</p>
               <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Verified alumni</p>
             </div>
           </article>

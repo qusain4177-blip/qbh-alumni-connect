@@ -26,7 +26,7 @@ export default defineTool({
     const updates = Object.fromEntries(Object.entries(input).filter(([, v]) => v !== undefined));
     if (Object.keys(updates).length === 0) return errorResult("Provide at least one field to update.");
     const { data, error } = await supabaseForUser(ctx)
-      .from("profiles")
+      .from("alumni")
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .update(updates as any)
       .eq("id", ctx.getUserId()!)

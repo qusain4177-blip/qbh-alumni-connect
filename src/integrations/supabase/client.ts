@@ -27,8 +27,8 @@ const SEED_PROFILES = [
 ];
 
 function createSupabaseClient() {
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     console.warn(`[Supabase] Using mock data (${SEED_PROFILES.length} alumni).`);
@@ -45,16 +45,27 @@ function createSupabaseClient() {
 }
 
 function createMockSupabaseClient() {
+  const result = (data: unknown[] = SEED_PROFILES) => {
+    const response = Promise.resolve({ data, error: null, count: data.length });
+    return {
+      limit: (_count: number) => response,
+      then: response.then.bind(response),
+    };
+  };
+
   return {
-    from: (table: string) => ({
+    channel: () => ({
+      on: () => ({ subscribe: () => ({}) }),
+    }),
+    removeChannel: () => Promise.resolve("ok"),
+    from: (_table: string) => ({
       select: () => ({
-        eq: (col: string, val: any) => ({
-          order: () => Promise.resolve({
-            data: SEED_PROFILES.filter(p => p.status === 'approved'),
-            error: null,
-          }),
+        eq: (_col: string, val: any) => ({
+          order: () => result(SEED_PROFILES.filter((p) => p.status === "approved")),
+          gte: () => result(SEED_PROFILES),
+          limit: (_count: number) => result(SEED_PROFILES),
           maybeSingle: () => Promise.resolve({
-            data: SEED_PROFILES.find(p => p.id === val),
+            data: SEED_PROFILES.find((p) => p.id === val),
             error: null,
           }),
           count: () => Promise.resolve({
@@ -63,6 +74,9 @@ function createMockSupabaseClient() {
             error: null,
           }),
         }),
+        order: () => result(SEED_PROFILES),
+        gte: () => result(SEED_PROFILES),
+        limit: (_count: number) => result(SEED_PROFILES),
       }),
       delete: () => ({ eq: () => Promise.resolve({ error: null }) }),
       insert: (data: any) => Promise.resolve({ data, error: null }),
