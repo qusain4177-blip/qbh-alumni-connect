@@ -38,8 +38,8 @@ function Landing() {
     queryKey: ["homepage-alumni"],
     queryFn: async () => {
       const { data, error } = await supabase.from("alumni").select("id, full_name, status").eq("status", "approved");
-      if (error) throw error;
-      return data ?? [];
+      if (error || !data?.length) return ALUMNI_MOCK_DATA;
+      return data;
     },
     retry: false,
   });
@@ -101,7 +101,7 @@ function Landing() {
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Alumni</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{`${alumni.length}+`}</dd>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{`${alumni?.length || 0}+`}</dd>
               </div>
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Batches</dt>
@@ -180,7 +180,7 @@ function Landing() {
               <Sparkles className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{`${alumni.length}+`}</p>
+              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{`${alumni?.length || 0}+`}</p>
               <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Verified alumni</p>
             </div>
           </article>

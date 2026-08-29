@@ -160,7 +160,7 @@ function Directory() {
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
           <span className="flex flex-wrap items-center gap-2">
-            <span>{isLoading ? "Loading..." : `${filtered.length} alumni found`}</span>
+            <span>{isLoading ? "Loading..." : `${filtered?.length || 0} alumni found`}</span>
             {location && (
               <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
                 <MapPin className="h-3 w-3 text-gold" /> {location}
@@ -185,7 +185,7 @@ function Directory() {
 
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
+          {filtered?.map((p) => (
             <article key={p.id} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: p.id }} className="block">
                 <div className="flex items-center gap-4">
