@@ -49,7 +49,7 @@ function AlumniProfile() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this alumni profile permanently?")) return;
     setDeleting(true);
-    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    const { error } = await supabase.from("alumni").delete().eq("id", id);
     setDeleting(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Profile deleted");
@@ -62,7 +62,7 @@ function AlumniProfile() {
     queryFn: async () => {
       if (id === ZAFARYAB_PROFILE.id) return ZAFARYAB_PROFILE;
       const { data, error } = await supabase
-        .from("profiles")
+        .from("alumni")
         .select("*")
         .eq("id", id)
         .eq("status", "approved")

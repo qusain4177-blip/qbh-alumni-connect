@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { ArrowRight, ArrowUpRight, Award, Briefcase, Calendar, Globe, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,13 +33,29 @@ function Landing() {
 
   }, []);
 
-  const alumni = ALUMNI_MOCK_DATA;
+  const queryClient = useQueryClient();
+  const { data: alumni = ALUMNI_MOCK_DATA } = useQuery({
+    queryKey: ["homepage-alumni"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("alumni").select("id, full_name, status").eq("status", "approved");
+      if (error) throw error;
+      return data ?? [];
+    },
+    retry: false,
+  });
+  useEffect(() => {
+    const channel = supabase.channel("homepage-alumni").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
+      queryClient.invalidateQueries({ queryKey: ["homepage-alumni"] });
+    }).subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [queryClient]);
+
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["landing-stats"],
     retry: false,
     queryFn: async () => {
       const [{ count: alumniCount }, { data: events }] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "approved"),
+        supabase.from("alumni").select("*", { count: "exact", head: true }).eq("status", "approved"),
         supabase.from("events").select("*").gte("event_date", new Date().toISOString()).order("event_date").limit(3),
       ]);
       return { alumniCount: alumniCount ?? 0, events: events ?? [] };

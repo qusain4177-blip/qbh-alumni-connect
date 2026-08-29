@@ -54,6 +54,10 @@ function createMockSupabaseClient() {
   };
 
   return {
+    channel: () => ({
+      on: () => ({ subscribe: () => ({}) }),
+    }),
+    removeChannel: () => Promise.resolve("ok"),
     from: (_table: string) => ({
       select: () => ({
         eq: (_col: string, val: any) => ({

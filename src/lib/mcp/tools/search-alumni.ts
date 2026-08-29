@@ -16,7 +16,7 @@ export default defineTool({
   handler: async ({ query, matric_year, matric_stream, limit }, ctx) => {
     if (!ctx.isAuthenticated()) return errorResult("Not authenticated");
     let q = supabaseForUser(ctx)
-      .from("profiles")
+      .from("alumni")
       .select("id, full_name, graduation_year, matric_stream, profession, higher_education, company, city, country, linkedin_url")
       .limit(limit ?? 20);
     if (query) q = q.ilike("full_name", `%${query}%`);

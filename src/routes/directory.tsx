@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
@@ -18,7 +18,15 @@ export const Route = createFileRoute("/directory")({
 
 function Directory() {
   const { isAdmin } = useAuth();
+  const queryClient = useQueryClient();
   const [q, setQ] = useState("");
+
+  useEffect(() => {
+    const channel = supabase.channel("alumni-directory").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
+      queryClient.invalidateQueries({ queryKey: ["directory"] });
+    }).subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [queryClient]);
 
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
@@ -30,7 +38,7 @@ function Directory() {
     queryKey: ["directory"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
+        .from("alumni")
         .select("id, alumni_id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
         .eq("status", "approved")
         .order("graduation_year", { ascending: false });
@@ -45,7 +53,7 @@ function Directory() {
     const timeout = window.setTimeout(() => setFallbackReady(true), 800);
     return () => window.clearTimeout(timeout);
   }, []);
-  const data = ALUMNI_MOCK_DATA;
+  const data = remoteData?.length ? remoteData : (remoteLoading && !fallbackReady ? [] : ALUMNI_MOCK_DATA);
   const isLoading = remoteLoading && !fallbackReady;
 
   const locationOptions = useMemo(() => {

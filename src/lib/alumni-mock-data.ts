@@ -1,6 +1,6 @@
 import type { Database } from "@/integrations/supabase/types";
 
-export type AlumniRecord = Database["public"]["Tables"]["profiles"]["Row"];
+export type AlumniRecord = Database["public"]["Tables"]["alumni"]["Row"];
 
 export const ALUMNI_MOCK_DATA: AlumniRecord[] = [
   {
