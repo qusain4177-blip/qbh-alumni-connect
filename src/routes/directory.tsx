@@ -7,7 +7,7 @@ import { Avatar } from "@/components/Avatar";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
 import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
 
@@ -22,6 +22,7 @@ function Directory() {
   const [q, setQ] = useState("");
 
   useEffect(() => {
+    if (!supabase) return;
     const channel = supabase.channel("alumni-directory").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
       queryClient.invalidateQueries({ queryKey: ["directory"] });
     }).subscribe();
@@ -37,6 +38,7 @@ function Directory() {
   const { data: remoteData, isLoading: remoteLoading } = useQuery<AlumniRecord[]>({
     queryKey: ["directory"],
     queryFn: async () => {
+      if (!supabase) return [];
       const { data, error } = await supabase
         .from("alumni")
         .select("id, alumni_id, full_name, avatar_url, graduation_year, matric_stream, profession, company, higher_education, city, country, linkedin_url, website_url, bio")
