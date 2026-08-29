@@ -23,7 +23,7 @@ export const ALUMNI_MOCK_DATA: AlumniRecord[] = [
     profession: "Civil Engineering Student",
     linkedin_url: null,
     website_url: null,
-    bio: "Proud Qamar E Bani Hashim School alumnus pursuing civil engineering at NED University.",
+    bio: "Proud QBH UMBRELLA alumnus pursuing civil engineering at NED University.",
     status: "approved",
     created_at: "2024-01-01T00:00:00.000Z",
     updated_at: "2024-01-01T00:00:00.000Z",

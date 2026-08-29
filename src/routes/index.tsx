@@ -13,9 +13,9 @@ import heroImg from "@/assets/hero-school.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Qamar E Bani Hashim School Alumni - Alumni Directory Portal" },
+      { title: "QBH UMBRELLA Alumni" },
       { name: "description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
-      { property: "og:title", content: "Qamar E Bani Hashim School Alumni - Alumni Directory Portal" },
+      { property: "og:title", content: "QBH UMBRELLA Alumni" },
       { property: "og:description", content: "Reconnect with classmates, mentor the next generation, and stay close to the heart of our school." },
     ],
   }),
@@ -53,20 +53,20 @@ function Landing() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border bg-navy">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Qamar E Bani Hashim School Alumni campus building" className="h-full w-full object-cover object-center opacity-30" width={1600} height={1100} />
+          <img src={heroImg} alt="QBH UMBRELLA Alumni" className="h-full w-full object-cover object-center opacity-30" width={1600} height={1100} />
           <div className="absolute inset-0 bg-navy/70" />
         </div>
         <div className="container relative mx-auto px-4 py-28 lg:px-8 lg:py-36">
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
-              <Award className="h-3.5 w-3.5" /> Qamar E Bani Hashim School Alumni
+              <Award className="h-3.5 w-3.5" /> QBH UMBRELLA Alumni
             </div>
             <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Qamar E Bani Hashim School Alumni, <br className="hidden sm:block" /> still connected.
+              QBH UMBRELLA Alumni, <br className="hidden sm:block" /> still connected.
             </h1>
-            <p className="mt-3 font-mono text-xs font-medium uppercase tracking-[0.2em] text-white/50">Qamar E Bani Hashim Alumni Directory</p>
+            <p className="mt-3 font-mono text-xs font-medium uppercase tracking-[0.2em] text-white/50">an umbrella of opportunities</p>
             <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/65 lg:text-lg">
-              The official Qamar E Bani Hashim School Alumni directory. Find your batch, share what you're working on, and stay in touch.
+              QBH UMBRELLA — an umbrella of opportunities. Find your batch, share what you're working on, and stay in touch.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
               <Link to="/directory">
@@ -132,7 +132,7 @@ function Landing() {
             </h2>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground lg:col-span-7 lg:pt-2 lg:text-lg">
-            Qamar E Bani Hashim School connects students and alumni across generations. This is the place to find fellow alumni again and keep your details current as life moves forward.
+            QBH UMBRELLA connects alumni across generations. This is the place to find fellow alumni again and keep your details current as life moves forward.
           </p>
 
         </div>

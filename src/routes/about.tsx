@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About — Qamar E Bani Hashim School Alumni" }, { name: "description", content: "The history, mission, and heritage of Qamar E Bani Hashim School Alumni." }] }),
+  head: () => ({ meta: [{ title: "About — QBH UMBRELLA Alumni" }, { name: "description", content: "The history, mission, and heritage of QBH UMBRELLA Alumni." }] }),
   component: About,
 });
 
@@ -16,16 +16,16 @@ function About() {
         <section className="bg-navy py-28 text-white">
           <div className="container mx-auto px-4 lg:px-8">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/60">About</p>
-            <h1 className="mt-4 max-w-3xl font-display text-5xl font-semibold tracking-tight lg:text-7xl">A school, and the people who left it.</h1>
+            <h1 className="mt-4 max-w-3xl font-display text-5xl font-semibold tracking-tight lg:text-7xl">A shared story, and the people who shaped it.</h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
-              Qamar E Bani Hashim School Alumni has been graduating Matric students since 1986. This page is the short version of what we stand for, and why the alumni network exists.
+              QBH UMBRELLA Alumni has been graduating Matric students since 1986. This page is the short version of what we stand for, and why the alumni network exists.
             </p>
           </div>
         </section>
 
         <section className="container mx-auto grid gap-14 px-4 py-28 lg:grid-cols-3 lg:px-8">
           {[
-            { icon: BookOpen, title: "What the school does", body: "We prepare students for the Matric board exams, and for the decisions that follow them. Discipline, daily reading, and a teacher who knows your name." },
+            { icon: BookOpen, title: "What QBH UMBRELLA does", body: "We prepare students for the Matric board exams, and for the decisions that follow them. Discipline, daily reading, and a teacher who knows your name." },
             { icon: HeartHandshake, title: "Why alumni stay involved", body: "Old students return to teach, to fund scholarships, and to hire from the new batches. The network makes that easier than a group chat." },
             { icon: Target, title: "What we are building", body: "A working directory, a real events calendar, and a job board that stays useful. No pageantry — just the practical parts of staying in touch." },
           ].map(({ icon: Icon, title, body }) => (

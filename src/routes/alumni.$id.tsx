@@ -30,10 +30,10 @@ import { ZAFARYAB_PROFILE } from "@/lib/alumni-mock-data";
 export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
     meta: [
-      { title: `Alumni Profile — Qamar E Bani Hashim School Alumni` },
-      { name: "description", content: `Alumni profile page for a Qamar E Bani Hashim School Alumni Matric graduate.` },
-      { property: "og:title", content: `Alumni Profile — Qamar E Bani Hashim School Alumni` },
-      { property: "og:description", content: `Qamar E Bani Hashim School Alumni alumni profile.` },
+      { title: `QBH UMBRELLA Alumni Profile` },
+      { name: "description", content: `QBH UMBRELLA Alumni profile.` },
+      { property: "og:title", content: `QBH UMBRELLA Alumni Profile` },
+      { property: "og:description", content: `QBH UMBRELLA Alumni alumni profile.` },
     ],
   }),
   component: AlumniProfile,

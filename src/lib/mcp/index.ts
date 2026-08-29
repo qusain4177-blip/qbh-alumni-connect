@@ -9,10 +9,10 @@ const projectRef = import.meta.env.VITE_SUPABASE_PROJECT_ID ?? "project-ref-unse
 
 export default defineMcp({
   name: "qbh-alumni-mcp",
-  title: "QBH UMBRELLA Alumni Portal",
+  title: "QBH UMBRELLA Alumni",
   version: "0.1.0",
   instructions:
-    "Tools for the QBH UMBRELLA school alumni network. Look up your own alumni profile, update it, search the alumni directory, and browse events and announcements. All tools act as the signed-in alumnus and respect row-level security.",
+    "Tools for the QBH UMBRELLA Alumni network. Look up your own alumni profile, update it, search the alumni directory, and browse events and announcements. All tools act as the signed-in alumnus and respect row-level security.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",

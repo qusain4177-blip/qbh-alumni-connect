@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/events")({
-  head: () => ({ meta: [{ title: "Events & News — Qamar E Bani Hashim School Alumni" }, { name: "description", content: "Upcoming reunions, alumni meets, and school news." }] }),
+  head: () => ({ meta: [{ title: "Events & News — QBH UMBRELLA Alumni" }, { name: "description", content: "Upcoming reunions, alumni meets, and school news." }] }),
   component: EventsPage,
 });
 

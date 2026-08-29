@@ -5,7 +5,7 @@ import { supabaseForUser, textResult, errorResult } from "../supabase";
 export default defineTool({
   name: "list_announcements",
   title: "List announcements",
-  description: "List alumni announcements posted by the school (news, general updates, job posts).",
+  description: "List alumni announcements posted by QBH UMBRELLA (news, general updates, job posts).",
   inputSchema: { limit: z.number().int().min(1).max(50).optional() },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ limit }, ctx) => {

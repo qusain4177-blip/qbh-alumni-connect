@@ -5,23 +5,23 @@ export function Footer() {
     <footer className="bg-navy text-navy-foreground">
       <div className="container mx-auto grid gap-10 px-4 py-14 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-2">
-          <Link to="/" className="flex items-center gap-3" aria-label="Qamar E Bani Hashim School Alumni — Home">
+          <Link to="/" className="flex items-center gap-3" aria-label="QBH UMBRELLA Alumni — Home">
             <img
               src="/images/image.png"
-              alt="Qamar E Bani Hashim School Alumni logo"
+              alt="QBH UMBRELLA Alumni logo"
               width={48}
               height={48}
               className="h-12 w-12 shrink-0 rounded-xl object-cover shadow-sm"
             />
-            <div><div className="font-display text-lg font-semibold tracking-tight">Qamar E Bani Hashim School Alumni</div><div className="mt-0.5 text-[11px] font-medium tracking-[0.08em] text-white/55">Qamar E Bani Hashim Alumni Directory</div></div>
+            <div><div className="font-display text-lg font-semibold tracking-tight">QBH UMBRELLA Alumni</div><div className="mt-0.5 text-[11px] font-medium tracking-[0.08em] text-white/55">an umbrella of opportunities</div></div>
           </Link>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-navy-foreground/65">
-            The official Qamar E Bani Hashim School Alumni directory.
+            QBH UMBRELLA — an umbrella of opportunities.
           </p>
         </div>
 
         <div>
-          <h4 className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">Qamar E Bani Hashim Alumni Directory</h4>
+          <h4 className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">an umbrella of opportunities</h4>
           <ul className="mt-5 space-y-3 text-sm text-navy-foreground/75">
             <li><Link to="/about" className="hover:text-white">About</Link></li>
             <li><Link to="/directory" className="hover:text-white">Directory</Link></li>
@@ -47,7 +47,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 py-5 font-mono text-[11px] text-navy-foreground/55 lg:flex-row lg:px-8">
-          <p>© {new Date().getFullYear()} Qamar E Bani Hashim School Alumni. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} QBH UMBRELLA Alumni. All rights reserved.</p>
           <p>Built by old students.</p>
         </div>
       </div>
