@@ -1,23 +1,23 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const env = typeof import.meta !== "undefined" ? import.meta.env : undefined;
+const nodeEnv = typeof process !== "undefined" ? process.env : undefined;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("[Supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY.");
-}
+const supabaseUrl =
+  env?.VITE_SUPABASE_URL || nodeEnv?.VITE_SUPABASE_URL || "https://ngexxgbkjyxgotvjuczi.supabase.co";
+const supabaseAnonKey =
+  env?.VITE_SUPABASE_ANON_KEY ||
+  nodeEnv?.VITE_SUPABASE_ANON_KEY ||
+  "sb_publishable_oxGhxy9p2857FbYB1H5RHg_53VkCNx_";
 
-export const supabase =
-  supabaseUrl && supabaseAnonKey
-    ? createClient<Database>(supabaseUrl, supabaseAnonKey, {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-        },
-      })
-    : null;
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+  },
+});
 
 export function getSupabaseClient() {
   return supabase;
