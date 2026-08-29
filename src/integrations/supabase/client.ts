@@ -1,8 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "./types";
+import { createClient } from '@supabase/supabase-js'
+import type { Database } from './types'
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://local-preview.supabase.co";
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "local-preview-anon-key";
+const SUPABASE_URL = "https://rjbjmswdtkoxtjstmmcu.supabase.co"
+const SUPABASE_ANON_KEY = "process.env.JWT_3"
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
@@ -14,4 +14,6 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, 
       apikey: SUPABASE_ANON_KEY,
     },
   },
-});
+})
+
+export default supabase
