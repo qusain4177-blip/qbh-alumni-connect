@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
@@ -36,8 +35,24 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
 
 function Directory() {
   const { isAdmin } = useAuth();
-  const queryClient = useQueryClient();
   const [q, setQ] = useState("");
+  const [alumni, setAlumni] = useState<AlumniWithGender[]>([]);
+
+  useEffect(() => {
+    const fetchAlumni = async () => {
+      try {
+        const { data, error } = await supabase.from("alumni").select("*");
+        console.log("SUPABASE DIRECT DATA:", data);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setAlumni(data.map(mapAlumniRecord));
+        }
+      } catch (err) {
+        console.error("Fetch exception:", err);
+      }
+    };
+    void fetchAlumni();
+  }, []);
 
   useEffect(() => {
     const channel = supabase?.channel("alumni-directory").on(
@@ -45,7 +60,7 @@ function Directory() {
       { event: "*", schema: "public", table: "alumni" },
       (payload) => {
         const incoming = mapAlumniRecord(payload.new);
-        queryClient.setQueryData<AlumniWithGender[]>(["directory"], (current = []) => {
+        setAlumni((current = []) => {
           const existing = current ?? [];
           if (payload.eventType === "UPDATE") {
             return existing.map((item) => item?.id === incoming.id ? incoming : item);
@@ -59,7 +74,7 @@ function Directory() {
     return () => {
       if (channel) void supabase?.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, []);
 
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
@@ -67,32 +82,8 @@ function Directory() {
   const [location, setLocation] = useState("");
   const [company, setCompany] = useState("");
 
-  const {
-    data: remoteData,
-    error: remoteError,
-    isLoading: remoteLoading,
-  } = useQuery<AlumniRecord[]>({
-    queryKey: ["directory"],
-    queryFn: async () => {
-      try {
-        const response = await supabase?.from("alumni").select("*");
-        if (!response) return [];
-
-        const { data, error } = response;
-        console.log("Supabase Alumni Data:", data, "Error:", error);
-        if (error) throw error;
-        const safeData = Array.isArray(data) ? data : [];
-        return safeData?.map(mapAlumniRecord);
-      } catch (error) {
-        console.error("[Supabase] Alumni fetch failed:", error);
-        return [];
-      }
-    },
-    retry: false,
-    staleTime: 60_000,
-  });
-  const data = remoteData ?? [];
-  const isLoading = remoteLoading;
+  const data = alumni ?? [];
+  const isLoading = false;
 
   const locationOptions = useMemo(() => {
     const set = new Set<string>();
@@ -195,12 +186,6 @@ function Directory() {
             <Input placeholder="Profession or higher education (e.g. Bachelors, Job)" value={pursuit} onChange={(e) => setPursuit(e.target.value)} />
           </div>
         </div>
-
-        {remoteError && !isLoading && (
-          <div role="alert" className="mt-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-            We couldn&apos;t load the alumni directory right now. Please check your connection or try again later.
-          </div>
-        )}
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
           <span className="flex flex-wrap items-center gap-2">
