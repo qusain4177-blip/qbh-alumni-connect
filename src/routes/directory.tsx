@@ -16,7 +16,9 @@ export const Route = createFileRoute("/directory")({
   component: Directory,
 });
 
-function mapAlumniRecord(item: unknown): AlumniRecord {
+type AlumniWithGender = AlumniRecord & { gender?: string | null };
+
+function mapAlumniRecord(item: unknown): AlumniWithGender {
   const record = (item ?? {}) as Record<string, unknown>;
   return {
     ...record,
@@ -28,7 +30,8 @@ function mapAlumniRecord(item: unknown): AlumniRecord {
     higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
     profession: (record?.occupation ?? record?.profession ?? null) as string | null,
     phone: (record?.contact ?? record?.phone ?? null) as string | null,
-  } as AlumniRecord;
+    gender: (record?.gender ?? null) as string | null,
+  } as AlumniWithGender;
 }
 
 function Directory() {
@@ -39,12 +42,16 @@ function Directory() {
   useEffect(() => {
     const channel = supabase?.channel("alumni-directory").on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "alumni" },
+      { event: "*", schema: "public", table: "alumni" },
       (payload) => {
         const incoming = mapAlumniRecord(payload.new);
-        queryClient.setQueryData<AlumniRecord[]>(["directory"], (current = []) => {
-          if (current.some((item) => item?.id === incoming.id)) return current;
-          return [incoming, ...current];
+        queryClient.setQueryData<AlumniWithGender[]>(["directory"], (current = []) => {
+          const existing = current ?? [];
+          if (payload.eventType === "UPDATE") {
+            return existing.map((item) => item?.id === incoming.id ? incoming : item);
+          }
+          if (existing.some((item) => item?.id === incoming.id)) return existing;
+          return [incoming, ...existing];
         });
       },
     ).subscribe();
@@ -230,13 +237,13 @@ function Directory() {
             const batch = item?.graduation_year ? String(item?.graduation_year) : "N/A";
             const qualification = item?.higher_education || "";
             const occupation = item?.profession || "";
-            const gender = String((item as AlumniRecord & { gender?: string })?.gender ?? "").toLowerCase();
+            const gender = String(item?.gender ?? "").toLowerCase();
             const avatarUrl = item?.avatar_url ||
               (gender === "female"
-                ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=female&hair=long01,long02,straight01&style=circle`
+                ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=female`
                 : gender === "male"
-                  ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=male&style=circle`
-                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=fff&bold=true`);
+                  ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=male`
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F172A&color=fff&bold=true`);
             return (
             <article key={item?.id || `alumni-${item?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: item?.id || "unknown" }} className="block">
