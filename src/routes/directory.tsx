@@ -16,17 +16,42 @@ export const Route = createFileRoute("/directory")({
   component: Directory,
 });
 
+function mapAlumniRecord(item: unknown): AlumniRecord {
+  const record = (item ?? {}) as Record<string, unknown>;
+  return {
+    ...record,
+    id: String(record?.id ?? record?.alumni_id ?? "unknown-alumni"),
+    alumni_id: (record?.alumni_id ?? record?.id ?? null) as string | null,
+    full_name: String(record?.name ?? record?.full_name ?? "Unnamed alumni"),
+    avatar_url: (record?.avatar_url ?? null) as string | null,
+    graduation_year: (record?.batch ?? record?.graduation_year ?? null) as number | null,
+    higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
+    profession: (record?.occupation ?? record?.profession ?? null) as string | null,
+    phone: (record?.contact ?? record?.phone ?? null) as string | null,
+  } as AlumniRecord;
+}
+
 function Directory() {
   const { isAdmin } = useAuth();
   const queryClient = useQueryClient();
   const [q, setQ] = useState("");
 
   useEffect(() => {
-    if (!supabase) return;
-    const channel = supabase.channel("alumni-directory").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
-      queryClient.invalidateQueries({ queryKey: ["directory"] });
-    }).subscribe();
-    return () => { void supabase.removeChannel(channel); };
+    const channel = supabase?.channel("alumni-directory").on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "alumni" },
+      (payload) => {
+        const incoming = mapAlumniRecord(payload.new);
+        queryClient.setQueryData<AlumniRecord[]>(["directory"], (current = []) => {
+          if (current.some((item) => item?.id === incoming.id)) return current;
+          return [incoming, ...current];
+        });
+      },
+    ).subscribe();
+
+    return () => {
+      if (channel) void supabase?.removeChannel(channel);
+    };
   }, [queryClient]);
 
   const [year, setYear] = useState("");
@@ -45,8 +70,7 @@ function Directory() {
       try {
         const response = await supabase?.from("alumni")
           .select("*")
-          .eq("status", "approved")
-          .order("graduation_year", { ascending: false });
+          .order("created_at", { ascending: false });
         if (!response) return [];
 
         const { data, error } = response;
@@ -54,20 +78,7 @@ function Directory() {
 
         console.info("[Supabase] Alumni response:", { data, error });
         const safeData = Array.isArray(data) ? data : [];
-        return safeData?.map((item) => {
-          const record = item as Record<string, unknown>;
-          return {
-            ...record,
-            id: String(record?.id ?? record?.alumni_id ?? "unknown-alumni"),
-            alumni_id: (record?.alumni_id ?? record?.id ?? null) as string | null,
-            full_name: String(record?.name ?? record?.full_name ?? "Unnamed alumni"),
-            avatar_url: (record?.avatar_url ?? null) as string | null,
-            graduation_year: (record?.batch ?? record?.graduation_year ?? null) as number | null,
-            higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
-            profession: (record?.occupation ?? record?.profession ?? null) as string | null,
-            phone: (record?.contact ?? record?.phone ?? null) as string | null,
-          } as AlumniRecord;
-        });
+        return safeData?.map(mapAlumniRecord);
       } catch (error) {
         console.error("[Supabase] Alumni fetch failed:", error);
         return [];
