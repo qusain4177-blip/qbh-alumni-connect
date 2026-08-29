@@ -17,14 +17,28 @@ export default defineConfig({
     server: { entry: "server" },
   },
   nitro: {
-    // Cloudflare Pages consumes Nitro's standard .output directory.
-    // Cloudflare Pages consumes the static assets plus the generated _worker.js.
-    // Keep Vercel's preset when building for Vercel deployments.
-    ...(isVercel ? { preset: "vercel" } : { preset: "cloudflare-pages" }),
+    // Cloudflare Pages expects the complete deployable output in dist.
+    ...(isVercel
+      ? { preset: "vercel" }
+      : {
+          preset: "cloudflare-pages",
+          output: {
+            dir: "dist",
+            publicDir: "dist",
+          },
+          prerender: {
+            routes: ["/"],
+          },
+        },
+  },
+        }),
   },
   vite: {
     root: projectRoot,
     plugins: [],
+    build: {
+      outDir: "dist",
+    },
     ...(isVercel
       ? {
           build: {
