@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Download, Megaphone, Newspaper, Pencil, Plus, Search, Trash2, Users, CalendarPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,9 +25,15 @@ function AdminPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loading) return;
-    if (!user) { navigate({ to: "/admin/login" }); return; }
-    if (!isAdmin) { toast.error("Admin access required"); navigate({ to: "/" }); }
+    if (loading || isAdmin) return;
+    const timer = window.setTimeout(() => {
+      if (!user) navigate({ to: "/admin/login" });
+      else {
+        toast.error("Admin access required");
+        navigate({ to: "/" });
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [loading, user, isAdmin, navigate]);
 
   if (loading || !user || !isAdmin) {
@@ -166,6 +172,12 @@ function AlumniMgmt() {
     return list;
   }, [data, q, statusF, streamF, yearF, sortKey, sortDir]);
 
+  const handleAdminClick = useCallback((e: React.MouseEvent, alumni: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.setTimeout(() => setEditing(alumni), 0);
+  }, []);
+
   const del = async (id: string) => {
     if (!confirm("Delete this alumni record? This cannot be undone.")) return;
     const { error } = await supabase.from("alumni").delete().eq("id", id);
@@ -223,7 +235,7 @@ function AlumniMgmt() {
           <option value="suspended">Suspended</option>
         </select>
         <Button variant="outline" onClick={exportCsv} className="gap-2"><Download className="h-4 w-4" />Export CSV</Button>
-        <Button onClick={() => setEditing({ ...blank, __new: true })} className="gap-2 bg-navy text-navy-foreground"><Plus className="h-4 w-4" />Add alumni</Button>
+        <Button onClick={() => window.setTimeout(() => setEditing({ ...blank, __new: true }), 0)} className="gap-2 bg-navy text-navy-foreground"><Plus className="h-4 w-4" />Add alumni</Button>
       </div>
 
       <div className="rounded-xl border border-border bg-card">
@@ -261,7 +273,7 @@ function AlumniMgmt() {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setEditing({ ...p });
+                          handleAdminClick(e, { ...p });
                         }}
                       ><Pencil className="h-4 w-4" /></Button>
                       <Button
