@@ -43,16 +43,14 @@ function Directory() {
     queryKey: ["directory"],
     queryFn: async () => {
       try {
-        if (!supabase) {
-          throw new Error("Supabase is not configured. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.");
-        }
-
-        const { data, error } = await supabase
-          .from("alumni")
+        const response = await supabase
+          ?.from("alumni")
           .select("*")
           .eq("status", "approved")
           .order("graduation_year", { ascending: false });
+        if (!response) return [];
 
+        const { data, error } = response;
         if (error) throw error;
 
         console.info("[Supabase] Alumni response:", { data, error });
