@@ -18,7 +18,9 @@ export default defineConfig({
   },
   nitro: {
     output: { dir: "dist" },
-    ...(isVercel ? { preset: "vercel" } : {}),
+    // Cloudflare Pages consumes the static assets plus the generated _worker.js.
+    // Keep Vercel's preset when building for Vercel deployments.
+    ...(isVercel ? { preset: "vercel" } : { preset: "cloudflare-pages" }),
   },
   vite: {
     root: projectRoot,
