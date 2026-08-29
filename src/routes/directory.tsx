@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
 import { Avatar } from "@/components/Avatar";
@@ -9,7 +9,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-
+import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/directory")({
   head: () => ({ meta: [{ title: "Alumni Directory — QBH UMBRELLA" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
@@ -26,7 +26,7 @@ function Directory() {
   const [location, setLocation] = useState("");
   const [company, setCompany] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data: remoteData, isLoading: remoteLoading } = useQuery<AlumniRecord[]>({
     queryKey: ["directory"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -35,9 +35,20 @@ function Directory() {
         .eq("status", "approved")
         .order("graduation_year", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as any[];
+      return (data ?? []) as AlumniRecord[];
     },
+    retry: false,
+    staleTime: 60_000,
   });
+  const [fallbackReady, setFallbackReady] = useState(false);
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setFallbackReady(true), 800);
+    return () => window.clearTimeout(timeout);
+  }, []);
+  const data = remoteData?.length
+    ? [...ALUMNI_MOCK_DATA.filter((mock) => !remoteData.some((profile) => profile.id === mock.id)), ...remoteData]
+    : ALUMNI_MOCK_DATA;
+  const isLoading = remoteLoading && !fallbackReady;
 
   const locationOptions = useMemo(() => {
     const set = new Set<string>();
