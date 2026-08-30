@@ -8,7 +8,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import type { AlumniRecord } from "@/lib/alumni-mock-data";
+import { ALUMNI_MOCK_DATA, type AlumniRecord } from "@/lib/alumni-mock-data";
 
 export const Route = createFileRoute("/directory")({
   head: () => ({ meta: [{ title: "QBH UMBRELLA Alumni Directory" }, { name: "description", content: "Search and connect with fellow Matric alumni." }] }),
@@ -36,7 +36,7 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
 function Directory() {
   const { isAdmin } = useAuth();
   const [q, setQ] = useState("");
-  const [alumni, setAlumni] = useState<AlumniWithGender[]>([]);
+  const [alumni, setAlumni] = useState<AlumniWithGender[]>(ALUMNI_MOCK_DATA as AlumniWithGender[]);
 
   useEffect(() => {
     const fetchAlumni = async () => {
