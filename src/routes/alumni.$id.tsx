@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { ZAFARYAB_PROFILE } from "@/lib/alumni-mock-data";
+import localAlumni from "@/data/alumni.json";
 
 export const Route = createFileRoute("/alumni/$id")({
   head: ({ params }) => ({
@@ -61,15 +62,14 @@ function AlumniProfile() {
     queryKey: ["alumni", id],
     queryFn: async () => {
       if (id === ZAFARYAB_PROFILE.id) return ZAFARYAB_PROFILE;
+      const localProfile = (Array.isArray(localAlumni) ? localAlumni : []).find((item) => String(item?.id ?? item?.alumni_id) === id);
       const { data, error } = await supabase
         .from("alumni")
         .select("*")
-        .eq("id", id)
-        .eq("status", "approved")
+        .or(`id.eq.${id},alumni_id.eq.${id}`)
         .maybeSingle();
-      if (error) throw error;
-      if (data) return data as any;
-      return null;
+      if (error && !localProfile) throw error;
+      return data ?? localProfile ?? null;
     },
   });
 

@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
@@ -8,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import alumniData from "@/data/alumni.json";
 import { useAuth } from "@/lib/auth-context";
 import type { AlumniRecord } from "@/lib/alumni-mock-data";
 
@@ -24,7 +24,7 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
     ...record,
     id: String(record?.id ?? record?.alumni_id ?? "unknown-alumni"),
     alumni_id: (record?.alumni_id ?? record?.id ?? null) as string | null,
-    full_name: String(record?.name ?? record?.full_name ?? "Unnamed alumni"),
+    full_name: String(record?.full_name ?? record?.name ?? "Unnamed alumni"),
     avatar_url: (record?.avatar_url ?? null) as string | null,
     graduation_year: (record?.batch ?? record?.graduation_year ?? null) as number | null,
     higher_education: (record?.qualification ?? record?.higher_education ?? null) as string | null,
@@ -36,30 +36,43 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
 
 function Directory() {
   const { isAdmin } = useAuth();
-  const queryClient = useQueryClient();
   const [q, setQ] = useState("");
+  const localAlumni = useMemo(
+    () => (Array.isArray(alumniData) ? alumniData : []).map(mapAlumniRecord),
+    [],
+  );
+  const [alumni, setAlumni] = useState<AlumniWithGender[]>(localAlumni);
+  // Render the local dataset immediately while the live request refreshes it in the background.
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const channel = supabase?.channel("alumni-directory").on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "alumni" },
-      (payload) => {
-        const incoming = mapAlumniRecord(payload.new);
-        queryClient.setQueryData<AlumniWithGender[]>(["directory"], (current = []) => {
-          const existing = current ?? [];
-          if (payload.eventType === "UPDATE") {
-            return existing.map((item) => item?.id === incoming.id ? incoming : item);
-          }
-          if (existing.some((item) => item?.id === incoming.id)) return existing;
-          return [incoming, ...existing];
-        });
-      },
-    ).subscribe();
+    let active = true;
 
-    return () => {
-      if (channel) void supabase?.removeChannel(channel);
+    const fetchAlumni = async () => {
+      try {
+        const { data, error } = await supabase.from("alumni").select("*");
+        if (error) throw error;
+        if (active) {
+          setAlumni((Array.isArray(data) ? data : []).map(mapAlumniRecord));
+          setFetchError(null);
+        }
+      } catch (error) {
+        console.error("[Alumni] Supabase fetch failed; using local dataset:", error);
+        if (active) {
+          setAlumni(localAlumni);
+          setFetchError(error instanceof Error ? error : new Error("Unable to load live alumni data"));
+        }
+      } finally {
+        if (active) setIsLoading(false);
+      }
     };
-  }, [queryClient]);
+
+    void fetchAlumni();
+    return () => {
+      active = false;
+    };
+  }, [localAlumni]);
 
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
@@ -67,32 +80,8 @@ function Directory() {
   const [location, setLocation] = useState("");
   const [company, setCompany] = useState("");
 
-  const {
-    data: remoteData,
-    error: remoteError,
-    isLoading: remoteLoading,
-  } = useQuery<AlumniRecord[]>({
-    queryKey: ["directory"],
-    queryFn: async () => {
-      try {
-        const response = await supabase?.from("alumni").select("*");
-        if (!response) return [];
-
-        const { data, error } = response;
-        console.log("Supabase Alumni Data:", data, "Error:", error);
-        if (error) throw error;
-        const safeData = Array.isArray(data) ? data : [];
-        return safeData?.map(mapAlumniRecord);
-      } catch (error) {
-        console.error("[Supabase] Alumni fetch failed:", error);
-        return [];
-      }
-    },
-    retry: false,
-    staleTime: 60_000,
-  });
-  const data = remoteData ?? [];
-  const isLoading = remoteLoading;
+  const data = alumni;
+  const isLoadingState = isLoading;
 
   const locationOptions = useMemo(() => {
     const set = new Set<string>();
@@ -196,15 +185,15 @@ function Directory() {
           </div>
         </div>
 
-        {remoteError && !isLoading && (
+        {fetchError && (
           <div role="alert" className="mt-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-            We couldn&apos;t load the alumni directory right now. Please check your connection or try again later.
+            {fetchError.message || "Failed to load alumni data"}
           </div>
         )}
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
           <span className="flex flex-wrap items-center gap-2">
-            <span>{isLoading ? "Loading..." : `${filtered?.length || 0} alumni found`}</span>
+            <span>{isLoadingState ? "Loading..." : `${filtered?.length || 0} alumni found`}</span>
             {location && (
               <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs text-navy">
                 <MapPin className="h-3 w-3 text-gold" /> {location}
@@ -228,8 +217,14 @@ function Directory() {
 
 
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered?.map((item) => {
+        {isLoadingState && (
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label="Loading alumni profiles">
+            {Array.from({ length: 6 }, (_, index) => <div key={index} className="h-52 animate-pulse rounded-xl border border-border bg-muted" />)}
+          </div>
+        )}
+
+        {!isLoadingState && <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered?.map((item, index) => {
             const name = item?.full_name || "Alumni Member";
             const batch = item?.graduation_year ? String(item?.graduation_year) : "N/A";
             const qualification = item?.higher_education || "";
@@ -242,7 +237,7 @@ function Directory() {
                   ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}&gender=male`
                   : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F172A&color=fff&bold=true`);
             return (
-            <article key={item?.id || `alumni-${item?.alumni_id || "unknown"}`} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
+            <article key={item?.alumni_id || index} className="group rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-card">
               <Link to="/alumni/$id" params={{ id: item?.id || "unknown" }} className="block">
                 <div className="flex items-center gap-4">
                   <Avatar
@@ -288,11 +283,11 @@ function Directory() {
             </article>
               );
           })}
-        </div>
+        </div>}
 
-        {!isLoading && filtered.length === 0 && (
+        {!isLoadingState && filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
-            <h3 className="font-display text-xl text-navy">No Data Available</h3>
+            <h3 className="font-display text-xl text-navy">No alumni profiles found.</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {location
                 ? `No alumni found in ${location}.`

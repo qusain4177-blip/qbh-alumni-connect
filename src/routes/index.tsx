@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { FeaturedHighlights } from "@/components/FeaturedHighlights";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-school.jpg";
+import localAlumni from "@/data/alumni.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,18 +34,9 @@ function Landing() {
   }, []);
 
   const queryClient = useQueryClient();
-  const { data: alumni = [] } = useQuery({
-    queryKey: ["homepage-alumni"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("alumni").select("id, full_name, status").eq("status", "approved");
-      if (error) throw error;
-      return data ?? [];
-    },
-    retry: false,
-  });
   useEffect(() => {
-    const channel = supabase.channel("homepage-alumni").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
-      queryClient.invalidateQueries({ queryKey: ["homepage-alumni"] });
+    const channel = supabase.channel("homepage-alumni-count").on("postgres_changes", { event: "*", schema: "public", table: "alumni" }, () => {
+      void queryClient.invalidateQueries({ queryKey: ["landing-stats"] });
     }).subscribe();
     return () => { void supabase.removeChannel(channel); };
   }, [queryClient]);
@@ -54,7 +46,7 @@ function Landing() {
     retry: false,
     queryFn: async () => {
       const [{ count: alumniCount }, { data: events }] = await Promise.all([
-        supabase.from("alumni").select("*", { count: "exact", head: true }).eq("status", "approved"),
+        supabase.from("alumni").select("*", { count: "exact", head: true }),
         supabase.from("events").select("*").gte("event_date", new Date().toISOString()).order("event_date").limit(3),
       ]);
       return { alumniCount: alumniCount ?? 0, events: events ?? [] };
@@ -100,7 +92,7 @@ function Landing() {
             <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Alumni</dt>
-                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{`${alumni?.length || 0}+`}</dd>
+                <dd className="mt-1.5 font-display text-3xl font-semibold tracking-tight text-white">{`${stats?.alumniCount ?? (Array.isArray(localAlumni) ? localAlumni.length : 0)}+`}</dd>
               </div>
               <div>
                 <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">Batches</dt>
@@ -179,7 +171,7 @@ function Landing() {
               <Sparkles className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{`${alumni?.length || 0}+`}</p>
+              <p className="font-display text-4xl font-semibold tracking-tight text-navy">{`${stats?.alumniCount ?? (Array.isArray(localAlumni) ? localAlumni.length : 0)}+`}</p>
               <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Verified alumni</p>
             </div>
           </article>
