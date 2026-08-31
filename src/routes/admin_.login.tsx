@@ -47,22 +47,29 @@ function AdminLoginPage() {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
-    if (error || !data.user) {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
+      console.log("[v0] Admin sign-in response:", { hasUser: Boolean(data.user), error });
+      if (error || !data.user) {
+        toast.error(error?.message ?? "Sign in failed");
+        return;
+      }
+      const { data: roles, error: roleError } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id);
+      if (roleError) throw roleError;
+      const isAdmin = (roles ?? []).some((r) => r.role === "admin");
+      if (!isAdmin) {
+        await supabase.auth.signOut();
+        toast.error("This account does not have administrator access.");
+        return;
+      }
+      toast.success("Signed in as administrator");
+      navigate({ to: "/admin" });
+    } catch (err) {
+      console.error("[v0] Admin sign-in failed:", err);
+      toast.error(err instanceof Error ? err.message : "Sign in failed");
+    } finally {
       setLoading(false);
-      toast.error(error?.message ?? "Sign in failed");
-      return;
     }
-    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id);
-    const isAdmin = (roles ?? []).some((r) => r.role === "admin");
-    setLoading(false);
-    if (!isAdmin) {
-      await supabase.auth.signOut();
-      toast.error("This account does not have administrator access.");
-      return;
-    }
-    toast.success("Signed in as administrator");
-    navigate({ to: "/admin" });
   };
 
   return (
