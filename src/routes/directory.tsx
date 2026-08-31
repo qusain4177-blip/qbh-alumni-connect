@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
 import { Avatar } from "@/components/Avatar";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { supabase } from "@/integrations/supabase/client";
+import alumniData from "@/data/alumni.json";
 import { useAuth } from "@/lib/auth-context";
 import type { AlumniRecord } from "@/lib/alumni-mock-data";
 
@@ -36,49 +36,11 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
 function Directory() {
   const { isAdmin } = useAuth();
   const [q, setQ] = useState("");
-  const [alumni, setAlumni] = useState<AlumniWithGender[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchAlumni = async () => {
-      try {
-        const { data, error } = await supabase.from("alumni").select("*");
-        console.log("SUPABASE DIRECT DATA:", data);
-        if (error) throw error;
-        setAlumni((data ?? []).map(mapAlumniRecord));
-        setFetchError(null);
-      } catch (err) {
-        console.error("SUPABASE FETCH ERROR:", err);
-        setFetchError(err instanceof Error ? err : new Error("Failed to load alumni data"));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    void fetchAlumni();
-  }, []);
-
-  useEffect(() => {
-    const channel = supabase?.channel("alumni-directory").on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "alumni" },
-      (payload) => {
-        const incoming = mapAlumniRecord(payload.new);
-        setAlumni((current = []) => {
-          const existing = current ?? [];
-          if (payload.eventType === "UPDATE") {
-            return existing.map((item) => item?.id === incoming.id ? incoming : item);
-          }
-          if (existing.some((item) => item?.id === incoming.id)) return existing;
-          return [incoming, ...existing];
-        });
-      },
-    ).subscribe();
-
-    return () => {
-      if (channel) void supabase?.removeChannel(channel);
-    };
-  }, []);
+  const [alumni] = useState<AlumniWithGender[]>(() =>
+    (Array.isArray(alumniData) ? alumniData : []).map(mapAlumniRecord),
+  );
+  const isLoading = false;
+  const fetchError = null;
 
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
