@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Briefcase, Building2, GraduationCap, MapPin, Search, Linkedin, Globe, BookOpen, Pencil, Plus } from "lucide-react";
 import { LinkedInLink } from "@/components/LinkedInLink";
 import { Avatar } from "@/components/Avatar";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 import alumniData from "@/data/alumni.json";
 import { useAuth } from "@/lib/auth-context";
 import type { AlumniRecord } from "@/lib/alumni-mock-data";
@@ -36,11 +37,42 @@ function mapAlumniRecord(item: unknown): AlumniWithGender {
 function Directory() {
   const { isAdmin } = useAuth();
   const [q, setQ] = useState("");
-  const [alumni] = useState<AlumniWithGender[]>(() =>
-    (Array.isArray(alumniData) ? alumniData : []).map(mapAlumniRecord),
+  const localAlumni = useMemo(
+    () => (Array.isArray(alumniData) ? alumniData : []).map(mapAlumniRecord),
+    [],
   );
-  const isLoading = false;
-  const fetchError = null;
+  const [alumni, setAlumni] = useState<AlumniWithGender[]>(localAlumni);
+  // Render the local dataset immediately while the live request refreshes it in the background.
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchAlumni = async () => {
+      try {
+        const { data, error } = await supabase.from("alumni").select("*");
+        if (error) throw error;
+        if (active) {
+          setAlumni((Array.isArray(data) ? data : []).map(mapAlumniRecord));
+          setFetchError(null);
+        }
+      } catch (error) {
+        console.error("[Alumni] Supabase fetch failed; using local dataset:", error);
+        if (active) {
+          setAlumni(localAlumni);
+          setFetchError(error instanceof Error ? error : new Error("Unable to load live alumni data"));
+        }
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    };
+
+    void fetchAlumni();
+    return () => {
+      active = false;
+    };
+  }, [localAlumni]);
 
   const [year, setYear] = useState("");
   const [stream, setStream] = useState("");
